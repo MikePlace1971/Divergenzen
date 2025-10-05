@@ -1,8 +1,14 @@
 settings:
-  timeframe: H1
+  timeframe: D1
   default_source: yfinance
   markets_file: config/markets.yaml
 oanda:
   access_token: 
     7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c
   account_id: 101-004-12489955-001
+divergence:
+  rsi_period: 14
+  fractal_periods: 4
+  max_bars_diff: 30
+auswertung:
+  maximal_bars: 10
