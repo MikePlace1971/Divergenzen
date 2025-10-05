@@ -1,0 +1,3774 @@
+markets:
+  OANDA_CURRENCY:
+    - symbol: TRY_JPY
+      source: oanda
+      name: TRY/JPY
+    - symbol: AUD_JPY
+      source: oanda
+      name: AUD/JPY
+    - symbol: USD_CNH
+      source: oanda
+      name: USD/CNH
+    - symbol: NZD_JPY
+      source: oanda
+      name: NZD/JPY
+    - symbol: EUR_GBP
+      source: oanda
+      name: EUR/GBP
+    - symbol: CHF_HKD
+      source: oanda
+      name: CHF/HKD
+    - symbol: USD_CZK
+      source: oanda
+      name: USD/CZK
+    - symbol: NZD_HKD
+      source: oanda
+      name: NZD/HKD
+    - symbol: EUR_NOK
+      source: oanda
+      name: EUR/NOK
+    - symbol: USD_CAD
+      source: oanda
+      name: USD/CAD
+    - symbol: EUR_AUD
+      source: oanda
+      name: EUR/AUD
+    - symbol: EUR_SGD
+      source: oanda
+      name: EUR/SGD
+    - symbol: USD_HKD
+      source: oanda
+      name: USD/HKD
+    - symbol: CAD_HKD
+      source: oanda
+      name: CAD/HKD
+    - symbol: USD_CHF
+      source: oanda
+      name: USD/CHF
+    - symbol: AUD_HKD
+      source: oanda
+      name: AUD/HKD
+    - symbol: NZD_CHF
+      source: oanda
+      name: NZD/CHF
+    - symbol: AUD_CHF
+      source: oanda
+      name: AUD/CHF
+    - symbol: GBP_CHF
+      source: oanda
+      name: GBP/CHF
+    - symbol: USD_THB
+      source: oanda
+      name: USD/THB
+    - symbol: EUR_HKD
+      source: oanda
+      name: EUR/HKD
+    - symbol: CHF_JPY
+      source: oanda
+      name: CHF/JPY
+    - symbol: GBP_HKD
+      source: oanda
+      name: GBP/HKD
+    - symbol: EUR_NZD
+      source: oanda
+      name: EUR/NZD
+    - symbol: AUD_SGD
+      source: oanda
+      name: AUD/SGD
+    - symbol: EUR_JPY
+      source: oanda
+      name: EUR/JPY
+    - symbol: EUR_TRY
+      source: oanda
+      name: EUR/TRY
+    - symbol: USD_JPY
+      source: oanda
+      name: USD/JPY
+    - symbol: SGD_JPY
+      source: oanda
+      name: SGD/JPY
+    - symbol: GBP_ZAR
+      source: oanda
+      name: GBP/ZAR
+    - symbol: ZAR_JPY
+      source: oanda
+      name: ZAR/JPY
+    - symbol: USD_SEK
+      source: oanda
+      name: USD/SEK
+    - symbol: GBP_SGD
+      source: oanda
+      name: GBP/SGD
+    - symbol: CAD_CHF
+      source: oanda
+      name: CAD/CHF
+    - symbol: AUD_NZD
+      source: oanda
+      name: AUD/NZD
+    - symbol: HKD_JPY
+      source: oanda
+      name: HKD/JPY
+    - symbol: USD_NOK
+      source: oanda
+      name: USD/NOK
+    - symbol: GBP_AUD
+      source: oanda
+      name: GBP/AUD
+    - symbol: USD_PLN
+      source: oanda
+      name: USD/PLN
+    - symbol: EUR_ZAR
+      source: oanda
+      name: EUR/ZAR
+    - symbol: NZD_USD
+      source: oanda
+      name: NZD/USD
+    - symbol: USD_ZAR
+      source: oanda
+      name: USD/ZAR
+    - symbol: CAD_JPY
+      source: oanda
+      name: CAD/JPY
+    - symbol: CAD_SGD
+      source: oanda
+      name: CAD/SGD
+    - symbol: USD_HUF
+      source: oanda
+      name: USD/HUF
+    - symbol: EUR_CAD
+      source: oanda
+      name: EUR/CAD
+    - symbol: CHF_ZAR
+      source: oanda
+      name: CHF/ZAR
+    - symbol: USD_DKK
+      source: oanda
+      name: USD/DKK
+    - symbol: EUR_HUF
+      source: oanda
+      name: EUR/HUF
+    - symbol: EUR_CHF
+      source: oanda
+      name: EUR/CHF
+    - symbol: EUR_DKK
+      source: oanda
+      name: EUR/DKK
+    - symbol: EUR_USD
+      source: oanda
+      name: EUR/USD
+    - symbol: EUR_CZK
+      source: oanda
+      name: EUR/CZK
+    - symbol: NZD_CAD
+      source: oanda
+      name: NZD/CAD
+    - symbol: SGD_CHF
+      source: oanda
+      name: SGD/CHF
+    - symbol: GBP_JPY
+      source: oanda
+      name: GBP/JPY
+    - symbol: USD_TRY
+      source: oanda
+      name: USD/TRY
+    - symbol: GBP_PLN
+      source: oanda
+      name: GBP/PLN
+    - symbol: AUD_USD
+      source: oanda
+      name: AUD/USD
+    - symbol: GBP_USD
+      source: oanda
+      name: GBP/USD
+    - symbol: USD_MXN
+      source: oanda
+      name: USD/MXN
+    - symbol: GBP_CAD
+      source: oanda
+      name: GBP/CAD
+    - symbol: AUD_CAD
+      source: oanda
+      name: AUD/CAD
+    - symbol: EUR_PLN
+      source: oanda
+      name: EUR/PLN
+    - symbol: GBP_NZD
+      source: oanda
+      name: GBP/NZD
+    - symbol: EUR_SEK
+      source: oanda
+      name: EUR/SEK
+    - symbol: USD_SGD
+      source: oanda
+      name: USD/SGD
+    - symbol: NZD_SGD
+      source: oanda
+      name: NZD/SGD
+  OANDA_Indices:
+    - symbol: USB02Y_USD
+      source: oanda
+      name: US 2Y T-Note
+    - symbol: CN50_USD
+      source: oanda
+      name: China A50
+    - symbol: US30_USD
+      source: oanda
+      name: US Wall St 30
+    - symbol: JP225Y_JPY
+      source: oanda
+      name: Japan 225 (JPY)
+    - symbol: CH20_CHF
+      source: oanda
+      name: Switzerland 20
+    - symbol: ESPIX_EUR
+      source: oanda
+      name: Spain 35
+    - symbol: WTICO_USD
+      source: oanda
+      name: West Texas Oil
+    - symbol: US2000_USD
+      source: oanda
+      name: US Russ 2000
+    - symbol: SPX500_USD
+      source: oanda
+      name: US SPX 500
+    - symbol: USB30Y_USD
+      source: oanda
+      name: US T-Bond
+    - symbol: BCO_USD
+      source: oanda
+      name: Brent Crude Oil
+    - symbol: HK33_HKD
+      source: oanda
+      name: Hong Kong 33
+    - symbol: USB10Y_USD
+      source: oanda
+      name: US 10Y T-Note
+    - symbol: EU50_EUR
+      source: oanda
+      name: Europe 50
+    - symbol: XCU_USD
+      source: oanda
+      name: Copper
+    - symbol: DE30_EUR
+      source: oanda
+      name: Germany 30
+    - symbol: NATGAS_USD
+      source: oanda
+      name: Natural Gas
+    - symbol: FR40_EUR
+      source: oanda
+      name: France 40
+    - symbol: DE10YB_EUR
+      source: oanda
+      name: Bund
+    - symbol: NAS100_USD
+      source: oanda
+      name: US Nas 100
+    - symbol: XPD_USD
+      source: oanda
+      name: Palladium
+    - symbol: XPT_USD
+      source: oanda
+      name: Platinum
+    - symbol: CORN_USD
+      source: oanda
+      name: Corn
+    - symbol: CHINAH_HKD
+      source: oanda
+      name: China H Shares
+    - symbol: NL25_EUR
+      source: oanda
+      name: Netherlands 25
+    - symbol: SOYBN_USD
+      source: oanda
+      name: Soybeans
+    - symbol: SG30_SGD
+      source: oanda
+      name: Singapore 30
+    - symbol: AU200_AUD
+      source: oanda
+      name: Australia 200
+    - symbol: JP225_USD
+      source: oanda
+      name: Japan 225
+    - symbol: WHEAT_USD
+      source: oanda
+      name: Wheat
+    - symbol: UK100_GBP
+      source: oanda
+      name: UK 100
+    - symbol: UK10YB_GBP
+      source: oanda
+      name: UK 10Y Gilt
+    - symbol: SUGAR_USD
+      source: oanda
+      name: Sugar
+    - symbol: USB05Y_USD
+      source: oanda
+      name: US 5Y T-Note
+  OANDA_METAL:
+    - symbol: XAU_USD
+      source: oanda
+      name: Gold
+    - symbol: XAG_GBP
+      source: oanda
+      name: Silver/GBP
+    - symbol: XAU_NZD
+      source: oanda
+      name: Gold/NZD
+    - symbol: XAG_CHF
+      source: oanda
+      name: Silver/CHF
+    - symbol: XAG_HKD
+      source: oanda
+      name: Silver/HKD
+    - symbol: XAU_JPY
+      source: oanda
+      name: Gold/JPY
+    - symbol: XAU_HKD
+      source: oanda
+      name: Gold/HKD
+    - symbol: XAG_AUD
+      source: oanda
+      name: Silver/AUD
+    - symbol: XAG_NZD
+      source: oanda
+      name: Silver/NZD
+    - symbol: XAG_JPY
+      source: oanda
+      name: Silver/JPY
+    - symbol: XAU_SGD
+      source: oanda
+      name: Gold/SGD
+    - symbol: XAU_XAG
+      source: oanda
+      name: Gold/Silver
+    - symbol: XAU_GBP
+      source: oanda
+      name: Gold/GBP
+    - symbol: XAG_EUR
+      source: oanda
+      name: Silver/EUR
+    - symbol: XAU_CAD
+      source: oanda
+      name: Gold/CAD
+    - symbol: XAU_AUD
+      source: oanda
+      name: Gold/AUD
+    - symbol: XAU_EUR
+      source: oanda
+      name: Gold/EUR
+    - symbol: XAG_CAD
+      source: oanda
+      name: Silver/CAD
+    - symbol: XAG_SGD
+      source: oanda
+      name: Silver/SGD
+    - symbol: XAG_USD
+      source: oanda
+      name: Silver
+    - symbol: XAU_CHF
+      source: oanda
+      name: Gold/CHF
+  DAX:
+    - symbol: ADS.DE
+      source: yfinance
+      name: adidas AG
+    - symbol: ALV.DE
+      source: yfinance
+      name: Allianz SE
+    - symbol: BAS.DE
+      source: yfinance
+      name: BASF SE
+    - symbol: BAYN.DE
+      source: yfinance
+      name: Bayer AG
+    - symbol: BEI.DE
+      source: yfinance
+      name: Beiersdorf AG
+    - symbol: BMW.DE
+      source: yfinance
+      name: Bayerische Motoren Werke AG
+    - symbol: CON.DE
+      source: yfinance
+      name: Continental AG
+    - symbol: 1COV.DE
+      source: yfinance
+      name: Covestro AG
+    - symbol: DBK.DE
+      source: yfinance
+      name: Deutsche Bank AG
+    - symbol: DB1.DE
+      source: yfinance
+      name: Deutsche Börse AG
+    - symbol: DPW.DE
+      source: yfinance
+      name: Deutsche Post AG
+    - symbol: DTE.DE
+      source: yfinance
+      name: Deutsche Telekom AG
+    - symbol: EOAN.DE
+      source: yfinance
+      name: E.ON SE
+    - symbol: FME.DE
+      source: yfinance
+      name: Fresenius Medical Care AG & Co. KGaA St
+    - symbol: FRE.DE
+      source: yfinance
+      name: Fresenius SE & Co. KGaA
+    - symbol: HEI.DE
+      source: yfinance
+      name: HeidelbergCement AG
+    - symbol: HEN3.DE
+      source: yfinance
+      name: Henkel AG & Co. KGaA Vz
+    - symbol: IFX.DE
+      source: yfinance
+      name: Infineon Technologies AG
+    - symbol: LIN.DE
+      source: yfinance
+      name: Linde PLC
+    - symbol: MRK.DE
+      source: yfinance
+      name: MERCK Kommanditgesellschaft auf Aktien
+    - symbol: MUV2.DE
+      source: yfinance
+      name: Münchener Rückversicherungs-Gesellschaft AG
+    - symbol: RWE.DE
+      source: yfinance
+      name: RWE AG
+    - symbol: SAP.DE
+      source: yfinance
+      name: SAP SE
+    - symbol: SIE.DE
+      source: yfinance
+      name: Siemens AG
+    - symbol: VOW3.DE
+      source: yfinance
+      name: Volkswagen AG
+    - symbol: VNA.DE
+      source: yfinance
+      name: Vonovia SE
+    - symbol: AIR.DE
+      source: yfinance
+      name: Airbus SE
+    - symbol: BNR.DE
+      source: yfinance
+      name: Brenntag AG
+    - symbol: HNR1.DE
+      source: yfinance
+      name: Hannover Rück SE
+    - symbol: MTX.DE
+      source: yfinance
+      name: MTU Aero Engines AG
+    - symbol: PUM.DE
+      source: yfinance
+      name: PUMA SE
+    - symbol: QIA.DE
+      source: yfinance
+      name: QIAGEN N.V.
+    - symbol: SRT3.DE
+      source: yfinance
+      name: Sartorius AG
+    - symbol: SHL.DE
+      source: yfinance
+      name: Siemens Healthineers AG
+    - symbol: SY1.DE
+      source: yfinance
+      name: Symrise AG
+    - symbol: ZAL.DE
+      source: yfinance
+      name: Zalando SE
+    - symbol: ENR.DE
+      source: yfinance
+      name: Siemens Energy AG
+    - symbol: PAH3.DE
+      source: yfinance
+      name: Porsche Automobil Holding SE
+    - symbol: DTG.DE
+      source: yfinance
+      name: Daimler Truck Holding AG
+    - symbol: MBG.DE
+      source: yfinance
+      name: Mercedes-Benz Group AG
+  MDAX:
+    - symbol: LHA.DE
+      source: yfinance
+      name: Deutsche Lufthansa AG
+    - symbol: TKA.DE
+      source: yfinance
+      name: thyssenkrupp AG
+    - symbol: AT1.DE
+      source: yfinance
+      name: Aroundtown SA
+    - symbol: NDA.DE
+      source: yfinance
+      name: Aurubis AG
+    - symbol: BC8.DE
+      source: yfinance
+      name: Bechtle AG
+    - symbol: CBK.DE
+      source: yfinance
+      name: Commerzbank AG
+    - symbol: EVD.DE
+      source: yfinance
+      name: CTS Eventim AG & Co. KGaA
+    - symbol: DHER.DE
+      source: yfinance
+      name: Delivery Hero SE
+    - symbol: DWNI.DE
+      source: yfinance
+      name: Deutsche Wohnen SE
+    - symbol: DUE.DE
+      source: yfinance
+      name: Dürr AG
+    - symbol: EVK.DE
+      source: yfinance
+      name: Evonik Industries AG
+    - symbol: EVT.DE
+      source: yfinance
+      name: Evotec SE
+    - symbol: FRA.DE
+      source: yfinance
+      name: Fraport AG
+    - symbol: FNTN.DE
+      source: yfinance
+      name: freenet AG
+    - symbol: FPE3.DE
+      source: yfinance
+      name: Fuchs Petrolub SE
+    - symbol: G1A.DE
+      source: yfinance
+      name: GEA Group AG
+    - symbol: GXI.DE
+      source: yfinance
+      name: Gerresheimer AG
+    - symbol: BOSS.DE
+      source: yfinance
+      name: Hugo Boss AG
+    - symbol: SDF.DE
+      source: yfinance
+      name: K+S AG
+    - symbol: KGX.DE
+      source: yfinance
+      name: KION GROUP AG
+    - symbol: LXS.DE
+      source: yfinance
+      name: LANXESS AG
+    - symbol: LEG.DE
+      source: yfinance
+      name: LEG Immobilien AG
+    - symbol: NEM.DE
+      source: yfinance
+      name: Nemetschek SE
+    - symbol: PSM.DE
+      source: yfinance
+      name: ProSiebenSat.1 Media SE
+    - symbol: RHM.DE
+      source: yfinance
+      name: Rheinmetall AG
+    - symbol: RRTL.DE
+      source: yfinance
+      name: RTL Group SA
+    - symbol: G24.DE
+      source: yfinance
+      name: Scout24 AG
+    - symbol: WAF.DE
+      source: yfinance
+      name: Siltronic AG
+    - symbol: SOW.DE
+      source: yfinance
+      name: Software AG
+    - symbol: TEG.DE
+      source: yfinance
+      name: TAG Immobilien AG
+    - symbol: O2D.DE
+      source: yfinance
+      name: Telefónica Deutschland Holding AG
+    - symbol: UTDI.DE
+      source: yfinance
+      name: United Internet AG
+    - symbol: WCH.DE
+      source: yfinance
+      name: Wacker Chemie AG
+    - symbol: AIXA.DE
+      source: yfinance
+      name: AIXTRON SE
+    - symbol: AFX.DE
+      source: yfinance
+      name: Carl Zeiss Meditec AG
+    - symbol: HFG.DE
+      source: yfinance
+      name: HelloFresh SE
+    - symbol: JUN3.DE
+      source: yfinance
+      name: JUNGHEINRICH AG
+    - symbol: RAA.DE
+      source: yfinance
+      name: RATIONAL AG
+    - symbol: SIX2.DE
+      source: yfinance
+      name: Sixt SE
+    - symbol: STM.DE
+      source: yfinance
+      name: Stabilus SA
+    - symbol: TLX.DE
+      source: yfinance
+      name: Talanx
+    - symbol: ZO1.DE
+      source: yfinance
+      name: zooplus AG
+    - symbol: KBX.DE
+      source: yfinance
+      name: Knorr-Bremse Aktiengesellschaft
+    - symbol: VAR1.DE
+      source: yfinance
+      name: VARTA AG
+    - symbol: AGOAF.DE
+      source: yfinance
+      name: Abengoa S.A.
+    - symbol: VTWR.DE
+      source: yfinance
+      name: Vantage Towers AG
+  SDAX:
+    - symbol: PBB.DE
+      source: yfinance
+      name: Deutsche Pfandbriefbank AG
+    - symbol: FIE.DE
+      source: yfinance
+      name: Fielmann AG
+    - symbol: GYC.DE
+      source: yfinance
+      name: Grand City Properties SA
+    - symbol: HLE.DE
+      source: yfinance
+      name: HELLA GmbH & Co. KGaA
+    - symbol: HOT.DE
+      source: yfinance
+      name: HOCHTIEF AG
+    - symbol: B4B.DE
+      source: yfinance
+      name: Metro AG
+    - symbol: MOR.DE
+      source: yfinance
+      name: MorphoSys AG
+    - symbol: NOEJ.DE
+      source: yfinance
+      name: NORMA Group SE
+    - symbol: SZG.DE
+      source: yfinance
+      name: Salzgitter AG
+    - symbol: SHA.DE
+      source: yfinance
+      name: Schaeffler AG
+    - symbol: UN01.DE
+      source: yfinance
+      name: Uniper SE
+    - symbol: BYW6.DE
+      source: yfinance
+      name: BayWa AG vNa
+    - symbol: GBF.DE
+      source: yfinance
+      name: Bilfinger SE
+    - symbol: COK.DE
+      source: yfinance
+      name: Cancom SE
+    - symbol: CWC.DE
+      source: yfinance
+      name: CEWE Stiftung & Co. KGaA
+    - symbol: COP.DE
+      source: yfinance
+      name: CompuGroup Medical SE
+    - symbol: DEZ.DE
+      source: yfinance
+      name: DEUTZ AG
+    - symbol: DIC.DE
+      source: yfinance
+      name: DIC ASSET AG
+    - symbol: DRW3.DE
+      source: yfinance
+      name: Drägerwerk AG & Co. KGaA Vz
+    - symbol: DWS.DE
+      source: yfinance
+      name: DWS Group GmbH & Co. KGaA
+    - symbol: CAP.DE
+      source: yfinance
+      name: "ENCAVIS AG "
+    - symbol: GLJ.DE
+      source: yfinance
+      name: Grenke AG
+    - symbol: HAB.DE
+      source: yfinance
+      name: Hamborner REIT AG
+    - symbol: HDD.DE
+      source: yfinance
+      name: Heidelberger Druckmaschinen AG
+    - symbol: HBH.DE
+      source: yfinance
+      name: HORNBACH HOLDING AG&CO.KGAA
+    - symbol: INH.DE
+      source: yfinance
+      name: INDUS HOLDING AG
+    - symbol: JEN.DE
+      source: yfinance
+      name: JENOPTIK AG
+    - symbol: JST.DE
+      source: yfinance
+      name: JOST Werke AG
+    - symbol: KCO.DE
+      source: yfinance
+      name: KLOECKNER & CO SE
+    - symbol: KRN.DE
+      source: yfinance
+      name: Krones AG
+    - symbol: KWS.DE
+      source: yfinance
+      name: KWS SAAT SE
+    - symbol: NDX1.DE
+      source: yfinance
+      name: Nordex SE
+    - symbol: PAT.DE
+      source: yfinance
+      name: Patrizia AG
+    - symbol: PFV.DE
+      source: yfinance
+      name: PFEIFFER VACUUM TECHNOLOGY AG
+    - symbol: SFQ.DE
+      source: yfinance
+      name: SAF Holland SA
+    - symbol: SGL.DE
+      source: yfinance
+      name: SGL CARBON SE
+    - symbol: S92.DE
+      source: yfinance
+      name: SMA Solar Technology AG
+    - symbol: SZU.DE
+      source: yfinance
+      name: Südzucker AG
+    - symbol: WAC.DE
+      source: yfinance
+      name: Wacker Neuson SE
+    - symbol: O1BC.DE
+      source: yfinance
+      name: XING AG
+    - symbol: SAE.DE
+      source: yfinance
+      name: Shop Apotheke Europe
+    - symbol: EUZ.DE
+      source: yfinance
+      name: Eckert & Ziegler Strahlen- und Medizintechnik AG
+    - symbol: AAD.DE
+      source: yfinance
+      name: Amadeus FiRe AG
+    - symbol: CEC1.DE
+      source: yfinance
+      name: Ceconomy AG
+    - symbol: CE2.DE
+      source: yfinance
+      name: CropEnergies AG
+    - symbol: DMP.DE
+      source: yfinance
+      name: Dermapharm Holding SE
+    - symbol: FTK.DE
+      source: yfinance
+      name: Flatexdegiro AG
+    - symbol: INS.DE
+      source: yfinance
+      name: Instone Real Estate Group AG
+    - symbol: SBS.DE
+      source: yfinance
+      name: STRATEC SE
+    - symbol: 8TRA.DE
+      source: yfinance
+      name: Traton Group
+    - symbol: VBVBF.DE
+      source: yfinance
+      name: VERBIO Vereinigte BioEnergie AG
+    - symbol: TIMA.DE
+      source: yfinance
+      name: ZEAL Network SE
+    - symbol: AG1.DE
+      source: yfinance
+      name: AUTO1 Group SE
+    - symbol: AOF.DE
+      source: yfinance
+      name: ATOSS Software AG
+    - symbol: NA9.DE
+      source: yfinance
+      name: Nagarro SE
+    - symbol: BSL.DE
+      source: yfinance
+      name: Basler AG
+    - symbol: TPE.DE
+      source: yfinance
+      name: PVA TePla AG
+    - symbol: 0NWC.DE
+      source: yfinance
+      name: secunet Security Networks AG
+    - symbol: STO3.DE
+      source: yfinance
+      name: STO SE & Co. KGaA
+    - symbol: SUSE.DE
+      source: yfinance
+      name: SUSE S.A.
+    - symbol: SYAB.DE
+      source: yfinance
+      name: SYNLAB
+    - symbol: 0A9O.DE
+      source: yfinance
+      name: About You Holding SE
+    - symbol: 0N5I.DE
+      source: yfinance
+      name: adesso SE
+    - symbol: 0O2W.DE
+      source: yfinance
+      name: GFT Technologies SE
+    - symbol: VTS.DE
+      source: yfinance
+      name: Vitesco Technologies Group AG
+    - symbol: 0E9V.DE
+      source: yfinance
+      name: EnergieKontor AG
+    - symbol: KBC.DE
+      source: yfinance
+      name: Kontron S&T AG
+    - symbol: PNE3.DE
+      source: yfinance
+      name: PNE AG
+  TECDAX:
+    - symbol: DTE.DE
+      source: yfinance
+      name: Deutsche Telekom AG
+    - symbol: IFX.DE
+      source: yfinance
+      name: Infineon Technologies AG
+    - symbol: SAP.DE
+      source: yfinance
+      name: SAP SE
+    - symbol: BC8.DE
+      source: yfinance
+      name: Bechtle AG
+    - symbol: EVT.DE
+      source: yfinance
+      name: Evotec SE
+    - symbol: FNTN.DE
+      source: yfinance
+      name: freenet AG
+    - symbol: MOR.DE
+      source: yfinance
+      name: MorphoSys AG
+    - symbol: NEM.DE
+      source: yfinance
+      name: Nemetschek SE
+    - symbol: QIA.DE
+      source: yfinance
+      name: QIAGEN N.V.
+    - symbol: SRT3.DE
+      source: yfinance
+      name: Sartorius AG
+    - symbol: SHL.DE
+      source: yfinance
+      name: Siemens Healthineers AG
+    - symbol: WAF.DE
+      source: yfinance
+      name: Siltronic AG
+    - symbol: SOW.DE
+      source: yfinance
+      name: Software AG
+    - symbol: O2D.DE
+      source: yfinance
+      name: Telefónica Deutschland Holding AG
+    - symbol: UTDI.DE
+      source: yfinance
+      name: United Internet AG
+    - symbol: AIXA.DE
+      source: yfinance
+      name: AIXTRON SE
+    - symbol: COK.DE
+      source: yfinance
+      name: Cancom SE
+    - symbol: AFX.DE
+      source: yfinance
+      name: Carl Zeiss Meditec AG
+    - symbol: COP.DE
+      source: yfinance
+      name: CompuGroup Medical SE
+    - symbol: JEN.DE
+      source: yfinance
+      name: JENOPTIK AG
+    - symbol: NDX1.DE
+      source: yfinance
+      name: Nordex SE
+    - symbol: VAR1.DE
+      source: yfinance
+      name: VARTA AG
+    - symbol: HAG.DE
+      source: yfinance
+      name: Hensoldt AG
+    - symbol: VBVBF.DE
+      source: yfinance
+      name: VERBIO Vereinigte BioEnergie AG
+    - symbol: NA9.DE
+      source: yfinance
+      name: Nagarro SE
+    - symbol: VTWR.DE
+      source: yfinance
+      name: Vantage Towers AG
+    - symbol: SUSE.DE
+      source: yfinance
+      name: SUSE S.A.
+    - symbol: 1U1.DE
+      source: yfinance
+      name: 1&1 Aktiengesellschaft
+  SMI: []
+  AEX:
+    - symbol: REL.AS
+      source: yfinance
+      name: RELX PLC
+    - symbol: ULVR.AS
+      source: yfinance
+      name: Unilever PLC
+    - symbol: MT.AS
+      source: yfinance
+      name: ArcelorMittal
+    - symbol: URW.AS
+      source: yfinance
+      name: Unibail-Rodamco-Westfield
+    - symbol: INGA.AS
+      source: yfinance
+      name: ING Groep N.V.
+    - symbol: ADYEN.AS
+      source: yfinance
+      name: Adyen N.V.
+    - symbol: AGN.AS
+      source: yfinance
+      name: Aegon N.V.
+    - symbol: AD.AS
+      source: yfinance
+      name: Koninklijke Ahold Delhaize N.V.
+    - symbol: AKZA.AS
+      source: yfinance
+      name: Akzo Nobel N.V.
+    - symbol: ASML.AS
+      source: yfinance
+      name: ASML Holding N.V.
+    - symbol: DSM.AS
+      source: yfinance
+      name: Koninklijke DSM N.V.
+    - symbol: HEIA.AS
+      source: yfinance
+      name: Heineken N.V.
+    - symbol: IMCD.AS
+      source: yfinance
+      name: IMCD N.V.
+    - symbol: KPN.AS
+      source: yfinance
+      name: Koninklijke KPN N.V.
+    - symbol: NN.AS
+      source: yfinance
+      name: NN Group N.V.
+    - symbol: PHIA.AS
+      source: yfinance
+      name: Koninklijke Philips N.V.
+    - symbol: RAND.AS
+      source: yfinance
+      name: Randstad N.V.
+    - symbol: WKL.AS
+      source: yfinance
+      name: Wolters Kluwer N.V.
+    - symbol: JET.AS
+      source: yfinance
+      name: Just Eat Takeaway.com NV
+    - symbol: PRX.AS
+      source: yfinance
+      name: Prosus N.V.
+    - symbol: ASM.AS
+      source: yfinance
+      name: ASM International N.V.
+    - symbol: BESI.AS
+      source: yfinance
+      name: BE Semiconductor Industries N.V.
+    - symbol: LIGHT.AS
+      source: yfinance
+      name: Signify N.V.
+    - symbol: UMG.AS
+      source: yfinance
+      name: Universal Music Group N.V.
+    - symbol: SHELL.AS
+      source: yfinance
+      name: Shell plc
+  CAC 40:
+    - symbol: AI.PA
+      source: yfinance
+      name: Air Liquide SA
+    - symbol: MT.PA
+      source: yfinance
+      name: ArcelorMittal
+    - symbol: CS.PA
+      source: yfinance
+      name: AXA SA
+    - symbol: BNP.PA
+      source: yfinance
+      name: BNP Paribas SA
+    - symbol: EN.PA
+      source: yfinance
+      name: Bouygues SA
+    - symbol: CAP.PA
+      source: yfinance
+      name: Capgemini SE
+    - symbol: CA.PA
+      source: yfinance
+      name: Carrefour SA
+    - symbol: ACA.PA
+      source: yfinance
+      name: Crédit Agricole SA
+    - symbol: BN.PA
+      source: yfinance
+      name: Danone SA
+    - symbol: DSY.PA
+      source: yfinance
+      name: Dassault Systèmes SE
+    - symbol: ENGI.PA
+      source: yfinance
+      name: Engie SA
+    - symbol: EL.PA
+      source: yfinance
+      name: EssilorLuxottica SA
+    - symbol: RMS.PA
+      source: yfinance
+      name: Hermès International SCA
+    - symbol: KER.PA
+      source: yfinance
+      name: Kering SA
+    - symbol: OR.PA
+      source: yfinance
+      name: L'Oréal SA
+    - symbol: LR.PA
+      source: yfinance
+      name: Legrand SA
+    - symbol: ML.PA
+      source: yfinance
+      name: Compagnie Générale des établissements Michelin
+    - symbol: ORA.PA
+      source: yfinance
+      name: Orange Belgium SA
+    - symbol: RI.PA
+      source: yfinance
+      name: Pernod Ricard SA
+    - symbol: PUB.PA
+      source: yfinance
+      name: Publicis Groupe SA
+    - symbol: RNO.PA
+      source: yfinance
+      name: Renault SA
+    - symbol: SAF.PA
+      source: yfinance
+      name: Safran SA
+    - symbol: SGO.PA
+      source: yfinance
+      name: Compagnie de Saint-Gobain SA
+    - symbol: SAN.PA
+      source: yfinance
+      name: Sanofi
+    - symbol: SU.PA
+      source: yfinance
+      name: Schneider Electric S.E.
+    - symbol: STM.PA
+      source: yfinance
+      name: STMicroelectronics N.V.
+    - symbol: FP.PA
+      source: yfinance
+      name: TOTAL SA
+    - symbol: URW.PA
+      source: yfinance
+      name: Unibail-Rodamco-Westfield
+    - symbol: VIE.PA
+      source: yfinance
+      name: Veolia Environnement SA
+    - symbol: DG.PA
+      source: yfinance
+      name: VINCI SA
+    - symbol: VIV.PA
+      source: yfinance
+      name: Vivendi SA
+    - symbol: WLN.PA
+      source: yfinance
+      name: Worldline SA
+    - symbol: BA.PA
+      source: yfinance
+      name: The Boeing Company
+    - symbol: GE.PA
+      source: yfinance
+      name: General Electric Company
+    - symbol: ESF0.PA
+      source: yfinance
+      name: Eurofins Scientific SE
+    - symbol: HO.PA
+      source: yfinance
+      name: Thales S.A.
+    - symbol: MC.PA
+      source: yfinance
+      name: LVMH Moët Hennessy - Louis Vuitton, Société Européenne
+    - symbol: GLE.PA
+      source: yfinance
+      name: Société Générale SA
+    - symbol: STLA.PA
+      source: yfinance
+      name: Stellantis N.V.
+    - symbol: TEP.PA
+      source: yfinance
+      name: Teleperformance
+  BEL 20:
+    - symbol: DB1.BR
+      source: yfinance
+      name: Deutsche Börse AG
+    - symbol: ABI.BR
+      source: yfinance
+      name: Anheuser-Busch InBev SA/NV
+    - symbol: XBRU.BR
+      source: yfinance
+      name: Ackermans & van Haaren
+    - symbol: AGS.BR
+      source: yfinance
+      name: Ageas SA/NV
+    - symbol: APAM.BR
+      source: yfinance
+      name: Aperam SA
+    - symbol: ARGX.BR
+      source: yfinance
+      name: argenx SE
+    - symbol: COFB.BR
+      source: yfinance
+      name: Cofinimmo SA
+    - symbol: GLPG.BR
+      source: yfinance
+      name: Galapagos NV
+    - symbol: GBLB.BR
+      source: yfinance
+      name: Groupe Bruxelles Lambert SA
+    - symbol: KBC.BR
+      source: yfinance
+      name: KBC Group NV
+    - symbol: PROX.BR
+      source: yfinance
+      name: Proximus PLC
+    - symbol: SOLB.BR
+      source: yfinance
+      name: Solvay SA
+    - symbol: XBRU.BR
+      source: yfinance
+      name: UCB S.A.
+    - symbol: AOO.BR
+      source: yfinance
+      name: Aedifica
+    - symbol: XBRU.BR
+      source: yfinance
+      name: Colruyt Group
+    - symbol: XBRU.BR
+      source: yfinance
+      name: UMICORE N.V./S.A.
+    - symbol: XBRU.BR
+      source: yfinance
+      name: Elia
+  FTSE 100:
+    - symbol: III.L
+      source: yfinance
+      name: 3i Group PLC
+    - symbol: ADM.L
+      source: yfinance
+      name: Admiral Group PLC
+    - symbol: AAL.L
+      source: yfinance
+      name: Anglo American PLC
+    - symbol: ANTO.L
+      source: yfinance
+      name: Antofagasta PLC
+    - symbol: AHT.L
+      source: yfinance
+      name: Ashtead Group PLC
+    - symbol: ABF.L
+      source: yfinance
+      name: Associated British Foods PLC
+    - symbol: AZN.L
+      source: yfinance
+      name: AstraZeneca PLC
+    - symbol: AUTO.L
+      source: yfinance
+      name: Auto Trader Group PLC
+    - symbol: AV..L
+      source: yfinance
+      name: Aviva PLC
+    - symbol: BA..L
+      source: yfinance
+      name: BAE Systems PLC
+    - symbol: BARC.L
+      source: yfinance
+      name: Barclays PLC
+    - symbol: BDEV.L
+      source: yfinance
+      name: Barratt Developments PLC
+    - symbol: BKG.L
+      source: yfinance
+      name: Berkeley Group Holdings/The
+    - symbol: BP..L
+      source: yfinance
+      name: BP PLC
+    - symbol: BATS.L
+      source: yfinance
+      name: British American Tobacco p.l.c.
+    - symbol: BLND.L
+      source: yfinance
+      name: British Land Company PLC
+    - symbol: BT.A.L
+      source: yfinance
+      name: BT Group PLC
+    - symbol: BNZL.L
+      source: yfinance
+      name: Bunzl PLC
+    - symbol: BRBY.L
+      source: yfinance
+      name: Burberry Group PLC
+    - symbol: CNA.L
+      source: yfinance
+      name: Centrica PLC
+    - symbol: CCH.L
+      source: yfinance
+      name: Coca-Cola HBC AG
+    - symbol: CPG.L
+      source: yfinance
+      name: Compass Group PLC
+    - symbol: CRH.L
+      source: yfinance
+      name: CRH PLC
+    - symbol: CRDA.L
+      source: yfinance
+      name: Croda International PLC
+    - symbol: DCC.L
+      source: yfinance
+      name: DCC PLC
+    - symbol: DGE.L
+      source: yfinance
+      name: Diageo PLC
+    - symbol: SMDS.L
+      source: yfinance
+      name: DS Smith PLC
+    - symbol: EXPN.L
+      source: yfinance
+      name: Experian PLC
+    - symbol: FRES.L
+      source: yfinance
+      name: Fresnillo PLC
+    - symbol: GSK.L
+      source: yfinance
+      name: GlaxoSmithKline PLC
+    - symbol: GLEN.L
+      source: yfinance
+      name: Glencore PLC
+    - symbol: HLMA.L
+      source: yfinance
+      name: Halma PLC
+    - symbol: HL..L
+      source: yfinance
+      name: Hargreaves Lansdown PLC
+    - symbol: HSBA.L
+      source: yfinance
+      name: HSBC Holdings PLC
+    - symbol: IMB.L
+      source: yfinance
+      name: Imperial Brands PLC
+    - symbol: INF.L
+      source: yfinance
+      name: Informa PLC
+    - symbol: IHG.L
+      source: yfinance
+      name: InterContinental Hotels Group PLC
+    - symbol: IAG.L
+      source: yfinance
+      name: International Consolidated Airlines Group SA
+    - symbol: ITRK.L
+      source: yfinance
+      name: Intertek Group PLC
+    - symbol: KGF.L
+      source: yfinance
+      name: Kingfisher PLC
+    - symbol: LGEN.L
+      source: yfinance
+      name: Legal & General Group PLC
+    - symbol: LLOY.L
+      source: yfinance
+      name: Lloyds Banking Group PLC
+    - symbol: LSE.L
+      source: yfinance
+      name: London Stock Exchange Group PLC
+    - symbol: MRO.L
+      source: yfinance
+      name: Melrose Industries PLC
+    - symbol: MNDI.L
+      source: yfinance
+      name: Mondi PLC
+    - symbol: NG..L
+      source: yfinance
+      name: National Grid PLC
+    - symbol: NXT.L
+      source: yfinance
+      name: NEXT PLC
+    - symbol: OCDO.L
+      source: yfinance
+      name: Ocado Group PLC
+    - symbol: PPB.L
+      source: yfinance
+      name: Flutter Entertainment PLC
+    - symbol: PSON.L
+      source: yfinance
+      name: Pearson PLC
+    - symbol: PSN.L
+      source: yfinance
+      name: Persimmon PLC
+    - symbol: PHNX.L
+      source: yfinance
+      name: Phoenix Group Holdings PLC
+    - symbol: PRU.L
+      source: yfinance
+      name: Prudential PLC
+    - symbol: RB..L
+      source: yfinance
+      name: Reckitt Benckiser Group PLC
+    - symbol: REL.L
+      source: yfinance
+      name: RELX PLC
+    - symbol: RTO.L
+      source: yfinance
+      name: Rentokil Initial PLC
+    - symbol: RMV.L
+      source: yfinance
+      name: Rightmove PLC
+    - symbol: RR..L
+      source: yfinance
+      name: Rolls-Royce Holdings PLC
+    - symbol: RBS.L
+      source: yfinance
+      name: The Royal Bank of Scotland Group PLC
+    - symbol: SGE.L
+      source: yfinance
+      name: The Sage Group PLC
+    - symbol: SBRY.L
+      source: yfinance
+      name: J Sainsbury PLC
+    - symbol: SDR.L
+      source: yfinance
+      name: Schroders PLC
+    - symbol: SMT.L
+      source: yfinance
+      name: Scottish Mortgage Investment Trust PLC
+    - symbol: SGRO.L
+      source: yfinance
+      name: SEGRO PLC
+    - symbol: SVT.L
+      source: yfinance
+      name: Severn Trent PLC
+    - symbol: SN..L
+      source: yfinance
+      name: Smith & Nephew PLC
+    - symbol: SMIN.L
+      source: yfinance
+      name: Smiths Group PLC
+    - symbol: SKG.L
+      source: yfinance
+      name: Smurfit Kappa Group PLC
+    - symbol: SPX.L
+      source: yfinance
+      name: Spirax-Sarco Engineering PLC
+    - symbol: STJ.L
+      source: yfinance
+      name: St. James's Place PLC
+    - symbol: STAN.L
+      source: yfinance
+      name: Standard Chartered PLC
+    - symbol: TW..L
+      source: yfinance
+      name: Taylor Wimpey PLC
+    - symbol: TSCO.L
+      source: yfinance
+      name: Tesco PLC
+    - symbol: ULVR.L
+      source: yfinance
+      name: Unilever PLC
+    - symbol: UU..L
+      source: yfinance
+      name: United Utilities Group PLC
+    - symbol: VOD.L
+      source: yfinance
+      name: Vodafone Group PLC
+    - symbol: WTB.L
+      source: yfinance
+      name: Whitbread PLC
+    - symbol: WPP.L
+      source: yfinance
+      name: WPP PLC
+    - symbol: AVV.L
+      source: yfinance
+      name: AVEVA Group plc
+    - symbol: BME.L
+      source: yfinance
+      name: B&M S.A.
+    - symbol: ENT.L
+      source: yfinance
+      name: Entain plc
+    - symbol: ICP.L
+      source: yfinance
+      name: Intermediate Capital Group plc
+    - symbol: JD.L
+      source: yfinance
+      name: JD Sports Fashion plc
+    - symbol: LAND.L
+      source: yfinance
+      name: Landsec
+    - symbol: MNG.L
+      source: yfinance
+      name: M&G
+    - symbol: RIO.L
+      source: yfinance
+      name: Rio Tinto Group Rio Tinto plc & Rio Tinto Limited
+    - symbol: SSE.L
+      source: yfinance
+      name: SSE plc
+    - symbol: DARK.L
+      source: yfinance
+      name: Darktrace plc
+    - symbol: RDSA.L
+      source: yfinance
+      name: Royal Dutch Shell PLC
+    - symbol: AAF.L
+      source: yfinance
+      name: Airtel Africa plc
+    - symbol: EDV.L
+      source: yfinance
+      name: Endeavour Mining
+    - symbol: HWDN.L
+      source: yfinance
+      name: Howden Joinery Group plc
+    - symbol: RS.L
+      source: yfinance
+      name: RS Group plc
+    - symbol: CTEC.L
+      source: yfinance
+      name: Convatec Group plc
+    - symbol: DPH.L
+      source: yfinance
+      name: Dechra Pharmaceuticals plc
+    - symbol: FCIT.L
+      source: yfinance
+      name: F&C Investment Trust plc
+    - symbol: FRAS.L
+      source: yfinance
+      name: Frasers Group plc
+    - symbol: HLN.L
+      source: yfinance
+      name: Haleon plc
+    - symbol: HBR.L
+      source: yfinance
+      name: Harbour Energy plc
+    - symbol: HSV.L
+      source: yfinance
+      name: HomeServe plc
+    - symbol: PSH.L
+      source: yfinance
+      name: Pershing Square Holdings Ltd.
+    - symbol: UTG.L
+      source: yfinance
+      name: The Unite Group plc
+  IBEX 35:
+    - symbol: IAG.MC
+      source: yfinance
+      name: International Consolidated Airlines Group SA
+    - symbol: MT.MC
+      source: yfinance
+      name: ArcelorMittal
+    - symbol: ANA.MC
+      source: yfinance
+      name: Acciona SA
+    - symbol: ACX.MC
+      source: yfinance
+      name: Acerinox SA
+    - symbol: ACS.MC
+      source: yfinance
+      name: Actividades de Construcción y Servicios SA
+    - symbol: AENA.MC
+      source: yfinance
+      name: Aena SA
+    - symbol: AMS.MC
+      source: yfinance
+      name: Amadeus IT Group SA
+    - symbol: BBVA.MC
+      source: yfinance
+      name: Banco Bilbao Vizcaya Argentaria SA
+    - symbol: BKT.MC
+      source: yfinance
+      name: Bankinter SA
+    - symbol: CABK.MC
+      source: yfinance
+      name: CaixaBank SA
+    - symbol: CLNX.MC
+      source: yfinance
+      name: Cellnex Telecom SA
+    - symbol: ELE.MC
+      source: yfinance
+      name: Endesa SA
+    - symbol: FER.MC
+      source: yfinance
+      name: Ferrovial SA
+    - symbol: GRF.MC
+      source: yfinance
+      name: Grifols SA
+    - symbol: IBE.MC
+      source: yfinance
+      name: Iberdrola SA
+    - symbol: ITX.MC
+      source: yfinance
+      name: Industria de Diseño Textil SA
+    - symbol: IDR.MC
+      source: yfinance
+      name: Indra Sistemas SA
+    - symbol: COL.MC
+      source: yfinance
+      name: Inmobiliaria Colonial, SOCIMI SA
+    - symbol: MEL.MC
+      source: yfinance
+      name: Meliá Hotels International
+    - symbol: MRL.MC
+      source: yfinance
+      name: MERLIN Properties SOCIMI SA
+    - symbol: NTGY.MC
+      source: yfinance
+      name: Naturgy Energy Group SA
+    - symbol: REE.MC
+      source: yfinance
+      name: Red Eléctrica Corporación SA
+    - symbol: REP.MC
+      source: yfinance
+      name: Repsol SA
+    - symbol: SGRE.MC
+      source: yfinance
+      name: Siemens Gamesa Renewable Energy SA
+    - symbol: TEF.MC
+      source: yfinance
+      name: Telefónica
+    - symbol: SAB.MC
+      source: yfinance
+      name: Banco de Sabadell, S.A.
+    - symbol: SAN.MC
+      source: yfinance
+      name: Banco Santander, S.A.
+    - symbol: ENG.MC
+      source: yfinance
+      name: Enagás, S.A.
+    - symbol: FDR.MC
+      source: yfinance
+      name: Fluidra
+    - symbol: MAP.MC
+      source: yfinance
+      name: Mapfre, S.A.
+    - symbol: PHM.MC
+      source: yfinance
+      name: Pharma Mar S.A.
+    - symbol: SLR.MC
+      source: yfinance
+      name: Solar power in Spain
+    - symbol: ROVI.MC
+      source: yfinance
+      name: Laboratorios Rovi
+  NASDAQ 100:
+    - symbol: AZN
+      source: yfinance
+      name: AstraZeneca PLC
+    - symbol: AAPL
+      source: yfinance
+      name: Apple Inc.
+    - symbol: CSCO
+      source: yfinance
+      name: Cisco Systems Inc.
+    - symbol: INTC
+      source: yfinance
+      name: Intel Corporation
+    - symbol: MSFT
+      source: yfinance
+      name: Microsoft Corporation
+    - symbol: WBA
+      source: yfinance
+      name: Walgreens Boots Alliance Inc.
+    - symbol: ATVI
+      source: yfinance
+      name: Activision Blizzard Inc.
+    - symbol: ADBE
+      source: yfinance
+      name: Adobe Inc.
+    - symbol: GOOGL
+      source: yfinance
+      name: Alphabet Inc.
+    - symbol: AMZN
+      source: yfinance
+      name: Amazon.com Inc.
+    - symbol: AMGN
+      source: yfinance
+      name: Amgen Inc.
+    - symbol: ADI
+      source: yfinance
+      name: Analog Devices Inc.
+    - symbol: AMAT
+      source: yfinance
+      name: Applied Materials Inc.
+    - symbol: ADSK
+      source: yfinance
+      name: Autodesk Inc.
+    - symbol: ADP
+      source: yfinance
+      name: Automatic Data Processing Inc.
+    - symbol: BIDU
+      source: yfinance
+      name: Baidu Inc.
+    - symbol: BIIB
+      source: yfinance
+      name: Biogen Inc.
+    - symbol: CHTR
+      source: yfinance
+      name: Charter Communications Inc.
+    - symbol: CTSH
+      source: yfinance
+      name: Cognizant Technology Solutions Corporation
+    - symbol: CMCSA
+      source: yfinance
+      name: Comcast Corporation
+    - symbol: COST
+      source: yfinance
+      name: Costco Wholesale Corporation
+    - symbol: CSX
+      source: yfinance
+      name: CSX Corporation
+    - symbol: DLTR
+      source: yfinance
+      name: Dollar Tree Inc.
+    - symbol: EBAY
+      source: yfinance
+      name: eBay Inc.
+    - symbol: EA
+      source: yfinance
+      name: Electronic Arts Inc.
+    - symbol: FAST
+      source: yfinance
+      name: Fastenal Company
+    - symbol: FISV
+      source: yfinance
+      name: Fiserv Inc.
+    - symbol: GILD
+      source: yfinance
+      name: Gilead Sciences Inc.
+    - symbol: ILMN
+      source: yfinance
+      name: Illumina Inc.
+    - symbol: INTU
+      source: yfinance
+      name: Intuit Inc.
+    - symbol: ISRG
+      source: yfinance
+      name: Intuitive Surgical Inc.
+    - symbol: JD
+      source: yfinance
+      name: JD.com Inc.
+    - symbol: KHC
+      source: yfinance
+      name: The Kraft Heinz Company
+    - symbol: LRCX
+      source: yfinance
+      name: Lam Research Corporation
+    - symbol: MAR
+      source: yfinance
+      name: Marriott International Inc.
+    - symbol: MCHP
+      source: yfinance
+      name: Microchip Technology Inc.
+    - symbol: MU
+      source: yfinance
+      name: Micron Technology Inc.
+    - symbol: MDLZ
+      source: yfinance
+      name: Mondelez International Inc.
+    - symbol: MNST
+      source: yfinance
+      name: Monster Beverage Corporation
+    - symbol: NTES
+      source: yfinance
+      name: NetEase Inc.
+    - symbol: NFLX
+      source: yfinance
+      name: Netflix Inc.
+    - symbol: NVDA
+      source: yfinance
+      name: NVIDIA Corporation
+    - symbol: NXPI
+      source: yfinance
+      name: NXP Semiconductors N.V.
+    - symbol: ORLY
+      source: yfinance
+      name: O'Reilly Automotive Inc.
+    - symbol: PCAR
+      source: yfinance
+      name: PACCAR Inc
+    - symbol: PAYX
+      source: yfinance
+      name: Paychex Inc.
+    - symbol: PYPL
+      source: yfinance
+      name: PayPal Holdings Inc.
+    - symbol: QCOM
+      source: yfinance
+      name: Qualcomm Inc.
+    - symbol: REGN
+      source: yfinance
+      name: Regeneron Pharmaceuticals Inc.
+    - symbol: ROST
+      source: yfinance
+      name: Ross Stores Inc.
+    - symbol: SIRI
+      source: yfinance
+      name: Sirius XM Holdings Inc.
+    - symbol: SWKS
+      source: yfinance
+      name: Skyworks Solutions Inc.
+    - symbol: SBUX
+      source: yfinance
+      name: Starbucks Corporation
+    - symbol: TMUS
+      source: yfinance
+      name: T-Mobile US Inc.
+    - symbol: TSLA
+      source: yfinance
+      name: Tesla Inc.
+    - symbol: TXN
+      source: yfinance
+      name: Texas Instruments Inc.
+    - symbol: VRSK
+      source: yfinance
+      name: Verisk Analytics Inc.
+    - symbol: VRTX
+      source: yfinance
+      name: Vertex Pharmaceuticals Inc.
+    - symbol: BKNG
+      source: yfinance
+      name: Booking Holdings Inc.
+    - symbol: EXC
+      source: yfinance
+      name: Exelon Corporation
+    - symbol: HON
+      source: yfinance
+      name: Honeywell International Inc.
+    - symbol: AMD
+      source: yfinance
+      name: Advanced Micro Devices Inc.
+    - symbol: ALGN
+      source: yfinance
+      name: Align Technology Inc.
+    - symbol: AEP
+      source: yfinance
+      name: American Electric Power Company Inc.
+    - symbol: ANSS
+      source: yfinance
+      name: ANSYS Inc.
+    - symbol: AVGO
+      source: yfinance
+      name: Broadcom Inc.
+    - symbol: CDNS
+      source: yfinance
+      name: Cadence Design Systems Inc.
+    - symbol: CTAS
+      source: yfinance
+      name: Cintas Corporation
+    - symbol: STZ
+      source: yfinance
+      name: Constellation Brands Inc.
+    - symbol: CPRT
+      source: yfinance
+      name: Copart Inc.
+    - symbol: FTNT
+      source: yfinance
+      name: Fortinet Inc.
+    - symbol: IDXX
+      source: yfinance
+      name: IDEXX Laboratories Inc.
+    - symbol: KLAC
+      source: yfinance
+      name: KLA-Tencor Corporation
+    - symbol: SNPS
+      source: yfinance
+      name: Synopsys Inc.
+    - symbol: VRSN
+      source: yfinance
+      name: VeriSign Inc.
+    - symbol: ASML
+      source: yfinance
+      name: ASML Holding N.V.
+    - symbol: DXCM
+      source: yfinance
+      name: DexCom, Inc.
+    - symbol: ODFL
+      source: yfinance
+      name: Old Dominion Freight Line, Inc.
+    - symbol: PEP
+      source: yfinance
+      name: PepsiCo, Inc.
+    - symbol: XEL
+      source: yfinance
+      name: Xcel Energy Inc.
+    - symbol: TEAM
+      source: yfinance
+      name: Atlassian Corporation Plc
+    - symbol: DOCU
+      source: yfinance
+      name: DocuSign, Inc.
+    - symbol: KDP
+      source: yfinance
+      name: Keurig Dr Pepper Inc.
+    - symbol: LULU
+      source: yfinance
+      name: lululemon athletica inc.
+    - symbol: MRVL
+      source: yfinance
+      name: Marvell Technology Group Ltd.
+    - symbol: MTCH
+      source: yfinance
+      name: Match Group, Inc.
+    - symbol: MELI
+      source: yfinance
+      name: Mercado Libre, Inc.
+    - symbol: MRNA
+      source: yfinance
+      name: Moderna, Inc.
+    - symbol: OKTA
+      source: yfinance
+      name: Okta, Inc.
+    - symbol: PDD
+      source: yfinance
+      name: Pinduoduo Inc.
+    - symbol: SGEN
+      source: yfinance
+      name: Seagen Inc.
+    - symbol: SPLK
+      source: yfinance
+      name: Splunk Inc.
+    - symbol: WDAY
+      source: yfinance
+      name: Workday, Inc.
+    - symbol: ZM
+      source: yfinance
+      name: Zoom Video Communications, Inc.
+    - symbol: CRWD
+      source: yfinance
+      name: CrowdStrike Holdings, Inc.
+    - symbol: ABNB
+      source: yfinance
+      name: Airbnb, Inc.
+    - symbol: DDOG
+      source: yfinance
+      name: Datadog, Inc.
+    - symbol: PANW
+      source: yfinance
+      name: Palo Alto Networks, Inc.
+    - symbol: ZS
+      source: yfinance
+      name: Zscaler, Inc.
+    - symbol: META
+      source: yfinance
+      name: Meta Platforms, Inc.
+    - symbol: LCID
+      source: yfinance
+      name: Lucid Motors
+  S&P 100:
+    - symbol: LIN
+      source: yfinance
+      name: Linde PLC
+    - symbol: MMM
+      source: yfinance
+      name: 3M Company
+    - symbol: AXP
+      source: yfinance
+      name: American Express Company
+    - symbol: AAPL
+      source: yfinance
+      name: Apple Inc.
+    - symbol: BA
+      source: yfinance
+      name: The Boeing Company
+    - symbol: CAT
+      source: yfinance
+      name: Caterpillar Inc.
+    - symbol: CVX
+      source: yfinance
+      name: Chevron Corporation
+    - symbol: CSCO
+      source: yfinance
+      name: Cisco Systems Inc.
+    - symbol: KO
+      source: yfinance
+      name: The Coca-Cola Company
+    - symbol: XOM
+      source: yfinance
+      name: Exxon Mobil Corporation
+    - symbol: GS
+      source: yfinance
+      name: The Goldman Sachs Group Inc.
+    - symbol: HD
+      source: yfinance
+      name: The Home Depot Inc.
+    - symbol: IBM
+      source: yfinance
+      name: International Business Machines Corporation
+    - symbol: INTC
+      source: yfinance
+      name: Intel Corporation
+    - symbol: JNJ
+      source: yfinance
+      name: Johnson & Johnson
+    - symbol: JPM
+      source: yfinance
+      name: JPMorgan Chase & Co.
+    - symbol: MCD
+      source: yfinance
+      name: McDonald's Corporation
+    - symbol: NKE
+      source: yfinance
+      name: Nike, Inc.
+    - symbol: MRK
+      source: yfinance
+      name: Merck & Co. Inc.
+    - symbol: MSFT
+      source: yfinance
+      name: Microsoft Corporation
+    - symbol: PFE
+      source: yfinance
+      name: Pfizer Inc.
+    - symbol: PG
+      source: yfinance
+      name: The Procter & Gamble Company
+    - symbol: UNH
+      source: yfinance
+      name: UnitedHealth Group Inc.
+    - symbol: VZ
+      source: yfinance
+      name: Verizon Communications Inc.
+    - symbol: V
+      source: yfinance
+      name: Visa Inc.
+    - symbol: WMT
+      source: yfinance
+      name: Walmart Inc.
+    - symbol: WBA
+      source: yfinance
+      name: Walgreens Boots Alliance Inc.
+    - symbol: DIS
+      source: yfinance
+      name: The Walt Disney Company
+    - symbol: ADBE
+      source: yfinance
+      name: Adobe Inc.
+    - symbol: GOOGL
+      source: yfinance
+      name: Alphabet Inc.
+    - symbol: AMZN
+      source: yfinance
+      name: Amazon.com Inc.
+    - symbol: AMGN
+      source: yfinance
+      name: Amgen Inc.
+    - symbol: CHTR
+      source: yfinance
+      name: Charter Communications Inc.
+    - symbol: CMCSA
+      source: yfinance
+      name: Comcast Corporation
+    - symbol: COST
+      source: yfinance
+      name: Costco Wholesale Corporation
+    - symbol: GILD
+      source: yfinance
+      name: Gilead Sciences Inc.
+    - symbol: KHC
+      source: yfinance
+      name: The Kraft Heinz Company
+    - symbol: MDLZ
+      source: yfinance
+      name: Mondelez International Inc.
+    - symbol: NFLX
+      source: yfinance
+      name: Netflix Inc.
+    - symbol: NVDA
+      source: yfinance
+      name: NVIDIA Corporation
+    - symbol: PYPL
+      source: yfinance
+      name: PayPal Holdings Inc.
+    - symbol: QCOM
+      source: yfinance
+      name: Qualcomm Inc.
+    - symbol: SBUX
+      source: yfinance
+      name: Starbucks Corporation
+    - symbol: TMUS
+      source: yfinance
+      name: T-Mobile US Inc.
+    - symbol: TSLA
+      source: yfinance
+      name: Tesla Inc.
+    - symbol: TXN
+      source: yfinance
+      name: Texas Instruments Inc.
+    - symbol: ABT
+      source: yfinance
+      name: Abbott Laboratories
+    - symbol: ABBV
+      source: yfinance
+      name: AbbVie Inc.
+    - symbol: ACN
+      source: yfinance
+      name: Accenture PLC
+    - symbol: MO
+      source: yfinance
+      name: Altria Group Inc.
+    - symbol: AIG
+      source: yfinance
+      name: American International Group Inc.
+    - symbol: T
+      source: yfinance
+      name: AT&T Inc
+    - symbol: BAC
+      source: yfinance
+      name: Bank of America Corporation
+    - symbol: BK
+      source: yfinance
+      name: The Bank of New York Mellon Corporation
+    - symbol: BRK-B
+      source: yfinance
+      name: Berkshire Hathaway Inc.
+    - symbol: BLK
+      source: yfinance
+      name: BlackRock Inc.
+    - symbol: BKNG
+      source: yfinance
+      name: Booking Holdings Inc.
+    - symbol: BMY
+      source: yfinance
+      name: Bristol-Myers Squibb Company
+    - symbol: COF
+      source: yfinance
+      name: Capital One Financial Corporation
+    - symbol: C
+      source: yfinance
+      name: Citigroup Inc.
+    - symbol: CL
+      source: yfinance
+      name: Colgate-Palmolive Company
+    - symbol: COP
+      source: yfinance
+      name: ConocoPhillips
+    - symbol: CVS
+      source: yfinance
+      name: CVS Health Corporation
+    - symbol: DHR
+      source: yfinance
+      name: Danaher Corporation
+    - symbol: DUK
+      source: yfinance
+      name: Duke Energy Corporation
+    - symbol: LLY
+      source: yfinance
+      name: Eli Lilly and Company
+    - symbol: EMR
+      source: yfinance
+      name: Emerson Electric Co.
+    - symbol: EXC
+      source: yfinance
+      name: Exelon Corporation
+    - symbol: FDX
+      source: yfinance
+      name: FedEx Corporation
+    - symbol: F
+      source: yfinance
+      name: Ford Motor Company
+    - symbol: GE
+      source: yfinance
+      name: General Electric Company
+    - symbol: GM
+      source: yfinance
+      name: General Motors Company
+    - symbol: HON
+      source: yfinance
+      name: Honeywell International Inc.
+    - symbol: LOW
+      source: yfinance
+      name: Lowe's Companies Inc.
+    - symbol: MA
+      source: yfinance
+      name: Mastercard Inc.
+    - symbol: MDT
+      source: yfinance
+      name: Medtronic PLC
+    - symbol: MET
+      source: yfinance
+      name: MetLife Inc.
+    - symbol: MS
+      source: yfinance
+      name: Morgan Stanley
+    - symbol: NEE
+      source: yfinance
+      name: NextEra Energy Inc.
+    - symbol: ORCL
+      source: yfinance
+      name: Oracle Corporation
+    - symbol: PM
+      source: yfinance
+      name: Philip Morris International Inc.
+    - symbol: RTN
+      source: yfinance
+      name: Raytheon Company
+    - symbol: SPG
+      source: yfinance
+      name: Simon Property Group Inc.
+    - symbol: SO
+      source: yfinance
+      name: Southern Company
+    - symbol: TGT
+      source: yfinance
+      name: Target Corporation
+    - symbol: UNP
+      source: yfinance
+      name: Union Pacific Corporation
+    - symbol: UPS
+      source: yfinance
+      name: United Parcel Service Inc.
+    - symbol: USB
+      source: yfinance
+      name: U.S. Bancorp
+    - symbol: WFC
+      source: yfinance
+      name: Wells Fargo & Company
+    - symbol: AMD
+      source: yfinance
+      name: Advanced Micro Devices Inc.
+    - symbol: AMT
+      source: yfinance
+      name: American Tower Corporation
+    - symbol: AVGO
+      source: yfinance
+      name: Broadcom Inc.
+    - symbol: CRM
+      source: yfinance
+      name: salesforce.com Inc.
+    - symbol: SCHW
+      source: yfinance
+      name: The Charles Schwab Corporation
+    - symbol: TMO
+      source: yfinance
+      name: Thermo Fisher Scientific Inc.
+    - symbol: DOW
+      source: yfinance
+      name: Dow Inc.
+    - symbol: GD
+      source: yfinance
+      name: General Dynamics Corporation
+    - symbol: LMT
+      source: yfinance
+      name: Lockheed Martin Corporation
+    - symbol: PEP
+      source: yfinance
+      name: PepsiCo, Inc.
+    - symbol: META
+      source: yfinance
+      name: Meta Platforms, Inc.
+  S&P 500:
+    - symbol: LIN
+      source: yfinance
+      name: Linde PLC
+    - symbol: CCL
+      source: yfinance
+      name: Carnival Corporation
+    - symbol: SSE
+      source: yfinance
+      name: STERIS PLC
+    - symbol: MMM
+      source: yfinance
+      name: 3M Company
+    - symbol: AXP
+      source: yfinance
+      name: American Express Company
+    - symbol: AAPL
+      source: yfinance
+      name: Apple Inc.
+    - symbol: BA
+      source: yfinance
+      name: The Boeing Company
+    - symbol: CAT
+      source: yfinance
+      name: Caterpillar Inc.
+    - symbol: CVX
+      source: yfinance
+      name: Chevron Corporation
+    - symbol: CSCO
+      source: yfinance
+      name: Cisco Systems Inc.
+    - symbol: KO
+      source: yfinance
+      name: The Coca-Cola Company
+    - symbol: DOW
+      source: yfinance
+      name: DowDuPont Inc.
+    - symbol: XOM
+      source: yfinance
+      name: Exxon Mobil Corporation
+    - symbol: GS
+      source: yfinance
+      name: The Goldman Sachs Group Inc.
+    - symbol: HD
+      source: yfinance
+      name: The Home Depot Inc.
+    - symbol: IBM
+      source: yfinance
+      name: International Business Machines Corporation
+    - symbol: INTC
+      source: yfinance
+      name: Intel Corporation
+    - symbol: JNJ
+      source: yfinance
+      name: Johnson & Johnson
+    - symbol: JPM
+      source: yfinance
+      name: JPMorgan Chase & Co.
+    - symbol: MCD
+      source: yfinance
+      name: McDonald's Corporation
+    - symbol: NKE
+      source: yfinance
+      name: Nike, Inc.
+    - symbol: MRK
+      source: yfinance
+      name: Merck & Co. Inc.
+    - symbol: MSFT
+      source: yfinance
+      name: Microsoft Corporation
+    - symbol: PFE
+      source: yfinance
+      name: Pfizer Inc.
+    - symbol: PG
+      source: yfinance
+      name: The Procter & Gamble Company
+    - symbol: TRV
+      source: yfinance
+      name: The Travelers Companies Inc.
+    - symbol: UNH
+      source: yfinance
+      name: UnitedHealth Group Inc.
+    - symbol: VZ
+      source: yfinance
+      name: Verizon Communications Inc.
+    - symbol: V
+      source: yfinance
+      name: Visa Inc.
+    - symbol: WMT
+      source: yfinance
+      name: Walmart Inc.
+    - symbol: WBA
+      source: yfinance
+      name: Walgreens Boots Alliance Inc.
+    - symbol: DIS
+      source: yfinance
+      name: The Walt Disney Company
+    - symbol: ATVI
+      source: yfinance
+      name: Activision Blizzard Inc.
+    - symbol: ADBE
+      source: yfinance
+      name: Adobe Inc.
+    - symbol: AKAM
+      source: yfinance
+      name: Akamai Technologies Inc.
+    - symbol: GOOGL
+      source: yfinance
+      name: Alphabet Inc.
+    - symbol: AMZN
+      source: yfinance
+      name: Amazon.com Inc.
+    - symbol: AAL
+      source: yfinance
+      name: American Airlines Group Inc.
+    - symbol: AMGN
+      source: yfinance
+      name: Amgen Inc.
+    - symbol: ADI
+      source: yfinance
+      name: Analog Devices Inc.
+    - symbol: AMAT
+      source: yfinance
+      name: Applied Materials Inc.
+    - symbol: ADSK
+      source: yfinance
+      name: Autodesk Inc.
+    - symbol: ADP
+      source: yfinance
+      name: Automatic Data Processing Inc.
+    - symbol: BIIB
+      source: yfinance
+      name: Biogen Inc.
+    - symbol: CHTR
+      source: yfinance
+      name: Charter Communications Inc.
+    - symbol: CTSH
+      source: yfinance
+      name: Cognizant Technology Solutions Corporation
+    - symbol: CMCSA
+      source: yfinance
+      name: Comcast Corporation
+    - symbol: COST
+      source: yfinance
+      name: Costco Wholesale Corporation
+    - symbol: CSX
+      source: yfinance
+      name: CSX Corporation
+    - symbol: XRAY
+      source: yfinance
+      name: Dentyply Sirona Inc.
+    - symbol: DISH
+      source: yfinance
+      name: DISH Network Corporation
+    - symbol: DLTR
+      source: yfinance
+      name: Dollar Tree Inc.
+    - symbol: EBAY
+      source: yfinance
+      name: eBay Inc.
+    - symbol: EA
+      source: yfinance
+      name: Electronic Arts Inc.
+    - symbol: EXPE
+      source: yfinance
+      name: Expedia Group Inc.
+    - symbol: FAST
+      source: yfinance
+      name: Fastenal Company
+    - symbol: FISV
+      source: yfinance
+      name: Fiserv Inc.
+    - symbol: GILD
+      source: yfinance
+      name: Gilead Sciences Inc.
+    - symbol: HSIC
+      source: yfinance
+      name: Henry Schein Inc.
+    - symbol: ILMN
+      source: yfinance
+      name: Illumina Inc.
+    - symbol: INCY
+      source: yfinance
+      name: Incyte Corporation
+    - symbol: INTU
+      source: yfinance
+      name: Intuit Inc.
+    - symbol: ISRG
+      source: yfinance
+      name: Intuitive Surgical Inc.
+    - symbol: KHC
+      source: yfinance
+      name: The Kraft Heinz Company
+    - symbol: LRCX
+      source: yfinance
+      name: Lam Research Corporation
+    - symbol: MAR
+      source: yfinance
+      name: Marriott International Inc.
+    - symbol: MCHP
+      source: yfinance
+      name: Microchip Technology Inc.
+    - symbol: MU
+      source: yfinance
+      name: Micron Technology Inc.
+    - symbol: MDLZ
+      source: yfinance
+      name: Mondelez International Inc.
+    - symbol: MNST
+      source: yfinance
+      name: Monster Beverage Corporation
+    - symbol: NTAP
+      source: yfinance
+      name: NetApp Inc.
+    - symbol: NFLX
+      source: yfinance
+      name: Netflix Inc.
+    - symbol: NVDA
+      source: yfinance
+      name: NVIDIA Corporation
+    - symbol: NXPI
+      source: yfinance
+      name: NXP Semiconductors N.V.
+    - symbol: ORLY
+      source: yfinance
+      name: O'Reilly Automotive Inc.
+    - symbol: PCAR
+      source: yfinance
+      name: PACCAR Inc
+    - symbol: PAYX
+      source: yfinance
+      name: Paychex Inc.
+    - symbol: PYPL
+      source: yfinance
+      name: PayPal Holdings Inc.
+    - symbol: QCOM
+      source: yfinance
+      name: Qualcomm Inc.
+    - symbol: REGN
+      source: yfinance
+      name: Regeneron Pharmaceuticals Inc.
+    - symbol: ROST
+      source: yfinance
+      name: Ross Stores Inc.
+    - symbol: STX
+      source: yfinance
+      name: Seagate Technology PLC
+    - symbol: SWKS
+      source: yfinance
+      name: Skyworks Solutions Inc.
+    - symbol: SBUX
+      source: yfinance
+      name: Starbucks Corporation
+    - symbol: TMUS
+      source: yfinance
+      name: T-Mobile US Inc.
+    - symbol: TSLA
+      source: yfinance
+      name: Tesla Inc.
+    - symbol: TXN
+      source: yfinance
+      name: Texas Instruments Inc.
+    - symbol: TSCO
+      source: yfinance
+      name: Tractor Supply Company
+    - symbol: ULTA
+      source: yfinance
+      name: Ulta Beauty Inc.
+    - symbol: VRSK
+      source: yfinance
+      name: Verisk Analytics Inc.
+    - symbol: VRTX
+      source: yfinance
+      name: Vertex Pharmaceuticals Inc.
+    - symbol: WDC
+      source: yfinance
+      name: Western Digital Corporation
+    - symbol: ABT
+      source: yfinance
+      name: Abbott Laboratories
+    - symbol: ABBV
+      source: yfinance
+      name: AbbVie Inc.
+    - symbol: ACN
+      source: yfinance
+      name: Accenture PLC
+    - symbol: ALL
+      source: yfinance
+      name: The Allstate Corporation
+    - symbol: MO
+      source: yfinance
+      name: Altria Group Inc.
+    - symbol: AIG
+      source: yfinance
+      name: American International Group Inc.
+    - symbol: T
+      source: yfinance
+      name: AT&T Inc
+    - symbol: BAC
+      source: yfinance
+      name: Bank of America Corporation
+    - symbol: BK
+      source: yfinance
+      name: The Bank of New York Mellon Corporation
+    - symbol: BRK-B
+      source: yfinance
+      name: Berkshire Hathaway Inc.
+    - symbol: BLK
+      source: yfinance
+      name: BlackRock Inc.
+    - symbol: BKNG
+      source: yfinance
+      name: Booking Holdings Inc.
+    - symbol: BMY
+      source: yfinance
+      name: Bristol-Myers Squibb Company
+    - symbol: COF
+      source: yfinance
+      name: Capital One Financial Corporation
+    - symbol: C
+      source: yfinance
+      name: Citigroup Inc.
+    - symbol: CL
+      source: yfinance
+      name: Colgate-Palmolive Company
+    - symbol: COP
+      source: yfinance
+      name: ConocoPhillips
+    - symbol: CVS
+      source: yfinance
+      name: CVS Health Corporation
+    - symbol: DHR
+      source: yfinance
+      name: Danaher Corporation
+    - symbol: DUK
+      source: yfinance
+      name: Duke Energy Corporation
+    - symbol: LLY
+      source: yfinance
+      name: Eli Lilly and Company
+    - symbol: EMR
+      source: yfinance
+      name: Emerson Electric Co.
+    - symbol: EXC
+      source: yfinance
+      name: Exelon Corporation
+    - symbol: FDX
+      source: yfinance
+      name: FedEx Corporation
+    - symbol: F
+      source: yfinance
+      name: Ford Motor Company
+    - symbol: GE
+      source: yfinance
+      name: General Electric Company
+    - symbol: GM
+      source: yfinance
+      name: General Motors Company
+    - symbol: HON
+      source: yfinance
+      name: Honeywell International Inc.
+    - symbol: KMI
+      source: yfinance
+      name: Kinder Morgan Inc.
+    - symbol: LOW
+      source: yfinance
+      name: Lowe's Companies Inc.
+    - symbol: MA
+      source: yfinance
+      name: Mastercard Inc.
+    - symbol: MDT
+      source: yfinance
+      name: Medtronic PLC
+    - symbol: MET
+      source: yfinance
+      name: MetLife Inc.
+    - symbol: MS
+      source: yfinance
+      name: Morgan Stanley
+    - symbol: NEE
+      source: yfinance
+      name: NextEra Energy Inc.
+    - symbol: OXY
+      source: yfinance
+      name: Occidental Petroleum Corporation
+    - symbol: ORCL
+      source: yfinance
+      name: Oracle Corporation
+    - symbol: PM
+      source: yfinance
+      name: Philip Morris International Inc.
+    - symbol: RTN
+      source: yfinance
+      name: Raytheon Company
+    - symbol: SLB
+      source: yfinance
+      name: Schlumberger Limited
+    - symbol: SPG
+      source: yfinance
+      name: Simon Property Group Inc.
+    - symbol: SO
+      source: yfinance
+      name: Southern Company
+    - symbol: TGT
+      source: yfinance
+      name: Target Corporation
+    - symbol: UNP
+      source: yfinance
+      name: Union Pacific Corporation
+    - symbol: UPS
+      source: yfinance
+      name: United Parcel Service Inc.
+    - symbol: USB
+      source: yfinance
+      name: U.S. Bancorp
+    - symbol: WFC
+      source: yfinance
+      name: Wells Fargo & Company
+    - symbol: ABMD
+      source: yfinance
+      name: Abiomed Inc.
+    - symbol: AAP
+      source: yfinance
+      name: Advance Auto Parts Inc.
+    - symbol: AMD
+      source: yfinance
+      name: Advanced Micro Devices Inc.
+    - symbol: AES
+      source: yfinance
+      name: The AES Corporation
+    - symbol: AFL
+      source: yfinance
+      name: Aflac Inc.
+    - symbol: A
+      source: yfinance
+      name: Agilent Technologies Inc.
+    - symbol: APD
+      source: yfinance
+      name: Air Products and Chemicals Inc.
+    - symbol: ALK
+      source: yfinance
+      name: Alaska Air Group Inc.
+    - symbol: ALB
+      source: yfinance
+      name: Albemarle Corporation
+    - symbol: ARE
+      source: yfinance
+      name: Alexandria Real Estate Equities Inc.
+    - symbol: ALGN
+      source: yfinance
+      name: Align Technology Inc.
+    - symbol: ALLE
+      source: yfinance
+      name: Allegion PLC
+    - symbol: AEE
+      source: yfinance
+      name: Ameren Corporation
+    - symbol: AEP
+      source: yfinance
+      name: American Electric Power Company Inc.
+    - symbol: AMT
+      source: yfinance
+      name: American Tower Corporation
+    - symbol: AWK
+      source: yfinance
+      name: American Water Works Company Inc.
+    - symbol: AMP
+      source: yfinance
+      name: Ameriprise Financial Inc.
+    - symbol: ABC
+      source: yfinance
+      name: AmerisourceBergen Corporation
+    - symbol: AME
+      source: yfinance
+      name: AMETEK Inc.
+    - symbol: APH
+      source: yfinance
+      name: Amphenol Corporation
+    - symbol: ANSS
+      source: yfinance
+      name: ANSYS Inc.
+    - symbol: AOS
+      source: yfinance
+      name: A. O. Smith Corporation
+    - symbol: AON
+      source: yfinance
+      name: Aon PLC
+    - symbol: APA
+      source: yfinance
+      name: Apache Corporation
+    - symbol: APTV
+      source: yfinance
+      name: Aptiv PLC
+    - symbol: ADM
+      source: yfinance
+      name: Archer-Daniels-Midland Company
+    - symbol: ANET
+      source: yfinance
+      name: Arista Networks Inc.
+    - symbol: AJG
+      source: yfinance
+      name: Arthur J. Gallagher & Co.
+    - symbol: AIZ
+      source: yfinance
+      name: Assurant Inc.
+    - symbol: ATO
+      source: yfinance
+      name: Atmos Energy Corporation
+    - symbol: AZO
+      source: yfinance
+      name: AutoZone Inc.
+    - symbol: AVB
+      source: yfinance
+      name: AvalonBay Communities Inc.
+    - symbol: AVY
+      source: yfinance
+      name: Avery Dennison Corporation
+    - symbol: BKR
+      source: yfinance
+      name: Baker Hughes Company
+    - symbol: BLL
+      source: yfinance
+      name: Ball Corporation
+    - symbol: BAX
+      source: yfinance
+      name: Baxter International Inc.
+    - symbol: BDX
+      source: yfinance
+      name: Becton, Dickinson and Company
+    - symbol: BBY
+      source: yfinance
+      name: Best Buy Co. Inc.
+    - symbol: BWA
+      source: yfinance
+      name: BorgWarner Inc.
+    - symbol: BXP
+      source: yfinance
+      name: Boston Properties Inc.
+    - symbol: BSX
+      source: yfinance
+      name: Boston Scientific Corporation
+    - symbol: AVGO
+      source: yfinance
+      name: Broadcom Inc.
+    - symbol: BR
+      source: yfinance
+      name: Broadridge Financial Solutions Inc.
+    - symbol: BF-B
+      source: yfinance
+      name: Brown-Forman Corporation
+    - symbol: CHRW
+      source: yfinance
+      name: C.H. Robinson Worldwide Inc.
+    - symbol: CDNS
+      source: yfinance
+      name: Cadence Design Systems Inc.
+    - symbol: CPB
+      source: yfinance
+      name: Campbell Soup Company
+    - symbol: CAH
+      source: yfinance
+      name: Cardinal Health Inc.
+    - symbol: KMX
+      source: yfinance
+      name: CarMax Inc.
+    - symbol: CBRE
+      source: yfinance
+      name: CBRE Group Inc.
+    - symbol: CE
+      source: yfinance
+      name: Celanese Corporation
+    - symbol: CNC
+      source: yfinance
+      name: Centene Corporation
+    - symbol: CNP
+      source: yfinance
+      name: CenterPoint Energy Inc.
+    - symbol: CF
+      source: yfinance
+      name: CF Industries Holdings Inc.
+    - symbol: CMG
+      source: yfinance
+      name: Chipotle Mexican Grill Inc.
+    - symbol: CB
+      source: yfinance
+      name: Chubb Limited
+    - symbol: CHD
+      source: yfinance
+      name: Church & Dwight Co. Inc.
+    - symbol: CI
+      source: yfinance
+      name: Cigna Corporation
+    - symbol: CINF
+      source: yfinance
+      name: Cincinnati Financial Corporation
+    - symbol: CTAS
+      source: yfinance
+      name: Cintas Corporation
+    - symbol: CFG
+      source: yfinance
+      name: Citizens Financial Group Inc.
+    - symbol: CLX
+      source: yfinance
+      name: The Clorox Company
+    - symbol: CME
+      source: yfinance
+      name: CME Group Inc.
+    - symbol: CMS
+      source: yfinance
+      name: CMS Energy Corporation
+    - symbol: CMA
+      source: yfinance
+      name: Comerica Inc.
+    - symbol: CAG
+      source: yfinance
+      name: Conagra Brands Inc.
+    - symbol: ED
+      source: yfinance
+      name: Consolidated Edison Inc.
+    - symbol: STZ
+      source: yfinance
+      name: Constellation Brands Inc.
+    - symbol: COO
+      source: yfinance
+      name: The Cooper Companies Inc.
+    - symbol: CPRT
+      source: yfinance
+      name: Copart Inc.
+    - symbol: GLW
+      source: yfinance
+      name: Corning Inc.
+    - symbol: CCI
+      source: yfinance
+      name: Crown Castle International Corp
+    - symbol: CMI
+      source: yfinance
+      name: Cummins Inc.
+    - symbol: DRI
+      source: yfinance
+      name: Darden Restaurants Inc.
+    - symbol: DVA
+      source: yfinance
+      name: DaVita Inc.
+    - symbol: DE
+      source: yfinance
+      name: Deere & Company
+    - symbol: DAL
+      source: yfinance
+      name: Delta Air Lines Inc.
+    - symbol: DVN
+      source: yfinance
+      name: Devon Energy Corporation
+    - symbol: FANG
+      source: yfinance
+      name: Diamondback Energy Inc.
+    - symbol: DLR
+      source: yfinance
+      name: Digital Realty Trust Inc.
+    - symbol: DFS
+      source: yfinance
+      name: Discover Financials
+    - symbol: DG
+      source: yfinance
+      name: Dollar General Corporation
+    - symbol: D
+      source: yfinance
+      name: Dominion Energy Inc.
+    - symbol: DOV
+      source: yfinance
+      name: Dover Corporation
+    - symbol: DHI
+      source: yfinance
+      name: D.R. Horton Inc.
+    - symbol: DTE
+      source: yfinance
+      name: DTE Energy Company
+    - symbol: DXC
+      source: yfinance
+      name: DXC Technology Company
+    - symbol: EMN
+      source: yfinance
+      name: Eastman Chemical Company
+    - symbol: ETN
+      source: yfinance
+      name: Eaton Corporation PLC
+    - symbol: ECL
+      source: yfinance
+      name: Ecolab Inc.
+    - symbol: EIX
+      source: yfinance
+      name: Edison International
+    - symbol: EW
+      source: yfinance
+      name: Edwards Lifesciences Corporation
+    - symbol: ETR
+      source: yfinance
+      name: Entergy Corporation
+    - symbol: EOG
+      source: yfinance
+      name: EOG Resources Inc.
+    - symbol: EFX
+      source: yfinance
+      name: Equifax Inc.
+    - symbol: EQIX
+      source: yfinance
+      name: Equinix Inc. (REIT)
+    - symbol: EQR
+      source: yfinance
+      name: Equity Residential
+    - symbol: ESS
+      source: yfinance
+      name: Essex Property Trust Inc.
+    - symbol: RE
+      source: yfinance
+      name: Everest Re Group, Ltd.
+    - symbol: EVRG
+      source: yfinance
+      name: Evergy Inc.
+    - symbol: ES
+      source: yfinance
+      name: Eversource Energy
+    - symbol: EXPD
+      source: yfinance
+      name: Expeditors International of Washington Inc.
+    - symbol: EXR
+      source: yfinance
+      name: Extra Space Storage Inc.
+    - symbol: FFIV
+      source: yfinance
+      name: F5 Networks Inc.
+    - symbol: FRT
+      source: yfinance
+      name: Federal Realty Investment Trust
+    - symbol: FIS
+      source: yfinance
+      name: Fidelity National Information Services Inc.
+    - symbol: FITB
+      source: yfinance
+      name: Fifth Third Bancorp
+    - symbol: FRC
+      source: yfinance
+      name: First Republic Bank
+    - symbol: FE
+      source: yfinance
+      name: FirstEnergy Corp.
+    - symbol: FLT
+      source: yfinance
+      name: FleetCor Technologies Inc.
+    - symbol: FMC
+      source: yfinance
+      name: FMC Corporation
+    - symbol: FTNT
+      source: yfinance
+      name: Fortinet Inc.
+    - symbol: FTV
+      source: yfinance
+      name: Fortive Corporation
+    - symbol: FBHS
+      source: yfinance
+      name: Fortune Brands Home & Security Inc.
+    - symbol: FOXA
+      source: yfinance
+      name: Fox Corporation
+    - symbol: BEN
+      source: yfinance
+      name: Franklin Resources Inc.
+    - symbol: FCX
+      source: yfinance
+      name: Freeport-McMoRan Inc.
+    - symbol: GRMN
+      source: yfinance
+      name: Garmin Ltd.
+    - symbol: IT
+      source: yfinance
+      name: Gartner Inc.
+    - symbol: GIS
+      source: yfinance
+      name: General Mills Inc.
+    - symbol: GPC
+      source: yfinance
+      name: Genuine Parts Company
+    - symbol: GPN
+      source: yfinance
+      name: Global Payments Inc.
+    - symbol: GWW
+      source: yfinance
+      name: W.W. Grainger Inc.
+    - symbol: HAL
+      source: yfinance
+      name: Halliburton Company
+    - symbol: HIG
+      source: yfinance
+      name: The Hartford Financials Group Inc.
+    - symbol: HAS
+      source: yfinance
+      name: Hasbro Inc.
+    - symbol: HCA
+      source: yfinance
+      name: HCA Healthcare Inc.
+    - symbol: PEAK
+      source: yfinance
+      name: Healthpeak Properties, Inc.
+    - symbol: HSY
+      source: yfinance
+      name: The Hershey Company
+    - symbol: HES
+      source: yfinance
+      name: Hess Corporation
+    - symbol: HPE
+      source: yfinance
+      name: Hewlett Packard Enterprise Company
+    - symbol: HLT
+      source: yfinance
+      name: Hilton Worldwide Holdings Inc.
+    - symbol: HOLX
+      source: yfinance
+      name: Hologic Inc.
+    - symbol: HRL
+      source: yfinance
+      name: Hormel Foods Corporation
+    - symbol: HST
+      source: yfinance
+      name: Host Hotels & Resorts Inc.
+    - symbol: HPQ
+      source: yfinance
+      name: HP Inc.
+    - symbol: HUM
+      source: yfinance
+      name: Humana Inc.
+    - symbol: HBAN
+      source: yfinance
+      name: Huntington Bancshares Inc.
+    - symbol: HII
+      source: yfinance
+      name: Huntington Ingalls Industries Inc.
+    - symbol: IDXX
+      source: yfinance
+      name: IDEXX Laboratories Inc.
+    - symbol: ITW
+      source: yfinance
+      name: Illinois Tool Works Inc.
+    - symbol: ICE
+      source: yfinance
+      name: Intercontinental Exchange Inc.
+    - symbol: IFF
+      source: yfinance
+      name: International Flavors & Fragrances Inc.
+    - symbol: IP
+      source: yfinance
+      name: International Paper Company
+    - symbol: IPG
+      source: yfinance
+      name: The Interpublic Group of Companies Inc.
+    - symbol: IVZ
+      source: yfinance
+      name: Invesco Ltd.
+    - symbol: IQV
+      source: yfinance
+      name: IQVIA Holdings Inc.
+    - symbol: IRM
+      source: yfinance
+      name: Iron Mountain Inc.
+    - symbol: JBHT
+      source: yfinance
+      name: J.B. Hunt Transport Services Inc.
+    - symbol: JKHY
+      source: yfinance
+      name: Jack Henry & Associates Inc.
+    - symbol: JEC
+      source: yfinance
+      name: Jacobs Engineering Group Inc.
+    - symbol: SJM
+      source: yfinance
+      name: The J. M. Smucker Company
+    - symbol: JCI
+      source: yfinance
+      name: Johnson Controls International PLC
+    - symbol: JNPR
+      source: yfinance
+      name: Juniper Networks Inc.
+    - symbol: K
+      source: yfinance
+      name: Kellogg Company
+    - symbol: KEYS
+      source: yfinance
+      name: Keysight Technologies Inc.
+    - symbol: KMB
+      source: yfinance
+      name: Kimberly-Clark Corporation
+    - symbol: KIM
+      source: yfinance
+      name: Kimco Realty Corporation
+    - symbol: KLAC
+      source: yfinance
+      name: KLA-Tencor Corporation
+    - symbol: KR
+      source: yfinance
+      name: The Kroger Co.
+    - symbol: LH
+      source: yfinance
+      name: Laboratory Corporation of America Holdings
+    - symbol: LW
+      source: yfinance
+      name: Lamb Weston Holdings Inc.
+    - symbol: EL
+      source: yfinance
+      name: The Estée Lauder Companies Inc.
+    - symbol: LEN
+      source: yfinance
+      name: Lennar Corporation
+    - symbol: LNC
+      source: yfinance
+      name: Lincoln National Corporation
+    - symbol: LKQ
+      source: yfinance
+      name: LKQ Corporation
+    - symbol: L
+      source: yfinance
+      name: Loews Corporation
+    - symbol: LYB
+      source: yfinance
+      name: LyondellBasell Industries N.V.
+    - symbol: MTB
+      source: yfinance
+      name: M&T Bank Corporation
+    - symbol: MRO
+      source: yfinance
+      name: Marathon Oil Corporation
+    - symbol: MPC
+      source: yfinance
+      name: Marathon Petroleum Corporation
+    - symbol: MMC
+      source: yfinance
+      name: Marsh & McLennan Companies Inc.
+    - symbol: MLM
+      source: yfinance
+      name: Martin Marietta Materials Inc.
+    - symbol: MAS
+      source: yfinance
+      name: Masco Corporation
+    - symbol: MKC
+      source: yfinance
+      name: McCormick & Company Inc.
+    - symbol: MCK
+      source: yfinance
+      name: McKesson Corporation
+    - symbol: MTD
+      source: yfinance
+      name: Mettler-Toledo International Inc.
+    - symbol: MGM
+      source: yfinance
+      name: MGM Resorts International
+    - symbol: MAA
+      source: yfinance
+      name: Mid-America Apartment Communities Inc.
+    - symbol: MHK
+      source: yfinance
+      name: Mohawk Industries Inc.
+    - symbol: MCO
+      source: yfinance
+      name: Moody's Corporation
+    - symbol: MOS
+      source: yfinance
+      name: The Mosaic Company
+    - symbol: MSI
+      source: yfinance
+      name: Motorola Solutions Inc.
+    - symbol: MSCI
+      source: yfinance
+      name: MSCI Inc.
+    - symbol: NDAQ
+      source: yfinance
+      name: Nasdaq Inc.
+    - symbol: NWL
+      source: yfinance
+      name: Newell Brands Inc.
+    - symbol: NEM
+      source: yfinance
+      name: Newmont Goldcorp Corporation
+    - symbol: NWSA
+      source: yfinance
+      name: News Corporation
+    - symbol: NI
+      source: yfinance
+      name: NiSource Inc.
+    - symbol: NTRS
+      source: yfinance
+      name: Northern Trust Corporation
+    - symbol: NCLH
+      source: yfinance
+      name: Norwegian Cruise Line Holdings Ltd.
+    - symbol: NRG
+      source: yfinance
+      name: NRG Energy Inc.
+    - symbol: NUE
+      source: yfinance
+      name: Nucor Corporation
+    - symbol: OMC
+      source: yfinance
+      name: Omnicom Group Inc.
+    - symbol: OKE
+      source: yfinance
+      name: ONEOK Inc.
+    - symbol: PKG
+      source: yfinance
+      name: Packaging Corporation of America
+    - symbol: PH
+      source: yfinance
+      name: Parker-Hannifin Corporation
+    - symbol: PNR
+      source: yfinance
+      name: Pentair PLC
+    - symbol: PKI
+      source: yfinance
+      name: PerkinElmer Inc.
+    - symbol: PSX
+      source: yfinance
+      name: Phillips 66
+    - symbol: PNW
+      source: yfinance
+      name: Pinnacle West Capital Corporation
+    - symbol: PXD
+      source: yfinance
+      name: Pioneer Natural Resources Company
+    - symbol: PNC
+      source: yfinance
+      name: The PNC Financials Group Inc.
+    - symbol: PPG
+      source: yfinance
+      name: PPG Industries Inc.
+    - symbol: PPL
+      source: yfinance
+      name: PPL Corporation
+    - symbol: PGR
+      source: yfinance
+      name: The Progressive Corporation
+    - symbol: PLD
+      source: yfinance
+      name: Prologis Inc.
+    - symbol: PRU
+      source: yfinance
+      name: Prudential Financial Inc.
+    - symbol: PEG
+      source: yfinance
+      name: Public Service Enterprise Group Inc.
+    - symbol: PSA
+      source: yfinance
+      name: Public Storage
+    - symbol: PHM
+      source: yfinance
+      name: PulteGroup Inc.
+    - symbol: QRVO
+      source: yfinance
+      name: Qorvo Inc.
+    - symbol: PWR
+      source: yfinance
+      name: Quanta Services Inc.
+    - symbol: DGX
+      source: yfinance
+      name: Quest Diagnostics Inc.
+    - symbol: RL
+      source: yfinance
+      name: Ralph Lauren Corporation
+    - symbol: RJF
+      source: yfinance
+      name: Raymond James Financial Inc.
+    - symbol: O
+      source: yfinance
+      name: Realty Income Corporation
+    - symbol: RF
+      source: yfinance
+      name: Regions Financial Corporation
+    - symbol: RSG
+      source: yfinance
+      name: Republic Services Inc.
+    - symbol: RMD
+      source: yfinance
+      name: ResMed Inc.
+    - symbol: RHI
+      source: yfinance
+      name: Robert Half International Inc.
+    - symbol: ROK
+      source: yfinance
+      name: Rockwell Automation Inc.
+    - symbol: ROL
+      source: yfinance
+      name: Rollins Inc.
+    - symbol: ROP
+      source: yfinance
+      name: Roper Technologies Inc.
+    - symbol: RCL
+      source: yfinance
+      name: Royal Caribbean Cruises Ltd.
+    - symbol: SPGI
+      source: yfinance
+      name: S&P Global Inc.
+    - symbol: CRM
+      source: yfinance
+      name: salesforce.com Inc.
+    - symbol: SBAC
+      source: yfinance
+      name: SBA Communications Corporation
+    - symbol: SCHW
+      source: yfinance
+      name: The Charles Schwab Corporation
+    - symbol: SEE
+      source: yfinance
+      name: Sealed Air Corporation
+    - symbol: SRE
+      source: yfinance
+      name: Sempra Energy
+    - symbol: SHW
+      source: yfinance
+      name: The Sherwin-Williams Company
+    - symbol: SNA
+      source: yfinance
+      name: Snap-on Inc.
+    - symbol: LUV
+      source: yfinance
+      name: Southwest Airlines Co.
+    - symbol: SWK
+      source: yfinance
+      name: Stanley Black & Decker Inc.
+    - symbol: STT
+      source: yfinance
+      name: State Street Corporation
+    - symbol: SYK
+      source: yfinance
+      name: Stryker Corporation
+    - symbol: SIVB
+      source: yfinance
+      name: SVB Financial Group
+    - symbol: SYF
+      source: yfinance
+      name: Synchrony Financial
+    - symbol: SNPS
+      source: yfinance
+      name: Synopsys Inc.
+    - symbol: SYY
+      source: yfinance
+      name: Sysco Corporation
+    - symbol: TROW
+      source: yfinance
+      name: T. Rowe Price Group Inc.
+    - symbol: TTWO
+      source: yfinance
+      name: Take-Two Interactive Software Inc.
+    - symbol: TPR
+      source: yfinance
+      name: Tapestry Inc.
+    - symbol: TEL
+      source: yfinance
+      name: TE Connectivity Ltd.
+    - symbol: TFX
+      source: yfinance
+      name: Teleflex Inc.
+    - symbol: TMO
+      source: yfinance
+      name: Thermo Fisher Scientific Inc.
+    - symbol: TJX
+      source: yfinance
+      name: The TJX Companies Inc.
+    - symbol: TSN
+      source: yfinance
+      name: Tyson Foods Inc.
+    - symbol: UDR
+      source: yfinance
+      name: UDR Inc.
+    - symbol: UAL
+      source: yfinance
+      name: United Continental Holdings Inc.
+    - symbol: URI
+      source: yfinance
+      name: United Rentals Inc.
+    - symbol: UHS
+      source: yfinance
+      name: Universal Health Services Inc.
+    - symbol: VFC
+      source: yfinance
+      name: V.F. Corporation
+    - symbol: VLO
+      source: yfinance
+      name: Valero Energy Corporation
+    - symbol: VTR
+      source: yfinance
+      name: Ventas Inc.
+    - symbol: VRSN
+      source: yfinance
+      name: VeriSign Inc.
+    - symbol: VNO
+      source: yfinance
+      name: Vornado Realty Trust
+    - symbol: VMC
+      source: yfinance
+      name: Vulcan Materials Company
+    - symbol: WAB
+      source: yfinance
+      name: Wabtec Corporation
+    - symbol: WM
+      source: yfinance
+      name: Waste Management Inc.
+    - symbol: WAT
+      source: yfinance
+      name: Waters Corporation
+    - symbol: WEC
+      source: yfinance
+      name: WEC Energy Group Inc.
+    - symbol: WELL
+      source: yfinance
+      name: Welltower Inc.
+    - symbol: WRK
+      source: yfinance
+      name: WestRock Company
+    - symbol: WY
+      source: yfinance
+      name: Weyerhaeuser Company
+    - symbol: WHR
+      source: yfinance
+      name: Whirlpool Corporation
+    - symbol: WMB
+      source: yfinance
+      name: The Williams Companies Inc.
+    - symbol: WLTW
+      source: yfinance
+      name: WTW Public Limited Company
+    - symbol: WYNN
+      source: yfinance
+      name: Wynn Resorts, Limited
+    - symbol: XYL
+      source: yfinance
+      name: Xylem Inc.
+    - symbol: YUM
+      source: yfinance
+      name: YUM! Brands Inc.
+    - symbol: ZBH
+      source: yfinance
+      name: Zimmer Biomet Holdings Inc.
+    - symbol: ZION
+      source: yfinance
+      name: Zions Bancorporation, National Association
+    - symbol: ZTS
+      source: yfinance
+      name: Zoetis Inc.
+    - symbol: CTVA
+      source: yfinance
+      name: Corteva Inc.
+    - symbol: LNT
+      source: yfinance
+      name: Alliant Energy Corporation
+    - symbol: AMCR
+      source: yfinance
+      name: Amcor plc
+    - symbol: BIO
+      source: yfinance
+      name: Bio-Rad Laboratories, Inc.
+    - symbol: CARR
+      source: yfinance
+      name: Carrier Global Corporation
+    - symbol: CTLT
+      source: yfinance
+      name: Catalent, Inc.
+    - symbol: CBOE
+      source: yfinance
+      name: Cboe Global Markets, Inc.
+    - symbol: CDW
+      source: yfinance
+      name: CDW Corporation
+    - symbol: DXCM
+      source: yfinance
+      name: DexCom, Inc.
+    - symbol: DPZ
+      source: yfinance
+      name: Domino's Pizza, Inc.
+    - symbol: DOW
+      source: yfinance
+      name: Dow Inc.
+    - symbol: ETSY
+      source: yfinance
+      name: Etsy, Inc.
+    - symbol: GD
+      source: yfinance
+      name: General Dynamics Corporation
+    - symbol: HWM
+      source: yfinance
+      name: Howmet Aerospace Inc.
+    - symbol: IEX
+      source: yfinance
+      name: IDEX Corporation
+    - symbol: KEY
+      source: yfinance
+      name: KeyBank
+    - symbol: LHX
+      source: yfinance
+      name: L3Harris Technologies, Inc.
+    - symbol: LVS
+      source: yfinance
+      name: Las Vegas Sands Corporation
+    - symbol: LDOS
+      source: yfinance
+      name: Leidos Holdings, Inc.
+    - symbol: LYV
+      source: yfinance
+      name: Live Nation Entertainment, Inc.
+    - symbol: LMT
+      source: yfinance
+      name: Lockheed Martin Corporation
+    - symbol: LUMN
+      source: yfinance
+      name: Lumen Technologies, Inc.
+    - symbol: MKTX
+      source: yfinance
+      name: MarketAxess Holdings Inc.
+    - symbol: TAP
+      source: yfinance
+      name: Molson Coors Beverage Company
+    - symbol: NOC
+      source: yfinance
+      name: Northrop Grumman Corporation
+    - symbol: NVR
+      source: yfinance
+      name: NVR, Inc.
+    - symbol: ODFL
+      source: yfinance
+      name: Old Dominion Freight Line, Inc.
+    - symbol: OTIS
+      source: yfinance
+      name: Otis Worldwide Corporation
+    - symbol: PAYC
+      source: yfinance
+      name: Paycom Software, Inc.
+    - symbol: PEP
+      source: yfinance
+      name: PepsiCo, Inc.
+    - symbol: POOL
+      source: yfinance
+      name: Pool Corporation
+    - symbol: PFG
+      source: yfinance
+      name: Principal Financial Group, Inc.
+    - symbol: REG
+      source: yfinance
+      name: Regency Centers Corporation
+    - symbol: NOW
+      source: yfinance
+      name: ServiceNow, Inc.
+    - symbol: TDY
+      source: yfinance
+      name: Teledyne Technologies Incorporated
+    - symbol: TER
+      source: yfinance
+      name: Teradyne, Inc.
+    - symbol: TXT
+      source: yfinance
+      name: Textron Inc.
+    - symbol: TT
+      source: yfinance
+      name: Trane Technologies plc
+    - symbol: TDG
+      source: yfinance
+      name: TransDigm Group
+    - symbol: TFC
+      source: yfinance
+      name: Truist Financial Corporation
+    - symbol: TYL
+      source: yfinance
+      name: Tyler Technologies, Inc.
+    - symbol: VTRS
+      source: yfinance
+      name: Viatris Inc.
+    - symbol: WRB
+      source: yfinance
+      name: W. R. Berkley Corporation
+    - symbol: WST
+      source: yfinance
+      name: West Pharmaceutical Services, Inc.
+    - symbol: XEL
+      source: yfinance
+      name: Xcel Energy Inc.
+    - symbol: ZBRA
+      source: yfinance
+      name: Zebra Technologies Corporation
+    - symbol: KDP
+      source: yfinance
+      name: Keurig Dr Pepper Inc.
+    - symbol: MTCH
+      source: yfinance
+      name: Match Group, Inc.
+    - symbol: MRNA
+      source: yfinance
+      name: Moderna, Inc.
+    - symbol: CZR
+      source: yfinance
+      name: Caesars Entertainment, Inc.
+    - symbol: CRL
+      source: yfinance
+      name: Charles River Laboratories International, Inc.
+    - symbol: ENPH
+      source: yfinance
+      name: Enphase Energy, Inc.
+    - symbol: GNRC
+      source: yfinance
+      name: Generac Holdings Inc.
+    - symbol: MPWR
+      source: yfinance
+      name: Monolithic Power Systems, Inc.
+    - symbol: PTC
+      source: yfinance
+      name: PTC Inc.
+    - symbol: TRMB
+      source: yfinance
+      name: Trimble Inc.
+    - symbol: OGN
+      source: yfinance
+      name: Organon & Co.
+    - symbol: BBWI
+      source: yfinance
+      name: Bath & Body Works, Inc.
+    - symbol: TECH
+      source: yfinance
+      name: Bio-Techne Corporation
+    - symbol: BRO
+      source: yfinance
+      name: Brown & Brown, Inc.
+    - symbol: CDAY
+      source: yfinance
+      name: Ceridian HCM Holding Inc.
+    - symbol: IR
+      source: yfinance
+      name: Ingersoll Rand Inc.
+    - symbol: CTRA
+      source: yfinance
+      name: Coterra Energy Inc.
+    - symbol: GL
+      source: yfinance
+      name: Globe Life Field
+    - symbol: NSC
+      source: yfinance
+      name: Norfolk Southern Railway
+    - symbol: CPT
+      source: yfinance
+      name: Camden Property Trust
+    - symbol: EPAM
+      source: yfinance
+      name: EPAM Systems, Inc.
+    - symbol: FDS
+      source: yfinance
+      name: FactSet Research Systems Inc.
+    - symbol: MOH
+      source: yfinance
+      name: Molina Healthcare, Inc.
+    - symbol: NDSN
+      source: yfinance
+      name: Nordson Corporation
+    - symbol: PARA
+      source: yfinance
+      name: Paramount Global
+    - symbol: SBNY
+      source: yfinance
+      name: Signature Bank
+    - symbol: SEDG
+      source: yfinance
+      name: SolarEdge Technologies, Inc.
+    - symbol: WBD
+      source: yfinance
+      name: Warner Bros. Discovery, Inc.
+    - symbol: CSGP
+      source: yfinance
+      name: CoStar Group, Inc.
+    - symbol: ELV
+      source: yfinance
+      name: Elevance Health, Inc.
+    - symbol: EQT
+      source: yfinance
+      name: EQT Corporation
+    - symbol: INVH
+      source: yfinance
+      name: Invitation Homes Inc.
+    - symbol: "ON"
+      source: yfinance
+      name: ON Semiconductor Corporation
+    - symbol: PCG
+      source: yfinance
+      name: PG&E Corporation
+    - symbol: TRGP
+      source: yfinance
+      name: Targa Resources Corp.
+    - symbol: VICI
+      source: yfinance
+      name: Vici Properties Inc.
+    - symbol: ACGL
+      source: yfinance
+      name: Arch Capital Group Ltd.
+    - symbol: META
+      source: yfinance
+      name: Meta Platforms, Inc.
+    - symbol: GEN
+      source: yfinance
+      name: Gen Digital Inc.
+  DOW JONES:
+    - symbol: MMM
+      source: yfinance
+      name: 3M Company
+    - symbol: AXP
+      source: yfinance
+      name: American Express Company
+    - symbol: AAPL
+      source: yfinance
+      name: Apple Inc.
+    - symbol: BA
+      source: yfinance
+      name: The Boeing Company
+    - symbol: CAT
+      source: yfinance
+      name: Caterpillar Inc.
+    - symbol: CVX
+      source: yfinance
+      name: Chevron Corporation
+    - symbol: CSCO
+      source: yfinance
+      name: Cisco Systems Inc.
+    - symbol: KO
+      source: yfinance
+      name: The Coca-Cola Company
+    - symbol: GS
+      source: yfinance
+      name: The Goldman Sachs Group Inc.
+    - symbol: HD
+      source: yfinance
+      name: The Home Depot Inc.
+    - symbol: IBM
+      source: yfinance
+      name: International Business Machines Corporation
+    - symbol: INTC
+      source: yfinance
+      name: Intel Corporation
+    - symbol: JNJ
+      source: yfinance
+      name: Johnson & Johnson
+    - symbol: JPM
+      source: yfinance
+      name: JPMorgan Chase & Co.
+    - symbol: MCD
+      source: yfinance
+      name: McDonald's Corporation
+    - symbol: NKE
+      source: yfinance
+      name: Nike, Inc.
+    - symbol: MRK
+      source: yfinance
+      name: Merck & Co. Inc.
+    - symbol: MSFT
+      source: yfinance
+      name: Microsoft Corporation
+    - symbol: PG
+      source: yfinance
+      name: The Procter & Gamble Company
+    - symbol: TRV
+      source: yfinance
+      name: The Travelers Companies Inc.
+    - symbol: UNH
+      source: yfinance
+      name: UnitedHealth Group Inc.
+    - symbol: VZ
+      source: yfinance
+      name: Verizon Communications Inc.
+    - symbol: V
+      source: yfinance
+      name: Visa Inc.
+    - symbol: WMT
+      source: yfinance
+      name: Walmart Inc.
+    - symbol: WBA
+      source: yfinance
+      name: Walgreens Boots Alliance Inc.
+    - symbol: DIS
+      source: yfinance
+      name: The Walt Disney Company
+    - symbol: AMGN
+      source: yfinance
+      name: Amgen Inc.
+    - symbol: HON
+      source: yfinance
+      name: Honeywell International Inc.
+    - symbol: CRM
+      source: yfinance
+      name: salesforce.com Inc.
+    - symbol: DOW
+      source: yfinance
+      name: Dow Inc.

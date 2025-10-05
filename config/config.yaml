@@ -1,0 +1,8 @@
+settings:
+  timeframe: H1
+  default_source: yfinance
+  markets_file: config/markets.yaml
+oanda:
+  access_token: 
+    7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c
+  account_id: 101-004-12489955-001
