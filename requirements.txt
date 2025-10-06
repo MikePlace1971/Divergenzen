@@ -1,0 +1,9 @@
+# requirements.txt für das Divergenzen-Projekt
+pandas
+numpy
+matplotlib
+yfinance
+oandapyV20
+questionary
+pyyaml
+

@@ -2,9 +2,11 @@ settings:
   timeframe: D1
   default_source: yfinance
   markets_file: config/markets.yaml
+SMA:
+  langfristig: 200
+  kurzfristig: 25
 oanda:
-  access_token: 
-    7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c
+  access_token: 7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c
   account_id: 101-004-12489955-001
 divergence:
   rsi_period: 14

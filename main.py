@@ -1,6 +1,7 @@
 ﻿# /main.py
 import time
 from typing import Any, Dict, List, Optional
+from modules.sma_korrekturen_finden import finde_sma_korrekturen
 
 import questionary
 import yaml
@@ -108,10 +109,14 @@ def analyze_symbol(
         print(f"[WARN] Keine Daten fuer {symbol}.")
         return None
 
-    bars_for_analysis = lookback if isinstance(lookback, int) and lookback > 0 else len(raw_df)
+    bars_for_analysis = (
+        lookback if isinstance(lookback, int) and lookback > 0 else len(raw_df)
+    )
     analysis_df = raw_df.tail(bars_for_analysis) if bars_for_analysis else raw_df
 
-    print(f"[INFO] {len(raw_df)} Bars geladen, verwende {len(analysis_df)} Bars fuer Divergenz.")
+    print(
+        f"[INFO] {len(raw_df)} Bars geladen, verwende {len(analysis_df)} Bars fuer Divergenz."
+    )
 
     full_result = detector.find_divergences(raw_df)
 
@@ -211,63 +216,82 @@ def run_market_scanner(
     detector: DivergenceDetector,
     timeframe_choices: List[str],
 ) -> None:
-    market_choices = [
-        questionary.Choice(title=key, value=key, checked=True)
-        for key in markets.keys()
-    ]
-    selected_markets = questionary.checkbox(
-        "Maerkte zum Scannen auswaehlen:",
-        choices=market_choices,
-        validate=lambda sel: bool(sel) or "Bitte mindestens einen Markt waehlen.",
+    scan_mode = questionary.select(
+        "Was möchtest du scannen?",
+        choices=[
+            questionary.Choice("Divergenzen finden", "divergence"),
+            questionary.Choice("SMA Korrekturen finden", "sma"),
+        ],
     ).ask()
-    if not selected_markets:
-        print("[INFO] Auswahl abgebrochen.")
-        return
 
-    timeframe = questionary.select(
-        "Bitte Timeframe auswaehlen:", choices=timeframe_choices
-    ).ask()
-    if not timeframe:
-        print("[INFO] Auswahl abgebrochen.")
-        return
+    if scan_mode == "divergence":
+        # bisheriger Divergenz-Scanner
+        market_choices = [
+            questionary.Choice(title=key, value=key, checked=True)
+            for key in markets.keys()
+        ]
+        selected_markets = questionary.checkbox(
+            "Märkte zum Scannen auswählen:",
+            choices=market_choices,
+            validate=lambda sel: bool(sel) or "Bitte mindestens einen Markt wählen.",
+        ).ask()
+        if not selected_markets:
+            print("[INFO] Auswahl abgebrochen.")
+            return
 
-    print("\n================ STARTE DIVERGENZ-SCANNER ================")
+        timeframe = questionary.select(
+            "Bitte Timeframe auswählen:", choices=timeframe_choices
+        ).ask()
+        if not timeframe:
+            print("[INFO] Auswahl abgebrochen.")
+            return
 
-    results: List[Dict[str, Any]] = []
-    for market_key in selected_markets:
-        print(f"\n--- Scanne Markt: {market_key} ---")
-        for entry in markets.get(market_key, []):
-            analysis = analyze_symbol(entry, market_key, cfg, timeframe, detector)
-            if analysis:
-                results.append(analysis)
-            time.sleep(0.4)
+        print("\n================ STARTE DIVERGENZ-SCANNER ================")
 
-    found = [item for item in results if item["bullish"] or item["bearish"]]
+        results: List[Dict[str, Any]] = []
+        for market_key in selected_markets:
+            print(f"\n--- Scanne Markt: {market_key} ---")
+            for entry in markets.get(market_key, []):
+                analysis = analyze_symbol(entry, market_key, cfg, timeframe, detector)
+                if analysis:
+                    results.append(analysis)
+                time.sleep(0.4)
 
-    print("\n================ ERGEBNIS-ZUSAMMENFASSUNG ===============")
-    if not found:
-        print("Keine Divergenzen in den ausgewaehlten Maerkten gefunden.")
-        return
+        found = [item for item in results if item["bullish"] or item["bearish"]]
 
-    for item in found:
+        print("\n================ ERGEBNIS-ZUSAMMENFASSUNG ===============")
+        if not found:
+            print("Keine Divergenzen in den ausgewählten Märkten gefunden.")
+            return
+
+        for item in found:
+            print(
+                f"- {item['name']} ({item['symbol']}) | {item['market']} | "
+                f"{item['bullish']} Bullish / {item['bearish']} Bearish"
+            )
+
         print(
-            f"- {item['name']} ({item['symbol']}) | {item['market']} | "
-            f"{item['bullish']} Bullish / {item['bearish']} Bearish"
+            "\n[INFO] Öffne Charts nacheinander. Fenster schließen, um fortzufahren...\n"
         )
+        for item in found:
+            plot_candles(
+                item["df"],
+                title=f"{item['symbol']} [{item['market']}] {timeframe}",
+                name=item["name"],
+                symbol=item["symbol"],
+                index=item["market"],
+                timeframe=timeframe,
+                divergences=item["result"],
+            )
 
-    print("\n[INFO] Oeffne Charts nacheinander. Fenster schliessen, um fortzufahren...\n")
-    for item in found:
-        plot_candles(
-            item["df"],
-            title=f"{item['symbol']} [{item['market']}] {timeframe}",
-            name=item["name"],
-            symbol=item["symbol"],
-            index=item["market"],
-            timeframe=timeframe,
-            divergences=item["result"],
-        )
+        print("\n[OK] Analyse abgeschlossen.")
 
-    print("\n[OK] Analyse abgeschlossen.")
+    elif scan_mode == "sma":
+        # neue Funktion für SMA-Korrekturen
+        finde_sma_korrekturen(markets, cfg, timeframe_choices)
+
+    else:
+        print("[INFO] Auswahl abgebrochen.")
 
 
 def main() -> None:
