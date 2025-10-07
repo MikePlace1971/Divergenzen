@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
 import pandas as pd
+from datetime import datetime
+from pathlib import Path
 from modules.rsi_wilder import compute_rsi_wilder
 
 
@@ -210,16 +212,43 @@ def plot_candles(
 
     fig.autofmt_xdate()
     plt.tight_layout()
-    # Versuche nicht-blockierendes Anzeigen, warte bis das Fenster geschlossen wird.
+
+    def save_chart_fallback(error: Exception | None = None) -> Path:
+        charts_dir = Path('output') / 'charts'
+        charts_dir.mkdir(parents=True, exist_ok=True)
+        base_parts = [symbol or name or title or 'chart']
+        if timeframe:
+            base_parts.append(timeframe)
+        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+        base_parts.append(timestamp)
+        filename = '_'.join(part for part in base_parts if part)
+        safe_name = ''.join(ch if ch.isalnum() or ch in ('-', '_') else '_' for ch in filename) or 'chart'
+        output_path = charts_dir / f"{safe_name}.png"
+        fig.savefig(output_path, dpi=120)
+        if error:
+            print(f"[WARN] Interaktives Anzeigen fehlgeschlagen: {error}. Chart gespeichert unter {output_path}")
+        else:
+            print(f"[INFO] Chart gespeichert unter {output_path}")
+        return output_path
+
+    backend_name = plt.get_backend().lower()
+    is_gui_backend = any(token in backend_name for token in ('qt', 'gtk', 'tk', 'wx', 'macosx'))
+
+    if not is_gui_backend:
+        save_chart_fallback()
+        plt.close(fig)
+        return
+
     try:
         manager = plt.get_current_fig_manager()
+        if manager is None:
+            raise RuntimeError('Kein GUI-Backend verfügbar.')
         plt.show(block=False)
 
-        # Warten, bis das Fenster geschlossen wurde
-        if manager is not None:
-            while plt.fignum_exists(fig.number):
-                plt.pause(0.1)
-        else:
-            plt.show()
-    except Exception:
-        plt.show()
+        while plt.fignum_exists(fig.number):
+            plt.pause(0.1)
+    except Exception as exc:
+        save_chart_fallback(exc)
+    finally:
+        if plt.fignum_exists(fig.number):
+            plt.close(fig)
