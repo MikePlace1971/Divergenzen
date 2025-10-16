@@ -179,7 +179,8 @@ def plot_candles(
     # Formatierung
     # -----------------------------------------------------------
     # Zeichne vorhandene SMA-Linien (z. B. SMA20, SMA200, SMA{n})
-    sma_cols = [c for c in data.columns if isinstance(c, str) and c.startswith("SMA")]
+    sma_cols = [c for c in data.columns if isinstance(
+        c, str) and c.startswith("SMA")]
     if sma_cols:
         # Priorisiere längere Perioden zuerst (z.B. SMA200 unter SMA20 im Plot)
         try:
@@ -189,7 +190,8 @@ def plot_candles(
         except Exception:
             sma_sorted = sma_cols
 
-        colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"]  # blau, orange, grün, rot
+        colors = ["#1f77b4", "#ff7f0e", "#2ca02c",
+                  "#d62728"]  # blau, orange, grün, rot
         for i, col in enumerate(sma_sorted):
             color = colors[i % len(colors)]
             ax1.plot(
@@ -213,29 +215,11 @@ def plot_candles(
     fig.autofmt_xdate()
     plt.tight_layout()
 
-    def save_chart_fallback(error: Exception | None = None) -> Path:
-        charts_dir = Path('output') / 'charts'
-        charts_dir.mkdir(parents=True, exist_ok=True)
-        base_parts = [symbol or name or title or 'chart']
-        if timeframe:
-            base_parts.append(timeframe)
-        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-        base_parts.append(timestamp)
-        filename = '_'.join(part for part in base_parts if part)
-        safe_name = ''.join(ch if ch.isalnum() or ch in ('-', '_') else '_' for ch in filename) or 'chart'
-        output_path = charts_dir / f"{safe_name}.png"
-        fig.savefig(output_path, dpi=120)
-        if error:
-            print(f"[WARN] Interaktives Anzeigen fehlgeschlagen: {error}. Chart gespeichert unter {output_path}")
-        else:
-            print(f"[INFO] Chart gespeichert unter {output_path}")
-        return output_path
-
     backend_name = plt.get_backend().lower()
-    is_gui_backend = any(token in backend_name for token in ('qt', 'gtk', 'tk', 'wx', 'macosx'))
+    is_gui_backend = any(token in backend_name for token in (
+        'qt', 'gtk', 'tk', 'wx', 'macosx'))
 
     if not is_gui_backend:
-        save_chart_fallback()
         plt.close(fig)
         return
 
@@ -248,7 +232,7 @@ def plot_candles(
         while plt.fignum_exists(fig.number):
             plt.pause(0.1)
     except Exception as exc:
-        save_chart_fallback(exc)
+        print(f"Fehler beim Anzeigen des Charts: {exc}")
     finally:
         if plt.fignum_exists(fig.number):
             plt.close(fig)
