@@ -15,8 +15,8 @@ TIMEFRAME_MAP = {
 
 # Fixed history window for chart display per timeframe (in days)
 LOOKBACK_DAYS = {
-    "H4": 180,
-    "D1": 365,
+    "H4": 150,
+    "D1": 335,
 }
 
 # Hard limits imposed by yfinance per interval (in days)

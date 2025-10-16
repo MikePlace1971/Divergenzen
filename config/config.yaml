@@ -1,16 +1,20 @@
 settings:
-  timeframe: D1
-  default_source: yfinance
-  markets_file: config/markets.yaml
+  timeframe: D1               # Zeitrahmen für die Analyse: z. B. D1 (Tageschart) oder H4 (4-Stunden-Chart)
+  default_source: yfinance    # Datenquelle: 'yfinance' (Yahoo Finance) oder 'oanda'
+  markets_file: config/markets.yaml   # Pfad zur Datei mit den Marktdefinitionen (z. B. Indizes, Währungen etc.)
+
 SMA:
-  langfristig: 200
-  kurzfristig: 25
+  langfristig: 200            # Periode für den langfristigen gleitenden Durchschnitt (SMA200)
+  kurzfristig: 25             # Periode für den kurzfristigen gleitenden Durchschnitt (SMA25)
+
 oanda:
-  access_token: 7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c
-  account_id: 101-004-12489955-001
+  access_token: 7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c   # OANDA API-Zugangsschlüssel (privat halten!)
+  account_id: 101-004-12489955-001   # Deine OANDA Konto-ID für API-Zugriffe (privat halten!)
+
 divergence:
-  rsi_period: 14
-  fractal_periods: 4
-  max_bars_diff: 30
+  rsi_period: 14              # RSI-Periode (Standard 14) für Divergenzerkennung
+  fractal_periods: 4          # Wie viele Kerzen links/rechts ein Fraktalpunkt berücksichtigen soll
+  max_bars_diff: 30           # Maximale Kerzenanzahl zwischen zwei Divergenz-Punkten (Abstand)
+
 auswertung:
-  maximal_bars: 10
+  maximal_bars: 50            # Wie viele Kerzen rückblickend in der Auswertung berücksichtigt werden (z. B. für Charts oder Signale)

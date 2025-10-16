@@ -1,312 +1,124 @@
 markets:
-  OANDA_CURRENCY:
-  - symbol: AUD_CAD
-    source: oanda
-    name: AUD/CAD
-  - symbol: AUD_CHF
-    source: oanda
-    name: AUD/CHF
-  - symbol: AUD_HKD
-    source: oanda
-    name: AUD/HKD
-  - symbol: AUD_JPY
-    source: oanda
-    name: AUD/JPY
-  - symbol: AUD_NZD
-    source: oanda
-    name: AUD/NZD
-  - symbol: AUD_SGD
-    source: oanda
-    name: AUD/SGD
-  - symbol: AUD_USD
-    source: oanda
-    name: AUD/USD
-  - symbol: CAD_CHF
-    source: oanda
-    name: CAD/CHF
-  - symbol: CAD_HKD
-    source: oanda
-    name: CAD/HKD
-  - symbol: CAD_JPY
-    source: oanda
-    name: CAD/JPY
-  - symbol: CAD_SGD
-    source: oanda
-    name: CAD/SGD
-  - symbol: CHF_HKD
-    source: oanda
-    name: CHF/HKD
-  - symbol: CHF_JPY
-    source: oanda
-    name: CHF/JPY
-  - symbol: CHF_ZAR
-    source: oanda
-    name: CHF/ZAR
-  - symbol: EUR_AUD
-    source: oanda
-    name: EUR/AUD
-  - symbol: EUR_CAD
-    source: oanda
-    name: EUR/CAD
-  - symbol: EUR_CHF
-    source: oanda
-    name: EUR/CHF
-  - symbol: EUR_CZK
-    source: oanda
-    name: EUR/CZK
-  - symbol: EUR_DKK
-    source: oanda
-    name: EUR/DKK
-  - symbol: EUR_GBP
-    source: oanda
-    name: EUR/GBP
-  - symbol: EUR_HKD
-    source: oanda
-    name: EUR/HKD
-  - symbol: EUR_HUF
-    source: oanda
-    name: EUR/HUF
-  - symbol: EUR_JPY
-    source: oanda
-    name: EUR/JPY
-  - symbol: EUR_NOK
-    source: oanda
-    name: EUR/NOK
-  - symbol: EUR_NZD
-    source: oanda
-    name: EUR/NZD
-  - symbol: EUR_PLN
-    source: oanda
-    name: EUR/PLN
-  - symbol: EUR_SEK
-    source: oanda
-    name: EUR/SEK
-  - symbol: EUR_SGD
-    source: oanda
-    name: EUR/SGD
-  - symbol: EUR_TRY
-    source: oanda
-    name: EUR/TRY
-  - symbol: EUR_USD
-    source: oanda
-    name: EUR/USD
-  - symbol: EUR_ZAR
-    source: oanda
-    name: EUR/ZAR
-  - symbol: GBP_AUD
-    source: oanda
-    name: GBP/AUD
-  - symbol: GBP_CAD
-    source: oanda
-    name: GBP/CAD
-  - symbol: GBP_CHF
-    source: oanda
-    name: GBP/CHF
-  - symbol: GBP_HKD
-    source: oanda
-    name: GBP/HKD
-  - symbol: GBP_JPY
-    source: oanda
-    name: GBP/JPY
-  - symbol: GBP_NZD
-    source: oanda
-    name: GBP/NZD
-  - symbol: GBP_PLN
-    source: oanda
-    name: GBP/PLN
-  - symbol: GBP_SGD
-    source: oanda
-    name: GBP/SGD
-  - symbol: GBP_USD
-    source: oanda
-    name: GBP/USD
-  - symbol: GBP_ZAR
-    source: oanda
-    name: GBP/ZAR
-  - symbol: HKD_JPY
-    source: oanda
-    name: HKD/JPY
-  - symbol: NZD_CAD
-    source: oanda
-    name: NZD/CAD
-  - symbol: NZD_CHF
-    source: oanda
-    name: NZD/CHF
-  - symbol: NZD_HKD
-    source: oanda
-    name: NZD/HKD
-  - symbol: NZD_JPY
-    source: oanda
-    name: NZD/JPY
-  - symbol: NZD_SGD
-    source: oanda
-    name: NZD/SGD
-  - symbol: NZD_USD
-    source: oanda
-    name: NZD/USD
-  - symbol: SGD_CHF
-    source: oanda
-    name: SGD/CHF
-  - symbol: SGD_JPY
-    source: oanda
-    name: SGD/JPY
-  - symbol: TRY_JPY
-    source: oanda
-    name: TRY/JPY
-  - symbol: USD_CAD
-    source: oanda
-    name: USD/CAD
-  - symbol: USD_CHF
-    source: oanda
-    name: USD/CHF
-  - symbol: USD_CNH
-    source: oanda
-    name: USD/CNH
-  - symbol: USD_CZK
-    source: oanda
-    name: USD/CZK
-  - symbol: USD_DKK
-    source: oanda
-    name: USD/DKK
-  - symbol: USD_HKD
-    source: oanda
-    name: USD/HKD
-  - symbol: USD_HUF
-    source: oanda
-    name: USD/HUF
-  - symbol: USD_JPY
-    source: oanda
-    name: USD/JPY
-  - symbol: USD_MXN
-    source: oanda
-    name: USD/MXN
-  - symbol: USD_NOK
-    source: oanda
-    name: USD/NOK
-  - symbol: USD_PLN
-    source: oanda
-    name: USD/PLN
-  - symbol: USD_SEK
-    source: oanda
-    name: USD/SEK
-  - symbol: USD_SGD
-    source: oanda
-    name: USD/SGD
-  - symbol: USD_THB
-    source: oanda
-    name: USD/THB
-  - symbol: USD_TRY
-    source: oanda
-    name: USD/TRY
-  - symbol: USD_ZAR
-    source: oanda
-    name: USD/ZAR
-  - symbol: ZAR_JPY
-    source: oanda
-    name: ZAR/JPY
-  OANDA_Indices:
-  - symbol: AU200_AUD
-    source: oanda
+  YFINANCE_CURRENCY:
+    - symbol: EURUSD=X
+      source: yfinance
+      name: EUR/USD
+    - symbol: GBPUSD=X
+      source: yfinance
+      name: GBP/USD
+    - symbol: USDJPY=X
+      source: yfinance
+      name: USD/JPY
+    - symbol: USDCHF=X
+      source: yfinance
+      name: USD/CHF
+    - symbol: AUDUSD=X
+      source: yfinance
+      name: AUD/USD
+    - symbol: USDCAD=X
+      source: yfinance
+      name: USD/CAD
+    - symbol: EURJPY=X
+      source: yfinance
+      name: EUR/JPY
+  OANDA_Commodities_Bonds:
+    - symbol: BCO_USD
+      source: oanda
+      name: Brent Crude Oil
+    - symbol: WTICO_USD
+      source: oanda
+      name: West Texas Oil
+    - symbol: NATGAS_USD
+      source: oanda
+      name: Natural Gas
+    - symbol: XCU_USD
+      source: oanda
+      name: Copper
+    - symbol: XPD_USD
+      source: oanda
+      name: Palladium
+    - symbol: XPT_USD
+      source: oanda
+      name: Platinum
+    - symbol: CORN_USD
+      source: oanda
+      name: Corn
+    - symbol: SOYBN_USD
+      source: oanda
+      name: Soybeans
+    - symbol: SUGAR_USD
+      source: oanda
+      name: Sugar
+    - symbol: WHEAT_USD
+      source: oanda
+      name: Wheat
+    - symbol: DE10YB_EUR
+      source: oanda
+      name: Bund
+    - symbol: UK10YB_GBP
+      source: oanda
+      name: UK 10Y Gilt
+    - symbol: USB02Y_USD
+      source: oanda
+      name: US 2Y T-Note
+    - symbol: USB05Y_USD
+      source: oanda
+      name: US 5Y T-Note
+    - symbol: USB10Y_USD
+      source: oanda
+      name: US 10Y T-Note
+    - symbol: USB30Y_USD
+      source: oanda
+      name: US T-Bond
+  YFINANCE_INDICES:
+  - symbol: ^AXJO
+    source: yfinance
     name: Australia 200
-  - symbol: BCO_USD
-    source: oanda
-    name: Brent Crude Oil
-  - symbol: DE10YB_EUR
-    source: oanda
-    name: Bund
-  - symbol: CN50_USD
-    source: oanda
-    name: China A50
-  - symbol: CHINAH_HKD
-    source: oanda
+  - symbol: ^HSCE
+    source: yfinance
     name: China H Shares
-  - symbol: XCU_USD
-    source: oanda
-    name: Copper
-  - symbol: CORN_USD
-    source: oanda
-    name: Corn
-  - symbol: EU50_EUR
-    source: oanda
+  - symbol: ^STOXX50E
+    source: yfinance
     name: Europe 50
-  - symbol: FR40_EUR
-    source: oanda
+  - symbol: ^FCHI
+    source: yfinance
     name: France 40
-  - symbol: DE30_EUR
-    source: oanda
+  - symbol: ^GDAXI
+    source: yfinance
     name: Germany 30
-  - symbol: HK33_HKD
-    source: oanda
+  - symbol: ^HSI
+    source: yfinance
     name: Hong Kong 33
-  - symbol: JP225_USD
-    source: oanda
+  - symbol: ^N225
+    source: yfinance
     name: Japan 225
-  - symbol: JP225Y_JPY
-    source: oanda
-    name: Japan 225 (JPY)
-  - symbol: NATGAS_USD
-    source: oanda
-    name: Natural Gas
-  - symbol: NL25_EUR
-    source: oanda
+  - symbol: ^AEX
+    source: yfinance
     name: Netherlands 25
-  - symbol: XPD_USD
-    source: oanda
-    name: Palladium
-  - symbol: XPT_USD
-    source: oanda
-    name: Platinum
-  - symbol: SG30_SGD
-    source: oanda
+  - symbol: ^STI
+    source: yfinance
     name: Singapore 30
-  - symbol: SOYBN_USD
-    source: oanda
-    name: Soybeans
-  - symbol: ESPIX_EUR
-    source: oanda
+  - symbol: ^IBEX
+    source: yfinance
     name: Spain 35
-  - symbol: SUGAR_USD
-    source: oanda
-    name: Sugar
-  - symbol: CH20_CHF
-    source: oanda
+  - symbol: ^SSMI
+    source: yfinance
     name: Switzerland 20
-  - symbol: UK100_GBP
-    source: oanda
+  - symbol: ^FTSE
+    source: yfinance
     name: UK 100
-  - symbol: UK10YB_GBP
-    source: oanda
-    name: UK 10Y Gilt
-  - symbol: USB10Y_USD
-    source: oanda
-    name: US 10Y T-Note
-  - symbol: USB02Y_USD
-    source: oanda
-    name: US 2Y T-Note
-  - symbol: USB05Y_USD
-    source: oanda
-    name: US 5Y T-Note
-  - symbol: NAS100_USD
-    source: oanda
-    name: US Nas 100
-  - symbol: US2000_USD
-    source: oanda
-    name: US Russ 2000
-  - symbol: SPX500_USD
-    source: oanda
+  - symbol: ^NDX
+    source: yfinance
+    name: US Nasdaq 100
+  - symbol: ^RUT
+    source: yfinance
+    name: US Russell 2000
+  - symbol: ^GSPC
+    source: yfinance
     name: US SPX 500
-  - symbol: USB30Y_USD
-    source: oanda
-    name: US T-Bond
-  - symbol: US30_USD
-    source: oanda
+  - symbol: ^DJI
+    source: yfinance
     name: US Wall St 30
-  - symbol: WTICO_USD
-    source: oanda
-    name: West Texas Oil
-  - symbol: WHEAT_USD
-    source: oanda
-    name: Wheat
   OANDA_METAL:
   - symbol: XAU_USD
     source: oanda
@@ -867,7 +679,6 @@ markets:
   - symbol: VBVBF.DE
     source: yfinance
     name: VERBIO Vereinigte BioEnergie AG
-  SMI: []
   AEX:
   - symbol: ADYEN.AS
     source: yfinance
