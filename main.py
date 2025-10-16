@@ -112,7 +112,8 @@ def analyze_symbol(
     bars_for_analysis = (
         lookback if isinstance(lookback, int) and lookback > 0 else len(raw_df)
     )
-    analysis_df = raw_df.tail(bars_for_analysis) if bars_for_analysis else raw_df
+    analysis_df = raw_df.tail(
+        bars_for_analysis) if bars_for_analysis else raw_df
 
     print(
         f"[INFO] {len(raw_df)} Bars geladen, verwende {len(analysis_df)} Bars fuer Divergenz."
@@ -197,7 +198,8 @@ def run_single_analysis(
         print("[INFO] Auswahl abgebrochen.")
         return
 
-    result = analyze_symbol(symbol_choice, market_key, cfg, timeframe, detector)
+    result = analyze_symbol(symbol_choice, market_key,
+                            cfg, timeframe, detector)
     if result:
         plot_candles(
             result["df"],
@@ -233,7 +235,8 @@ def run_market_scanner(
         selected_markets = questionary.checkbox(
             "Märkte zum Scannen auswählen:",
             choices=market_choices,
-            validate=lambda sel: bool(sel) or "Bitte mindestens einen Markt wählen.",
+            validate=lambda sel: bool(
+                sel) or "Bitte mindestens einen Markt wählen.",
         ).ask()
         if not selected_markets:
             print("[INFO] Auswahl abgebrochen.")
@@ -252,7 +255,8 @@ def run_market_scanner(
         for market_key in selected_markets:
             print(f"\n--- Scanne Markt: {market_key} ---")
             for entry in markets.get(market_key, []):
-                analysis = analyze_symbol(entry, market_key, cfg, timeframe, detector)
+                analysis = analyze_symbol(
+                    entry, market_key, cfg, timeframe, detector)
                 if analysis:
                     results.append(analysis)
                 time.sleep(0.4)

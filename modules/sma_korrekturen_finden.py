@@ -20,7 +20,8 @@ def finde_sma_korrekturen(markets, cfg, timeframe_choices):
     selected_markets = questionary.checkbox(
         "Märkte für SMA-Korrektur-Scan auswählen:",
         choices=market_choices,
-        validate=lambda sel: bool(sel) or "Bitte mindestens einen Markt wählen.",
+        validate=lambda sel: bool(
+            sel) or "Bitte mindestens einen Markt wählen.",
     ).ask()
 
     if not selected_markets:
@@ -44,7 +45,8 @@ def finde_sma_korrekturen(markets, cfg, timeframe_choices):
     kurzfristig = int(sma_cfg.get("kurzfristig", 20))
     # Divergence-Detector bauen (Konfiguration berücksichtigen)
     div_cfg = cfg.get(
-        "divergence", {"rsi_period": 14, "fractal_periods": 4, "max_bars_diff": 30}
+        "divergence", {"rsi_period": 14,
+                       "fractal_periods": 4, "max_bars_diff": 30}
     )
     detector = DivergenceDetector(
         rsi_period=div_cfg.get("rsi_period", 14),
@@ -57,7 +59,8 @@ def finde_sma_korrekturen(markets, cfg, timeframe_choices):
             symbol = entry.get("symbol")
             name = entry.get("name", symbol)
             source = entry.get(
-                "source", cfg.get("settings", {}).get("default_source", "yfinance")
+                "source", cfg.get("settings", {}).get(
+                    "default_source", "yfinance")
             )
             oanda_token = cfg.get("oanda", {}).get("access_token")
             lookback = cfg.get("auswertung", {}).get("maximal_bars", 200)
@@ -67,8 +70,10 @@ def finde_sma_korrekturen(markets, cfg, timeframe_choices):
                 continue
 
             # Berechne SMAs anhand der konfigurierten Perioden
-            df[f"SMA{kurzfristig}"] = df["close"].rolling(window=kurzfristig).mean()
-            df[f"SMA{langfristig}"] = df["close"].rolling(window=langfristig).mean()
+            df[f"SMA{kurzfristig}"] = df["close"].rolling(
+                window=kurzfristig).mean()
+            df[f"SMA{langfristig}"] = df["close"].rolling(
+                window=langfristig).mean()
 
             if len(df) < max(langfristig, kurzfristig):
                 continue
@@ -80,7 +85,8 @@ def finde_sma_korrekturen(markets, cfg, timeframe_choices):
                 last["close"] > last[sma_long_col]
                 and last["close"] < last[sma_short_col]
             ):
-                print(f"[TREFFER] {name} ({symbol}) erfüllt SMA-Korrektur-Bedingung.")
+                print(
+                    f"[TREFFER] {name} ({symbol}) erfüllt SMA-Korrektur-Bedingung.")
                 results.append((name, symbol, market_key, df))
 
             time.sleep(0.3)
