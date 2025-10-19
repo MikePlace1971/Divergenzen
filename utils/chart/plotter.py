@@ -1,4 +1,4 @@
-﻿# /utils/chart/plotter.py
+# /utils/chart/plotter.py
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
@@ -96,8 +96,16 @@ def plot_candles(
         step = float(np.diff(np.sort(unique_x)).min())
     else:
         step = 1.0
+
+    # zusätzlicher Rand abhängig vom Zeitrahmen
+    extra_right = {
+        "H1": pd.Timedelta(hours=12),
+        "H4": pd.Timedelta(hours=24),
+        "D1": pd.Timedelta(days=2),
+    }.get((timeframe or "").upper(), pd.Timedelta(hours=12))
+
     pad = step * 1.5
-    ax1.set_xlim(x.min(), x.max() + pad)
+    ax1.set_xlim(data.index.min(), data.index.max() + extra_right)
     ax2.set_xlim(ax1.get_xlim())
 
     # -----------------------------------------------------------
@@ -179,8 +187,7 @@ def plot_candles(
     # Formatierung
     # -----------------------------------------------------------
     # Zeichne vorhandene SMA-Linien (z. B. SMA20, SMA200, SMA{n})
-    sma_cols = [c for c in data.columns if isinstance(
-        c, str) and c.startswith("SMA")]
+    sma_cols = [c for c in data.columns if isinstance(c, str) and c.startswith("SMA")]
     if sma_cols:
         # Priorisiere längere Perioden zuerst (z.B. SMA200 unter SMA20 im Plot)
         try:
@@ -190,8 +197,7 @@ def plot_candles(
         except Exception:
             sma_sorted = sma_cols
 
-        colors = ["#1f77b4", "#ff7f0e", "#2ca02c",
-                  "#d62728"]  # blau, orange, grün, rot
+        colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"]  # blau, orange, grün, rot
         for i, col in enumerate(sma_sorted):
             color = colors[i % len(colors)]
             ax1.plot(
@@ -216,8 +222,9 @@ def plot_candles(
     plt.tight_layout()
 
     backend_name = plt.get_backend().lower()
-    is_gui_backend = any(token in backend_name for token in (
-        'qt', 'gtk', 'tk', 'wx', 'macosx'))
+    is_gui_backend = any(
+        token in backend_name for token in ("qt", "gtk", "tk", "wx", "macosx")
+    )
 
     if not is_gui_backend:
         plt.close(fig)
@@ -226,7 +233,7 @@ def plot_candles(
     try:
         manager = plt.get_current_fig_manager()
         if manager is None:
-            raise RuntimeError('Kein GUI-Backend verfügbar.')
+            raise RuntimeError("Kein GUI-Backend verfügbar.")
         plt.show(block=False)
 
         while plt.fignum_exists(fig.number):

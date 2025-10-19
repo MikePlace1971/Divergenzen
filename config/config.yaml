@@ -1,5 +1,6 @@
 settings:
   timeframe: D1               # Zeitrahmen für die Analyse: z. B. D1 (Tageschart) oder H4 (4-Stunden-Chart)
+  timeframe_choices: ["H1", "H4", "D1"]
   default_source: yfinance    # Datenquelle: 'yfinance' (Yahoo Finance) oder 'oanda'
   markets_file: config/markets.yaml   # Pfad zur Datei mit den Marktdefinitionen (z. B. Indizes, Währungen etc.)
 
@@ -17,4 +18,4 @@ divergence:
   max_bars_diff: 30           # Maximale Kerzenanzahl zwischen zwei Divergenz-Punkten (Abstand)
 
 auswertung:
-  maximal_bars: 50            # Wie viele Kerzen rückblickend in der Auswertung berücksichtigt werden (z. B. für Charts oder Signale)
+  maximal_bars: 40            # Wie viele Kerzen rückblickend in der Auswertung berücksichtigt werden (z. B. für Charts oder Signale)

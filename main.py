@@ -11,8 +11,7 @@ from utils.chart.plotter import plot_candles
 from utils.daten.data_loader import load_data
 
 
-DEFAULT_TIMEFRAME_CHOICES = ["H4", "D1"]
-
+DEFAULT_TIMEFRAME_CHOICES = ["H1", "H4", "D1"]
 
 def load_config() -> Optional[Dict[str, Any]]:
     try:

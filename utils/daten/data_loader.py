@@ -9,18 +9,21 @@ import yfinance as yf
 
 # Supported timeframes (H4 and D1 only)
 TIMEFRAME_MAP = {
+    "H1": {"yfinance": "1h", "oanda": "H1", "hours": 1},
     "H4": {"yfinance": "4h", "oanda": "H4", "hours": 4},
     "D1": {"yfinance": "1d", "oanda": "D", "hours": 24},
 }
 
 # Fixed history window for chart display per timeframe (in days)
 LOOKBACK_DAYS = {
+    "H1": 60,
     "H4": 150,
     "D1": 335,
 }
 
 # Hard limits imposed by yfinance per interval (in days)
 YF_MAX_LOOKBACK_DAYS = {
+    "1h": 90,
     "4h": 730,
     "1d": 3650,
 }
@@ -29,7 +32,7 @@ YF_MAX_LOOKBACK_DAYS = {
 def fetch_yfinance_data(symbol: str, interval: str, days: int) -> pd.DataFrame:
     """Download price data from Yahoo Finance for the selected interval."""
 
-    if interval not in ("4h", "1d"):
+    if interval not in ("1h", "4h", "1d"):
         print(f"[Warnung] Unsupported interval fuer Yahoo Finance: {interval}")
         return pd.DataFrame()
 
@@ -73,7 +76,6 @@ def fetch_yfinance_data(symbol: str, interval: str, days: int) -> pd.DataFrame:
     df = df[["open", "high", "low", "close", "volume"]]
     df.index = pd.to_datetime(df.index, utc=True).tz_convert(None)
     df.index.name = "time"
-
     return df.sort_index()
 
 
@@ -144,7 +146,7 @@ def load_data(
 
     timeframe = timeframe.upper()
     if timeframe not in TIMEFRAME_MAP:
-        print(f"[Warnung] Ungueltiger Timeframe: {timeframe} (nur H4 und D1 erlaubt).")
+        print(f"[Warnung] Ungueltiger Timeframe: {timeframe} (nur H1, H4 und D1 erlaubt).")
         return pd.DataFrame()
 
     days_to_fetch = LOOKBACK_DAYS.get(timeframe)
