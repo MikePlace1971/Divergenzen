@@ -6,4 +6,3 @@ yfinance
 oandapyV20
 questionary
 pyyaml
-

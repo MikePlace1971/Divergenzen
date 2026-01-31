@@ -1,11 +1,17 @@
 # /utils/chart/plotter.py
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
 import pandas as pd
-from datetime import datetime
-from pathlib import Path
 from modules.rsi_wilder import compute_rsi_wilder
+
+# Verhindert, dass Matplotlib neue/aktualisierte Fenster nach vorne holt
+# (Windows-Taskleisten-Blinken). Falls Param nicht existiert, ignoriere still.
+try:
+    mpl.rcParams["figure.raise_window"] = False
+except Exception:
+    pass
 
 
 def plot_candles(
@@ -16,7 +22,11 @@ def plot_candles(
     index: str | None = None,
     timeframe: str | None = None,
     divergences: dict | None = None,
+    rsi_lower: float = 30.0,
+    rsi_upper: float = 70.0,
+    rsi_period: int = 14,
 ):
+
     required_columns = {"open", "high", "low", "close"}
     if df is None or df.empty or not required_columns.issubset(df.columns):
         print("[Fehler] Keine Daten zum Plotten oder Spalten fehlen.")
@@ -49,7 +59,8 @@ def plot_candles(
         return
 
     if "rsi" not in data.columns:
-        data["rsi"] = compute_rsi_wilder(data["close"])
+        data["rsi"] = compute_rsi_wilder(data["close"], period=int(rsi_period))
+
     if "rsi_hist" not in data.columns:
         data["rsi_hist"] = data["rsi"] - 50
 
@@ -177,8 +188,8 @@ def plot_candles(
     # RSI-Darstellung
     # -----------------------------------------------------------
     ax2.plot(data.index, data["rsi"], color="black", linewidth=1.1)
-    ax2.axhline(70, color="red", linewidth=1.0, linestyle="-", alpha=0.8)
-    ax2.axhline(30, color="green", linewidth=1.0, linestyle="-", alpha=0.8)
+    ax2.axhline(rsi_upper, color="red", linewidth=1.0, linestyle="-", alpha=0.8)
+    ax2.axhline(rsi_lower, color="green", linewidth=1.0, linestyle="-", alpha=0.8)
     ax2.set_ylim(0, 100)
     ax2.set_ylabel("RSI (Wilder)", fontsize=9)
     ax2.grid(True, linestyle=":", alpha=0.3)
@@ -187,7 +198,8 @@ def plot_candles(
     # Formatierung
     # -----------------------------------------------------------
     # Zeichne vorhandene SMA-Linien (z. B. SMA20, SMA200, SMA{n})
-    sma_cols = [c for c in data.columns if isinstance(c, str) and c.startswith("SMA")]
+    sma_cols = [c for c in data.columns if isinstance(
+        c, str) and c.startswith("SMA")]
     if sma_cols:
         # Priorisiere längere Perioden zuerst (z.B. SMA200 unter SMA20 im Plot)
         try:
@@ -197,7 +209,8 @@ def plot_candles(
         except Exception:
             sma_sorted = sma_cols
 
-        colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"]  # blau, orange, grün, rot
+        colors = ["#1f77b4", "#ff7f0e", "#2ca02c",
+                  "#d62728"]  # blau, orange, grün, rot
         for i, col in enumerate(sma_sorted):
             color = colors[i % len(colors)]
             ax1.plot(
@@ -234,10 +247,31 @@ def plot_candles(
         manager = plt.get_current_fig_manager()
         if manager is None:
             raise RuntimeError("Kein GUI-Backend verfügbar.")
+
+        # Qt: Fenster nicht aktivieren und keinen Fokus anfordern,
+        # damit Windows keine Aufmerksamkeitsanzeige (Blinken) triggert.
+        if "qt" in backend_name:
+            try:
+                from matplotlib.backends.qt_compat import QtCore
+                win = getattr(manager, "window", None)
+                if win is not None:
+                    try:
+                        win.setAttribute(QtCore.Qt.WA_ShowWithoutActivating, True)
+                    except Exception:
+                        pass
+                    try:
+                        win.setFocusPolicy(QtCore.Qt.NoFocus)
+                    except Exception:
+                        pass
+            except Exception:
+                pass
+
         plt.show(block=False)
+        plt.pause(0.001)
 
         while plt.fignum_exists(fig.number):
             plt.pause(0.1)
+
     except Exception as exc:
         print(f"Fehler beim Anzeigen des Charts: {exc}")
     finally:

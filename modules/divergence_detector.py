@@ -55,7 +55,7 @@ class DivergenceDetector:
 
             pivot_high = data["high"].iloc[pivot_idx]
             left_high = window["high"].iloc[:n].max()
-            right_high = window["high"].iloc[n + 1 :].max()
+            right_high = window["high"].iloc[n + 1:].max()
 
             if (
                 pivot_high > left_high
@@ -78,18 +78,20 @@ class DivergenceDetector:
                         and curr_hist < prev_hist
                         and data["high"].iloc[pivot_idx] > data["high"].iloc[prev_idx]
                     ):
-                        bearish.append((data.index[prev_idx], data.index[pivot_idx]))
+                        bearish.append(
+                            (data.index[prev_idx], data.index[detect_idx]))
 
             pivot_low = data["low"].iloc[pivot_idx]
             left_low = window["low"].iloc[:n].min()
-            right_low = window["low"].iloc[n + 1 :].min()
+            right_low = window["low"].iloc[n + 1:].min()
 
             if (
                 pivot_low < left_low
                 and pivot_low < right_low
                 and data["close"].iloc[pivot_idx] < data["ema_50"].iloc[pivot_idx]
             ):
-                data.iloc[pivot_idx, data.columns.get_loc("down_fractal")] = True
+                data.iloc[pivot_idx, data.columns.get_loc(
+                    "down_fractal")] = True
                 prev_idx = down_pivots[-1] if down_pivots else None
                 down_pivots.append(pivot_idx)
 
@@ -105,6 +107,7 @@ class DivergenceDetector:
                         and curr_hist > prev_hist
                         and data["low"].iloc[pivot_idx] < data["low"].iloc[prev_idx]
                     ):
-                        bullish.append((data.index[prev_idx], data.index[pivot_idx]))
+                        bullish.append(
+                            (data.index[prev_idx], data.index[detect_idx]))
 
         return {"df": data, "bullish": bullish, "bearish": bearish}

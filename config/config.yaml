@@ -1,3 +1,4 @@
+# config.yaml
 settings:
   timeframe: D1               # Zeitrahmen für die Analyse: z. B. D1 (Tageschart) oder H4 (4-Stunden-Chart)
   timeframe_choices: ["H1", "H4", "D1"]
@@ -15,7 +16,20 @@ oanda:
 divergence:
   rsi_period: 14              # RSI-Periode (Standard 14) für Divergenzerkennung
   fractal_periods: 4          # Wie viele Kerzen links/rechts ein Fraktalpunkt berücksichtigen soll
-  max_bars_diff: 30           # Maximale Kerzenanzahl zwischen zwei Divergenz-Punkten (Abstand)
+  max_bars_diff: 12           # Maximale Kerzenanzahl zwischen zwei Divergenz-Punkten (Abstand)
 
 auswertung:
-  maximal_bars: 40            # Wie viele Kerzen rückblickend in der Auswertung berücksichtigt werden (z. B. für Charts oder Signale)
+  maximal_bars: 7           # Wie viele Kerzen rückblickend in der Auswertung berücksichtigt werden (z. B. für Charts oder Signale)
+
+donchian:
+  period: 20
+  warn_distance_percent: 2
+
+
+rsi_scanner:
+  period: 14
+  lower: 30
+  upper: 70
+  mode: last_bar          # "last_bar" = aktueller RSI der letzten Kerze
+  lookback_bars: 200      # wie viele Bars laden (sicher genug)
+

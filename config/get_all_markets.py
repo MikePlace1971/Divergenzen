@@ -46,16 +46,14 @@ YF_SUFFIX = {
     "MDAX": ".DE",
     "SDAX": ".DE",
     "TECDAX": ".DE",
-    "SMI": ".SW",
     "AEX": ".AS",
     "CAC 40": ".PA",
     "BEL 20": ".BR",
     "FTSE 100": ".L",
     "IBEX 35": ".MC",
+    "DOW JONES": "",
     "NASDAQ 100": "",
-    "S&P 100": "",
-    "S&P 500": "",
-    "DOW JONES": ""
+    "S&P 100": ""
 }
 
 

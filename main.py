@@ -1,17 +1,23 @@
 ﻿# /main.py
+import matplotlib
+matplotlib.use("QtAgg")  # oder "TkAgg"
+
 import time
 from typing import Any, Dict, List, Optional
-from modules.sma_korrekturen_finden import finde_sma_korrekturen
 
 import questionary
 import yaml
 
+from modules.rsi_scanner import scan_rsi_range
+from modules.donchian_scanner import scan_donchian
+from modules.sma_korrekturen_finden import finde_sma_korrekturen
 from modules.divergence_detector import DivergenceDetector
-from utils.chart.plotter import plot_candles
 from utils.daten.data_loader import load_data
+from utils.chart.plotter import plot_candles
 
 
 DEFAULT_TIMEFRAME_CHOICES = ["H1", "H4", "D1"]
+
 
 def load_config() -> Optional[Dict[str, Any]]:
     try:
@@ -97,9 +103,9 @@ def analyze_symbol(
     )
 
     raw_df = load_data(
-        symbol,
-        source,
-        timeframe,
+        symbol=symbol,
+        source=source,
+        timeframe=timeframe,
         lookback=lookback,
         oanda_token=oanda_token,
     )
@@ -222,7 +228,10 @@ def run_market_scanner(
         choices=[
             questionary.Choice("Divergenzen finden", "divergence"),
             questionary.Choice("SMA Korrekturen finden", "sma"),
+            questionary.Choice("Donchian Pullback Setup", "donchian"),
+            questionary.Choice("RSI Range Scanner (30-70)", "rsi"),
         ],
+
     ).ask()
 
     if scan_mode == "divergence":
@@ -292,6 +301,36 @@ def run_market_scanner(
     elif scan_mode == "sma":
         # neue Funktion für SMA-Korrekturen
         finde_sma_korrekturen(markets, cfg, timeframe_choices)
+    elif scan_mode == "donchian":
+
+        # 1) Märkte wählen
+        market_choices = [
+            questionary.Choice(title=key, value=key, checked=True)
+            for key in markets.keys()
+        ]
+        selected_markets = questionary.checkbox(
+            "Märkte zum Scannen auswählen:",
+            choices=market_choices,
+            validate=lambda sel: bool(
+                sel) or "Bitte mindestens einen Markt wählen.",
+        ).ask()
+        if not selected_markets:
+            print("[INFO] Auswahl abgebrochen.")
+            return
+
+        # 2) Timeframe wählen
+        timeframe = questionary.select(
+            "Bitte Timeframe auswählen:", choices=timeframe_choices
+        ).ask()
+        if not timeframe:
+            print("[INFO] Auswahl abgebrochen.")
+            return
+
+        # 3) Scanner starten
+        scan_donchian(selected_markets, markets, cfg, timeframe)
+        
+    elif scan_mode == "rsi":
+        scan_rsi_range(markets, cfg, timeframe_choices)
 
     else:
         print("[INFO] Auswahl abgebrochen.")

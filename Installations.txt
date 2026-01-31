@@ -1,0 +1,96 @@
+Hier ist die vollständige, saubere **Installationsanleitung für Matplotlib auf Windows (Python 3.12)** – so, dass Charts stabil laufen, egal ob mit **Tkinter** oder **PyQt**.
+Kopierfertig für einen anderen PC 👇
+
+---
+
+### 🧭 **Schritt-für-Schritt-Anleitung: Matplotlib korrekt installieren (Windows)**
+
+#### 1️⃣ **PowerShell als Administrator öffnen**
+
+Rechtsklick → „Als Administrator ausführen“
+
+---
+
+#### 2️⃣ **Vorbereitung**
+
+Alle Programme schließen, die Python verwenden (VS Code, PyCharm, Konsolenfenster mit Skripten).
+Dann prüfen, ob Python 3.12 aktiv ist:
+
+```powershell
+python --version
+```
+
+---
+
+#### 3️⃣ **Eventuell fehlerhafte Reste aufräumen**
+
+Manche Systeme haben veraltete oder defekte Pakete – kurz säubern:
+
+```powershell
+pip uninstall matplotlib PyQt5 tk pillow sortedcontainers -y
+```
+
+---
+
+#### 4️⃣ **Matplotlib und Basis-Pakete installieren**
+
+```powershell
+pip install matplotlib==3.9.2 pillow --no-cache-dir
+```
+
+> 💬 *Diese Version 3.9.2 ist stabil mit Python 3.12 unter Windows.*
+
+---
+
+#### 5️⃣ **Option A – Qt-Backend (empfohlen, moderner)**
+
+Installiere PyQt5, wenn du ein komfortables Chart-Fenster willst:
+
+```powershell
+pip install PyQt5 --no-cache-dir
+```
+
+Wenn die Installation fehlschlägt (WinError 2 oder 5):
+
+* PowerShell **als Administrator** öffnen
+* Sicherstellen, dass keine Python-Prozesse laufen:
+
+  ```powershell
+  Get-Process python
+  Stop-Process -Name python -Force
+  ```
+* Dann erneut installieren.
+
+---
+
+#### 6️⃣ **Option B – Tkinter-Backend (klassisch, falls Qt nicht läuft)**
+
+Tkinter ist in der offiziellen Python.org-Version **schon enthalten**.
+Nicht das PyPI-Paket `tk` installieren – das ist nur ein Dummy.
+
+Test:
+
+```powershell
+python -m tkinter
+```
+
+→ Wenn ein kleines Fenster aufgeht, funktioniert Tkinter.
+
+---
+
+
+#### 8️⃣ **Installation prüfen**
+
+Ein kleiner Test:
+
+```powershell
+python - <<EOF
+import matplotlib
+import matplotlib.pyplot as plt
+print("Matplotlib-Version:", matplotlib.__version__)
+print("Aktives Backend:", matplotlib.get_backend())
+plt.plot([1,2,3],[4,5,6])
+plt.show()
+EOF
+```
+
