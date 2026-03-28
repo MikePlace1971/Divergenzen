@@ -7,7 +7,7 @@ settings:
 
 SMA:
   langfristig: 200            # Periode für den langfristigen gleitenden Durchschnitt (SMA200)
-  kurzfristig: 25             # Periode für den kurzfristigen gleitenden Durchschnitt (SMA25)
+  kurzfristig: 20             # Periode für den kurzfristigen gleitenden Durchschnitt (SMA20)
 
 oanda:
   access_token: 7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c   # OANDA API-Zugangsschlüssel (privat halten!)
@@ -33,3 +33,265 @@ rsi_scanner:
   mode: last_bar          # "last_bar" = aktueller RSI der letzten Kerze
   lookback_bars: 200      # wie viele Bars laden (sicher genug)
 
+
+## Liquidity Grab
+# Einstellungen für den Liquidity-Grab-Scanner nach SMC / ICT.
+# Der Scanner sucht nach Bereichen, in denen der Markt ein altes Hoch oder Tief
+# kurz über- bzw. unterschreitet, dort Liquidität holt und anschließend wieder zurückläuft.
+#
+# Wichtig:
+# - höhere Strenge = weniger, aber meist bessere Signale
+# - niedrigere Strenge = mehr Signale, aber auch mehr unklare Setups
+# - du entscheidest am Ende selbst, welche Grabs gut sind
+# - der Scanner zeigt dir nur aus seiner Sicht interessante Kandidaten
+
+liquidity_grab:
+  pivot_bars: 3
+  # Wie streng Hochs und Tiefs als relevante Swing-Levels erkannt werden.
+  # Der Wert gibt an, wie viele Kerzen links und rechts kleiner/größer sein müssen.
+  # Niedriger Wert = mehr Levels, mehr Signale, aber auch mehr Rauschen.
+  # Höherer Wert = nur stärkere Swing-Punkte.
+  # Sinnvolle Werte:
+  # 2 = aggressiv / viele Levels
+  # 3 = guter Standard
+  # 4-5 = strenger / nur markantere Swings
+
+  lookback_bars: 260
+  # Wie viele Kerzen insgesamt geladen und analysiert werden.
+  # Mehr Bars = mehr historische Levels, aber auch etwas mehr Rechenaufwand.
+  # Für H1 sind 200-400 Bars meist gut.
+  # Für D1 reichen oft 150-300 Bars.
+
+  scan_recent_bars: 8
+  # Es werden nur Signale ausgegeben, die in den letzten X Kerzen entstanden sind.
+  # Damit der Scanner aktuelle Setups zeigt und nicht alte.
+  # Kleinere Werte = nur sehr frische Signale.
+  # Größere Werte = mehr Treffer in der Liste.
+  # Gute Standardwerte: 5 bis 10
+
+  max_reference_age_bars: 120
+  # So alt darf ein Referenzlevel maximal sein.
+  # Sehr alte Hochs/Tiefs sind oft weniger relevant.
+  # Kleinerer Wert = frischere Levels, weniger Treffer.
+  # Größerer Wert = mehr Levels, aber oft auch mehr unwichtige.
+  # Gute Werte: 80 bis 120
+
+  max_levels_per_side: 12
+  # Maximale Anzahl aktiver Levels je Richtung.
+  # buy_side = Hochs über dem Markt
+  # sell_side = Tiefs unter dem Markt
+  # Zu viele Levels können die Bewertung und den Chart unnötig überladen.
+  # Gute Werte: 6 bis 10
+  # 12 ist eher großzügig.
+
+  use_equal_levels: true
+  # Ob nahe beieinander liegende Hochs/Tiefs zu einem gemeinsamen Liquiditätspool
+  # zusammengefasst werden sollen.
+  # Das ist für ICT / SMC sehr sinnvoll, weil Equal Highs / Equal Lows oft
+  # besonders interessante Liquiditätsbereiche sind.
+  # Empfehlung: meist auf true lassen.
+
+  equal_level_threshold_percent: 0.15
+  # Wie nah zwei Hochs/Tiefs beieinander liegen müssen, um als "equal" zu gelten.
+  # Angabe in Prozent.
+  # Kleinerer Wert = strenger, nur sehr exakte Equal Highs/Lows.
+  # Größerer Wert = lockerer, mehr Pools werden zusammengefasst.
+  # Gute Werte:
+  # 0.10 = streng
+  # 0.15 = guter Standard
+  # 0.20 bis 0.30 = eher lockerer
+
+  min_sweep_percent: 0.03
+  # Mindestgröße des Sweeps über/unter dem Level in Prozent.
+  # Der Markt muss das Level also wirklich ein Stück überschreiten.
+  # Zu kleiner Wert = viele Mini-Sweeps / unruhige Signale
+  # Höherer Wert = weniger, aber klarere Grabs
+  # Gute Werte:
+  # 0.03 = aggressiv
+  # 0.05 = guter Standard
+  # 0.08 bis 0.10 = strenger
+
+  max_sweep_percent: 1.20
+  # Maximale Sweep-Größe in Prozent.
+  # Wenn der Markt viel zu weit über/unter das Level läuft, ist es oft eher
+  # ein echter Durchbruch / Run statt ein sauberer Grab.
+  # Niedrigerer Wert = strenger
+  # Höherer Wert = toleranter
+  # Gute Werte: 0.8 bis 1.2
+
+  reclaim_rule: close_back_inside
+  # Regel, wann ein Sweep als "zurückgeholt" gilt.
+  #
+  # Mögliche Werte:
+  # close_back_inside
+  #   = der Schlusskurs muss wieder innerhalb des Levels liegen
+  #
+  # body_back_inside
+  #   = sogar der ganze Kerzenkörper muss wieder innerhalb liegen
+  #
+  # close_back_inside ist etwas lockerer und ein guter Start.
+  # body_back_inside ist strenger und filtert härter.
+
+  close_position_threshold: 0.45
+  # Bewertet, wie stark die Kerze in die gewünschte Richtung geschlossen hat.
+  # Beispiel bullish:
+  # - Schluss eher nahe am Hoch = besser
+  # Beispiel bearish:
+  # - Schluss eher nahe am Tief = besser
+  #
+  # Je höher der Wert, desto mehr wird ein "starker" Schluss bevorzugt.
+  # Gute Werte:
+  # 0.45 = eher locker
+  # 0.55 = solider
+  # 0.60+ = strenger
+
+  confirmation_mode: reclaim_only
+  # Wie streng ein Grab zusätzlich bestätigt werden muss.
+  #
+  # Mögliche Werte:
+  # none
+  #   = keine zusätzliche Bestätigung, reine Rohsignale
+  #
+  # reclaim_only
+  #   = der Reclaim auf derselben Kerze reicht
+  #
+  # strong_reclaim
+  #   = Reclaim + stärkere Schlusslage der Kerze
+  #
+  # structure_break
+  #   = nach dem Grab muss innerhalb weniger Kerzen noch eine
+  #     Struktur-Bestätigung folgen
+  #
+  # Empfehlung:
+  # reclaim_only = guter Start
+  # strong_reclaim = oft sinnvoller für bessere Qualität
+  # structure_break = strenger und oft hochwertiger
+
+  confirmation_lookahead_bars: 3
+  # Nur relevant für confirmation_mode: structure_break
+  # Gibt an, wie viele Folgekerzen Zeit für die Bestätigung gegeben wird.
+  # Klein = strenger
+  # Groß = toleranter
+  # Gute Werte: 2 bis 4
+
+  require_opposite_candle_color: false
+  # Optionaler Kerzenfarben-Filter.
+  # Bullish Grab bevorzugt dann eine bullishe/grüne Kerze.
+  # Bearish Grab bevorzugt dann eine bearishe/rote Kerze.
+  # true = strenger
+  # false = flexibler
+  #
+  # Später gut zum Testen, wenn du weniger, aber sauberere Signale möchtest.
+
+  one_sweep_per_level: true
+  # Wenn true, wird ein Level nach einem Sweep als "verbraucht" behandelt.
+  # So vermeidest du, dass derselbe Liquiditätspool mehrfach immer wieder
+  # als neues Signal auftaucht.
+  # Empfehlung: meist auf true lassen.
+
+  allow_multiple_signals_per_symbol: true
+  # Wenn true, darf ein Symbol mehrere Signale liefern.
+  # Wenn false, bleibt später typischerweise nur das beste Signal pro Symbol übrig.
+  #
+  # true = mehr Überblick
+  # false = sauberere, kompaktere Trefferliste
+
+  trend_filter: none
+  # Optionaler Trendfilter.
+  #
+  # Mögliche Werte:
+  # none
+  #   = kein Trendfilter
+  #
+  # sma200
+  #   = bullish Grabs nur oberhalb SMA200,
+  #     bearish Grabs nur unterhalb SMA200
+  #
+  # Empfehlung:
+  # none = mehr Signale
+  # sma200 = oft deutlich bessere Qualität
+
+  trend_sma_period: 200
+  # Periode des SMA für den Trendfilter.
+  # Standard ist meist 200 und in der Praxis sehr sinnvoll.
+
+  score_threshold: 55
+  # Mindest-Score, damit ein Signal überhaupt ausgegeben wird.
+  # Je höher der Wert, desto strenger der Filter.
+  #
+  # Gute Orientierung:
+  # 50-60 = viele Signale
+  # 65-75 = guter Bereich
+  # 80+ = sehr streng / nur wenige Top-Signale
+  #
+  # Einer der wichtigsten Regler, wenn du zu viele Treffer bekommst.
+
+  show_runs: true
+  # Wenn true, zeigt der Scanner auch Runs an.
+  # Runs sind Situationen, in denen das Level eher sauber durchlaufen wurde
+  # statt nur kurz Liquidität zu holen und zurückzulaufen.
+  #
+  # Für Analyse und Lernen oft hilfreich.
+  # Für reinen Grab-Fokus eher auf false setzen.
+
+  show_failed_grabs: false
+  # Wenn true, zeigt der Scanner auch schwächere oder unbestätigte Grabs an.
+  # Das ist vor allem für Tests und Feintuning interessant.
+  # Für die normale Nutzung meist besser auf false lassen.
+
+
+  # Ergebnis-Erklärung (Liquidity Grab Scanner)
+#
+# Jede Zeile im Ergebnis enthält die wichtigsten Infos zum erkannten Setup:
+#
+# Beispiel:
+# Score=117.56 | Sweep=0.569% | Level=37.34750
+#
+# Bedeutung:
+
+# Score:
+# Bewertet die Qualität des Signals (je höher, desto besser).
+# Der Score setzt sich aus mehreren Faktoren zusammen:
+# - Reclaim (wurde das Level sauber zurückerobert?)
+# - Confirmation (gibt es eine Bestätigung?)
+# - Equal High/Low (Liquiditätspool vorhanden?)
+# - Anzahl der Touches (wie oft wurde das Level getestet?)
+# - Alter des Levels (frischer = besser)
+# - Sweep-Größe (zu klein oder zu groß = schlechter)
+# - Schlusslage der Candle (starkes Close = besser)
+#
+# Orientierung:
+# 50–70  = durchschnittlich
+# 70–90  = gut
+# 90–110 = sehr gut
+# 110+   = sehr starkes Setup
+
+# Sweep:
+# Zeigt, wie weit der Markt das Level überschritten hat (in Prozent).
+# Das ist der eigentliche "Liquidity Grab".
+#
+# Interpretation:
+# <0.03%   = meist zu klein (Rauschen)
+# 0.05–0.3 = okay
+# 0.3–0.8  = sehr gut (typischer Stop-Hunt)
+# >1.0     = eher Run / Breakout als Grab
+#
+# Ziel:
+# Ein sauberer Sweep holt Liquidität, ohne dass der Markt komplett durchläuft.
+
+# Level:
+# Das Preisniveau, an dem die Liquidität lag.
+# Meist:
+# - altes Hoch → buy-side liquidity (Stops über Hoch)
+# - altes Tief → sell-side liquidity (Stops unter Tief)
+#
+# Typischer Ablauf:
+# 1. Markt läuft zum Level
+# 2. überschreitet es (Sweep)
+# 3. holt Liquidität (Stops)
+# 4. kehrt zurück (Grab)
+
+# Wichtiger Hinweis:
+# Der Scanner gibt KEINE direkten Trades vor.
+# Er zeigt nur mögliche Bereiche, in denen Liquidität geholt wurde.
+# Die finale Bewertung (Trade oder nicht) liegt immer beim Nutzer.

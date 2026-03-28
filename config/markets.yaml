@@ -119,7 +119,7 @@ markets:
     - symbol: CON.DE
       source: yfinance
       name: Continental AG
-    - symbol: 1COV.DE
+    - symbol: CON.DE
       source: yfinance
       name: Covestro AG
     - symbol: DBK.DE
@@ -303,9 +303,6 @@ markets:
     - symbol: WAF.DE
       source: yfinance
       name: Siltronic AG
-    - symbol: SOW.DE
-      source: yfinance
-      name: Software AG
     - symbol: TEG.DE
       source: yfinance
       name: TAG Immobilien AG
@@ -342,21 +339,9 @@ markets:
     - symbol: TLX.DE
       source: yfinance
       name: Talanx
-    - symbol: ZO1.DE
-      source: yfinance
-      name: zooplus AG
     - symbol: KBX.DE
       source: yfinance
       name: Knorr-Bremse Aktiengesellschaft
-    - symbol: VAR1.DE
-      source: yfinance
-      name: VARTA AG
-    - symbol: AGOAF.DE
-      source: yfinance
-      name: Abengoa S.A.
-    - symbol: VTWR.DE
-      source: yfinance
-      name: Vantage Towers AG
   SDAX:
     - symbol: PBB.DE
       source: yfinance
@@ -602,9 +587,6 @@ markets:
     - symbol: SOW.DE
       source: yfinance
       name: Software AG
-    - symbol: O2D.DE
-      source: yfinance
-      name: Telefónica Deutschland Holding AG
     - symbol: UTDI.DE
       source: yfinance
       name: United Internet AG

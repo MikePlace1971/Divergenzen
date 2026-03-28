@@ -12,6 +12,7 @@ from modules.rsi_scanner import scan_rsi_range
 from modules.donchian_scanner import scan_donchian
 from modules.sma_korrekturen_finden import finde_sma_korrekturen
 from modules.divergence_detector import DivergenceDetector
+from modules.liquidityGrabScanner.scanner import scan_liquidity_grabs
 from utils.daten.data_loader import load_data
 from utils.chart.plotter import plot_candles
 
@@ -226,6 +227,7 @@ def run_market_scanner(
     scan_mode = questionary.select(
         "Was möchtest du scannen?",
         choices=[
+            questionary.Choice("Liquidity Grabs finden", "liquidity"),
             questionary.Choice("Divergenzen finden", "divergence"),
             questionary.Choice("SMA Korrekturen finden", "sma"),
             questionary.Choice("Donchian Pullback Setup", "donchian"),
@@ -297,7 +299,10 @@ def run_market_scanner(
             )
 
         print("\n[OK] Analyse abgeschlossen.")
-
+    
+    elif scan_mode == "liquidity":
+        scan_liquidity_grabs(markets, cfg, timeframe_choices)
+        
     elif scan_mode == "sma":
         # neue Funktion für SMA-Korrekturen
         finde_sma_korrekturen(markets, cfg, timeframe_choices)
