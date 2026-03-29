@@ -1,39 +1,63 @@
 """
-modules/liquidtyGrabScanner/scanner.py
-
-Scannt ausgewählte Märkte nach Liquidity Grabs und Runs.
-
-Die Datei lädt Kursdaten, übergibt sie an den Detector, bewertet die
-Treffer und zeigt anschließend die relevantesten Charts.
+modules/liquidityGrabScanner/scanner.py
 """
 
 from __future__ import annotations
 
 import os
+import zipfile
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import questionary
 
 from utils.daten.data_loader import load_data
 from .detector import LiquidityGrabDetector
-from .plotter import plot_liquidity_grab_chart
+from .plotter import plot_liquidity_grab_chart, save_liquidity_grab_chart_image
 
 
 def _resolve_oanda_token(cfg: Dict[str, Any]) -> str | None:
-    """
-    Holt den OANDA-Token bevorzugt aus der Umgebungsvariable,
-    deren Name in der config.yaml steht.
-    """
     oanda_cfg = cfg.get("oanda", {}) if isinstance(cfg, dict) else {}
 
     token_env_name = oanda_cfg.get("access_token_env", "OANDA_ACCESS_TOKEN")
     token = os.getenv(token_env_name)
 
-    # Fallback nur für Altbestand
     if not token:
         token = oanda_cfg.get("access_token")
 
     return token
+
+
+def _sanitize_filename(text: str) -> str:
+    bad_chars = '<>:"/\\|?*'
+    result = text
+    for ch in bad_chars:
+        result = result.replace(ch, "_")
+    return result.replace(" ", "_")
+
+
+def _create_output_paths(base_root: str = "outputs/liquidity_grab_scans") -> tuple[Path, Path, Path]:
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    scan_dir = Path(base_root) / timestamp
+    full_dir = scan_dir / "full"
+    zoom_dir = scan_dir / "zoom"
+
+    full_dir.mkdir(parents=True, exist_ok=True)
+    zoom_dir.mkdir(parents=True, exist_ok=True)
+
+    return scan_dir, full_dir, zoom_dir
+
+
+def _zip_scan_folder(scan_dir: Path) -> Path:
+    zip_path = scan_dir / f"{scan_dir.name}.zip"
+
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for file_path in scan_dir.rglob("*"):
+            if file_path.is_file() and file_path != zip_path:
+                zf.write(file_path, arcname=file_path.relative_to(scan_dir))
+
+    return zip_path
 
 
 def scan_liquidity_grabs(
@@ -41,14 +65,6 @@ def scan_liquidity_grabs(
     cfg: Dict[str, Any],
     timeframe_choices: List[str],
 ) -> None:
-    """
-    Interaktiver Scanner:
-    - Märkte wählen
-    - Timeframe wählen
-    - Liquidity-Grabs finden
-    - Ergebnisse sortieren
-    - Charts öffnen
-    """
     lg_cfg = cfg.get("liquidity_grab", {}) if isinstance(cfg, dict) else {}
     detector = LiquidityGrabDetector(cfg)
 
@@ -82,11 +98,28 @@ def scan_liquidity_grabs(
         "allow_multiple_signals_per_symbol", True))
     oanda_token = _resolve_oanda_token(cfg)
 
+    save_chart_images = bool(lg_cfg.get("save_chart_images", True))
+    show_chart_windows = bool(lg_cfg.get("show_chart_windows", True))
+    zoom_fraction = float(lg_cfg.get("save_zoom_fraction", 1 / 3))
+    min_zoom_bars = int(lg_cfg.get("save_zoom_min_bars", 30))
+
+    scan_dir = None
+    full_dir = None
+    zoom_dir = None
+
+    if save_chart_images:
+        scan_dir, full_dir, zoom_dir = _create_output_paths()
+
     print("\n================ STARTE LIQUIDITY-GRAB-SCANNER ================")
     print(
         f"[INFO] timeframe={timeframe} | lookback={lookback_bars} | "
-        f"confirmation={lg_cfg.get('confirmation_mode', 'reclaim_only')}\n"
+        f"confirmation={lg_cfg.get('confirmation_mode', 'reclaim_only')}"
     )
+
+    if save_chart_images and scan_dir is not None:
+        print(f"[INFO] Charts werden gespeichert in: {scan_dir}")
+
+    print()
 
     results: List[Tuple[str, str, str, Dict[str, Any]]] = []
 
@@ -171,30 +204,29 @@ def scan_liquidity_grabs(
 
         print()
 
-        best_per_symbol = {}
+    best_per_symbol = {}
 
-        for symbol, name, market_key, payload in results:
-            signals = payload.get("signals", [])
-            if not signals:
-                continue
+    for symbol, name, market_key, payload in results:
+        signals = payload.get("signals", [])
+        if not signals:
+            continue
 
-            best = signals[0]
-            key = (symbol, market_key)
+        best = signals[0]
+        key = (symbol, market_key)
 
-            if key not in best_per_symbol:
+        if key not in best_per_symbol:
+            best_per_symbol[key] = (symbol, name, market_key, payload)
+        else:
+            old_best = best_per_symbol[key][3]["signals"][0]
+            if best.score > old_best.score:
                 best_per_symbol[key] = (symbol, name, market_key, payload)
-            else:
-                old_best = best_per_symbol[key][3]["signals"][0]
-                if best.score > old_best.score:
-                    best_per_symbol[key] = (symbol, name, market_key, payload)
 
-        results = list(best_per_symbol.values())
+    results = list(best_per_symbol.values())
 
     if not results:
         print("\n[INFO] Keine Liquidity-Grabs in den ausgewählten Märkten gefunden.")
         return
 
-    # Beste Ergebnisse zuerst sortieren
     results.sort(
         key=lambda item: item[3]["signals"][0].score if item[3]["signals"] else 0,
         reverse=True,
@@ -207,10 +239,12 @@ def scan_liquidity_grabs(
             f"{symbol:<12} | {market_key:<16} | "
             f"{best.direction:<7} | {best.signal_type:<11} | "
             f"Score={best.score:>6.2f} | Sweep={best.sweep_percent:>6.3f}% | "
-            f"Level={best.level_price:.5f} | {name}"
+            f"Wick={best.wick_ratio:>5.2f} | Level={best.level_price:.5f} | {name}"
         )
 
-    print("\n[INFO] Öffne Charts nacheinander. Fenster schließen → nächster Chart.\n")
+    print()
+
+    saved_count = 0
 
     for symbol, name, market_key, payload in results:
         df = payload["df"]
@@ -218,12 +252,52 @@ def scan_liquidity_grabs(
         levels = payload["levels"]
 
         title = f"{name} ({symbol}) [{market_key}] {timeframe} | Liquidity Grab"
+        base_filename = _sanitize_filename(
+            f"{market_key}_{symbol}_{timeframe}")
 
-        plot_liquidity_grab_chart(
-            df=df,
-            signals=signals,
-            levels=levels,
-            title=title,
-        )
+        if save_chart_images and full_dir and zoom_dir:
+            full_path = full_dir / f"{base_filename}_full.png"
+            zoom_path = zoom_dir / f"{base_filename}_zoom.png"
 
-    print("\n[OK] Liquidity-Grab-Scan abgeschlossen.\n")
+            saved1 = save_liquidity_grab_chart_image(
+                df=df,
+                signals=signals,
+                levels=levels,
+                title=f"{title} | FULL",
+                file_path=full_path,
+                zoom_last_fraction=None,
+            )
+            if saved1:
+                saved_count += 1
+
+            saved2 = save_liquidity_grab_chart_image(
+                df=df,
+                signals=signals,
+                levels=levels,
+                title=f"{title} | ZOOM_LAST_THIRD",
+                file_path=zoom_path,
+                zoom_last_fraction=zoom_fraction,
+                min_zoom_bars=min_zoom_bars,
+            )
+            if saved2:
+                saved_count += 1
+
+        if show_chart_windows:
+            plot_liquidity_grab_chart(
+                df=df,
+                signals=signals,
+                levels=levels,
+                title=title,
+            )
+
+    zip_path = None
+    if save_chart_images and scan_dir is not None:
+        zip_path = _zip_scan_folder(scan_dir)
+
+    print("\n[OK] Liquidity-Grab-Scan abgeschlossen.")
+    if save_chart_images and scan_dir is not None:
+        print(f"[INFO] Scan-Ordner: {scan_dir}")
+        print(f"[INFO] Gespeicherte Bilder: {saved_count}")
+    if zip_path is not None:
+        print(f"[INFO] ZIP-Datei: {zip_path}")
+    print()

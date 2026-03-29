@@ -1,5 +1,5 @@
 """
-modules/liquidtyGrabScanner/levels.py
+modules/liquidityGrabScanner/levels.py
 
 Erzeugt relevante Liquidity-Levels aus Pivot Highs und Pivot Lows.
 
@@ -88,23 +88,34 @@ def _merge_into_existing_level(
     created_at: pd.Timestamp,
     pivot_index: int,
     equal_threshold_percent: float,
+    recent_weight: float,
 ) -> bool:
     """
     Fügt ein Pivot in einen bestehenden Equal-High-/Equal-Low-Pool ein,
     falls der Preis nah genug an einem vorhandenen Level liegt.
+
+    Verbesserung gegenüber dem simplen Mittelwert:
+    - neuerer Pivot bekommt mehr Gewicht
+    - Pool wird auf den letzten Pivot "frisch" gesetzt
     """
     for level in levels:
         if level.side != side:
             continue
 
         if _percent_distance(price, level.price) <= equal_threshold_percent:
-            # Preis eines Pools leicht mitteln, damit der Pool robust bleibt
-            new_touch_count = level.touches + 1
-            level.price = ((level.price * level.touches) +
-                           price) / new_touch_count
-            level.touches = new_touch_count
+            recent_weight = min(max(recent_weight, 0.0), 1.0)
+            old_weight = 1.0 - recent_weight
+
+            level.price = (level.price * old_weight) + (price * recent_weight)
+            level.touches += 1
             level.source_indexes.append(pivot_index)
             level.is_equal_pool = True
+
+            # WICHTIG:
+            # Pool gilt ab dem letzten berührenden Pivot als "frisch"
+            level.created_at = created_at
+            level.pivot_index = pivot_index
+
             return True
 
     return False
@@ -117,6 +128,7 @@ def build_liquidity_levels(
     max_levels_per_side: int,
     use_equal_levels: bool,
     equal_level_threshold_percent: float,
+    equal_level_recent_weight: float = 0.70,
 ) -> List[LiquidityLevel]:
     """
     Baut aus dem DataFrame eine Liste relevanter Liquidity-Levels.
@@ -143,6 +155,7 @@ def build_liquidity_levels(
 
         if _is_pivot_high(df, idx, pivot_bars):
             price = float(df["high"].iloc[idx])
+
             if use_equal_levels:
                 merged = _merge_into_existing_level(
                     levels=levels,
@@ -151,6 +164,7 @@ def build_liquidity_levels(
                     created_at=ts,
                     pivot_index=idx,
                     equal_threshold_percent=equal_level_threshold_percent,
+                    recent_weight=equal_level_recent_weight,
                 )
                 if not merged:
                     levels.append(
@@ -175,6 +189,7 @@ def build_liquidity_levels(
 
         if _is_pivot_low(df, idx, pivot_bars):
             price = float(df["low"].iloc[idx])
+
             if use_equal_levels:
                 merged = _merge_into_existing_level(
                     levels=levels,
@@ -183,6 +198,7 @@ def build_liquidity_levels(
                     created_at=ts,
                     pivot_index=idx,
                     equal_threshold_percent=equal_level_threshold_percent,
+                    recent_weight=equal_level_recent_weight,
                 )
                 if not merged:
                     levels.append(
@@ -205,7 +221,6 @@ def build_liquidity_levels(
                     )
                 )
 
-    # Neuere Levels zuerst priorisieren
     buy_levels = sorted(
         [lvl for lvl in levels if lvl.side == "buy_side"],
         key=lambda x: x.pivot_index,
@@ -218,6 +233,5 @@ def build_liquidity_levels(
         reverse=True,
     )[:max_levels_per_side]
 
-    # Am Ende wieder chronologisch sortieren
     result = sorted(buy_levels + sell_levels, key=lambda x: x.pivot_index)
     return result

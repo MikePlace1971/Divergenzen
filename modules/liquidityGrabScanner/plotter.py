@@ -1,17 +1,10 @@
 """
 modules/liquidityGrabScanner/plotter.py
-
-Zeichnet Liquidity-Grabs mit Candlesticks, relevanten Levels und Signalmarkierungen.
-
-Der Plot ist bewusst auf Klarheit optimiert:
-- das wichtigste Signal wird deutlich hervorgehoben
-- das zugehörige Referenzlevel wird stark markiert
-- der Sweep wird sichtbar gemacht
-- andere Levels bleiben dezent im Hintergrund
 """
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import List
 
 import matplotlib as mpl
@@ -29,49 +22,47 @@ except Exception:
 
 
 def _signal_color(signal: LiquiditySignal) -> str:
-    """
-    Farbwahl je Signaltyp und Richtung.
-    """
     if signal.signal_type == "run":
-        return "#ff8c00"  # orange
+        return "#ff8c00"
     if signal.direction == "bullish":
-        return "#008000"  # grün
-    return "#cc0000"      # rot
+        return "#008000"
+    return "#cc0000"
 
 
 def _level_color(level: LiquidityLevel) -> str:
-    """
-    buy_side = Liquidität über Hochs -> eher rot
-    sell_side = Liquidität unter Tiefs -> eher grün
-    """
-    if level.side == "buy_side":
-        return "#cc6666"
-    return "#66aa66"
+    return "#cc6666" if level.side == "buy_side" else "#66aa66"
 
 
-def plot_liquidity_grab_chart(
-    df: pd.DataFrame,
-    signals: List[LiquiditySignal],
+def _select_nearest_background_levels(
     levels: List[LiquidityLevel],
-    title: str = "",
-):
-    """
-    Zeichnet einen Candlestick-Chart mit:
-    - Candles
-    - dezenten Hintergrund-Levels
-    - klar hervorgehobenen Signal-Leveln
-    - Sweep-Markierung
-    - Info-Label am Signal
-    """
-    if df is None or df.empty:
-        print("[Fehler] Keine Daten zum Plotten vorhanden.")
-        return
+    signals: List[LiquiditySignal],
+    max_background_levels: int = 4,
+) -> List[LiquidityLevel]:
+    if not levels or not signals:
+        return []
 
-    required = {"open", "high", "low", "close"}
-    if not required.issubset(df.columns):
-        print("[Fehler] OHLC-Spalten fehlen für den Chart.")
-        return
+    highlighted_level_keys = {
+        (sig.level_side, round(float(sig.level_price), 8))
+        for sig in signals
+    }
 
+    best_signal = sorted(signals, key=lambda s: (
+        s.score, s.signal_time), reverse=True)[0]
+    reference_price = float(best_signal.level_price)
+
+    candidates = []
+    for lvl in levels:
+        level_key = (lvl.side, round(float(lvl.price), 8))
+        if level_key in highlighted_level_keys:
+            continue
+        distance = abs(float(lvl.price) - reference_price)
+        candidates.append((distance, lvl))
+
+    candidates.sort(key=lambda x: x[0])
+    return [lvl for _, lvl in candidates[:max_background_levels]]
+
+
+def _prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     data = df.copy()
 
     if not isinstance(data.index, pd.DatetimeIndex):
@@ -80,25 +71,53 @@ def plot_liquidity_grab_chart(
     if getattr(data.index, "tz", None) is not None:
         data.index = data.index.tz_convert(None)
 
-    data = data[~data.index.isna()]
-    if data.empty:
-        print("[Fehler] Zeitindex ungültig.")
-        return
+    return data[~data.index.isna()]
 
-    # Nur beste Signale plotten, falls Liste sortiert ist:
-    # erstes Signal = wichtigstes Signal
-    sorted_signals = sorted(
-        signals,
-        key=lambda s: (s.score, s.signal_time),
-        reverse=True,
-    )
+
+def _filter_signals_for_visible_range(data: pd.DataFrame, signals: List[LiquiditySignal]) -> List[LiquiditySignal]:
+    visible_index = set(data.index)
+    return [sig for sig in signals if sig.signal_time in visible_index]
+
+
+def _build_subset_for_zoom(
+    data: pd.DataFrame,
+    signals: List[LiquiditySignal],
+    zoom_fraction: float = 1 / 3,
+    min_bars: int = 30,
+) -> pd.DataFrame:
+    if data.empty:
+        return data
+
+    total = len(data)
+    zoom_bars = max(int(total * zoom_fraction), min_bars)
+    zoom_bars = min(zoom_bars, total)
+    start_idx = total - zoom_bars
+
+    if signals:
+        best_signal = sorted(signals, key=lambda s: (
+            s.score, s.signal_time), reverse=True)[0]
+        if best_signal.signal_time in data.index:
+            best_loc = data.index.get_loc(best_signal.signal_time)
+            if isinstance(best_loc, slice):
+                best_loc = best_loc.start
+            if isinstance(best_loc, int) and best_loc < start_idx:
+                start_idx = max(0, best_loc - 10)
+
+    return data.iloc[start_idx:].copy()
+
+
+def _render_chart(
+    data: pd.DataFrame,
+    signals: List[LiquiditySignal],
+    levels: List[LiquidityLevel],
+    title: str = "",
+):
+    sorted_signals = sorted(signals, key=lambda s: (
+        s.score, s.signal_time), reverse=True)
 
     fig, ax = plt.subplots(figsize=(15, 7.8))
     fig.suptitle(title, fontsize=12, fontweight="bold", y=0.98)
 
-    # ---------------------------------------------------
-    # Candles
-    # ---------------------------------------------------
     x = mdates.date2num(data.index)
 
     if len(data) > 1:
@@ -120,13 +139,10 @@ def plot_liquidity_grab_chart(
 
         ax.vlines(xi, l, h, color=color, linewidth=1.0, alpha=0.95, zorder=2)
 
-        body_bottom = min(o, c)
-        body_height = max(abs(c - o), 1e-6)
-
         rect = plt.Rectangle(
-            (xi - candle_width / 2, body_bottom),
+            (xi - candle_width / 2, min(o, c)),
             candle_width,
-            body_height,
+            max(abs(c - o), 1e-6),
             facecolor=color,
             edgecolor="black",
             linewidth=0.5,
@@ -135,49 +151,27 @@ def plot_liquidity_grab_chart(
         )
         ax.add_patch(rect)
 
-    # ---------------------------------------------------
-    # Optionale SMA-Linien
-    # ---------------------------------------------------
     sma_cols = [c for c in data.columns if isinstance(
         c, str) and c.startswith("SMA")]
     for col in sma_cols:
-        ax.plot(
-            data.index,
-            data[col],
-            linewidth=1.15,
-            alpha=0.9,
-            label=col,
-            zorder=1,
-        )
+        ax.plot(data.index, data[col], linewidth=1.15,
+                alpha=0.9, label=col, zorder=1)
 
-    # ---------------------------------------------------
-    # Hintergrund-Levels (dezent)
-    # ---------------------------------------------------
-    highlighted_level_keys = set()
-    for sig in sorted_signals:
-        highlighted_level_keys.add((sig.level_side, round(sig.level_price, 8)))
-
-    for lvl in levels:
-        level_key = (lvl.side, round(float(lvl.price), 8))
-        if level_key in highlighted_level_keys:
-            continue
-
+    background_levels = _select_nearest_background_levels(
+        levels, sorted_signals, 4)
+    for lvl in background_levels:
         ax.axhline(
             y=float(lvl.price),
             color=_level_color(lvl),
             linestyle="--" if lvl.is_equal_pool else ":",
             linewidth=0.9,
-            alpha=0.22,
+            alpha=0.20,
             zorder=0,
         )
 
-    # ---------------------------------------------------
-    # Signal-Level + Sweep + Marker + Info
-    # ---------------------------------------------------
     y_min = float(data["low"].min())
     y_max = float(data["high"].max())
     y_range = max(y_max - y_min, 1e-6)
-    text_offset = y_range * 0.018
 
     for idx, signal in enumerate(sorted_signals):
         if signal.signal_time not in data.index:
@@ -186,7 +180,6 @@ def plot_liquidity_grab_chart(
         row = data.loc[signal.signal_time]
         sig_color = _signal_color(signal)
 
-        # Signal-Level stark hervorheben
         ax.axhline(
             y=signal.level_price,
             color=sig_color,
@@ -196,7 +189,6 @@ def plot_liquidity_grab_chart(
             zorder=1,
         )
 
-        # Referenzzeitpunkt markieren, falls vorhanden
         if signal.reference_time in data.index:
             ax.scatter(
                 [signal.reference_time],
@@ -210,19 +202,18 @@ def plot_liquidity_grab_chart(
                 zorder=5,
             )
 
-        # Sweep-Linie: vom Level zum Extrem der Signal-Candle
         if signal.direction == "bullish":
             sweep_extreme = float(row["low"])
             marker_y = sweep_extreme - y_range * 0.015
             marker = "^"
+            text_y = 0.02
             text_va = "bottom"
-            info_y = marker_y + text_offset
         else:
             sweep_extreme = float(row["high"])
             marker_y = sweep_extreme + y_range * 0.015
             marker = "v"
+            text_y = 0.98
             text_va = "top"
-            info_y = marker_y - text_offset
 
         ax.vlines(
             signal.signal_time,
@@ -234,7 +225,6 @@ def plot_liquidity_grab_chart(
             zorder=4,
         )
 
-        # Marker am Signal
         ax.scatter(
             [signal.signal_time],
             [marker_y],
@@ -244,50 +234,44 @@ def plot_liquidity_grab_chart(
             zorder=6,
         )
 
-        # Kompaktes Signal-Label
-        direction_text = "BULL" if signal.direction == "bullish" else "BEAR"
-        signal_text = signal.signal_type.upper()
+        if idx == 0:
+            direction_text = "BULL" if signal.direction == "bullish" else "BEAR"
+            flags = []
+            if signal.reclaimed:
+                flags.append("reclaim")
+            if signal.confirmed:
+                flags.append("confirm")
+            if signal.equal_pool:
+                flags.append("equal")
+            if signal.level_touches > 1:
+                flags.append(f"touches={signal.level_touches}")
 
-        flags = []
-        if signal.reclaimed:
-            flags.append("reclaim")
-        if signal.confirmed:
-            flags.append("confirm")
-        if signal.equal_pool:
-            flags.append("equal")
-        if signal.level_touches > 1:
-            flags.append(f"touches={signal.level_touches}")
+            label = (
+                f"{direction_text} {signal.signal_type.upper()} | {signal.score:.0f}\n"
+                f"Level: {signal.level_price:.4f}\n"
+                f"Sweep: {signal.sweep_percent:.3f}%\n"
+                f"Wick: {signal.wick_ratio:.2f}\n"
+                f"{' | '.join(flags) if flags else 'raw'}"
+            )
 
-        flags_text = " | ".join(flags) if flags else "raw"
+            ax.text(
+                0.015,
+                text_y,
+                label,
+                transform=ax.transAxes,
+                fontsize=8,
+                color=sig_color,
+                va=text_va,
+                ha="left",
+                bbox=dict(
+                    boxstyle="round,pad=0.25",
+                    facecolor="white",
+                    edgecolor=sig_color,
+                    alpha=0.88,
+                ),
+                zorder=7,
+            )
 
-        label = (
-            f"{direction_text} {signal_text} | {signal.score:.0f}\n"
-            f"Level: {signal.level_price:.4f}\n"
-            f"Sweep: {signal.sweep_percent:.3f}%\n"
-            f"{flags_text}"
-        )
-
-        ax.annotate(
-            label,
-            xy=(signal.signal_time, marker_y),
-            xytext=(8, 0 if signal.direction == "bullish" else 0),
-            textcoords="offset points",
-            fontsize=8,
-            color=sig_color,
-            va=text_va,
-            ha="left",
-            bbox=dict(
-                boxstyle="round,pad=0.25",
-                facecolor="white",
-                edgecolor=sig_color,
-                alpha=0.85,
-            ),
-            zorder=7,
-        )
-
-    # ---------------------------------------------------
-    # Chart-Layout
-    # ---------------------------------------------------
     ax.set_ylabel("Preis")
     ax.grid(True, linestyle=":", alpha=0.28)
 
@@ -296,41 +280,96 @@ def plot_liquidity_grab_chart(
     ax.xaxis.set_major_locator(locator)
     ax.xaxis.set_major_formatter(formatter)
 
-    # Legende nur wenn wirklich Labels vorhanden sind
     handles, labels = ax.get_legend_handles_labels()
     if handles:
         ax.legend(fontsize=8, loc="upper left")
 
-    # Etwas rechter Rand
     if len(data.index) > 1:
         extra_right = (data.index[-1] - data.index[-2]) * 2
         ax.set_xlim(data.index[0], data.index[-1] + extra_right)
 
     fig.autofmt_xdate()
     plt.tight_layout()
+    return fig
+
+
+def save_liquidity_grab_chart_image(
+    df: pd.DataFrame,
+    signals: List[LiquiditySignal],
+    levels: List[LiquidityLevel],
+    title: str,
+    file_path: str | Path,
+    zoom_last_fraction: float | None = None,
+    min_zoom_bars: int = 30,
+) -> Path | None:
+    required = {"open", "high", "low", "close"}
+    if df is None or df.empty or not required.issubset(df.columns):
+        print("[Fehler] Keine gültigen OHLC-Daten zum Speichern vorhanden.")
+        return None
+
+    data = _prepare_data(df)
+    if data.empty:
+        print("[Fehler] Zeitindex ungültig.")
+        return None
+
+    if zoom_last_fraction is not None:
+        data = _build_subset_for_zoom(
+            data=data,
+            signals=signals,
+            zoom_fraction=zoom_last_fraction,
+            min_bars=min_zoom_bars,
+        )
+
+    visible_signals = _filter_signals_for_visible_range(data, signals)
+
+    fig = _render_chart(
+        data=data,
+        signals=visible_signals,
+        levels=levels,
+        title=title,
+    )
+
+    file_path = Path(file_path)
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(file_path, dpi=180, bbox_inches="tight")
+    plt.close(fig)
+    return file_path
+
+
+def plot_liquidity_grab_chart(
+    df: pd.DataFrame,
+    signals: List[LiquiditySignal],
+    levels: List[LiquidityLevel],
+    title: str = "",
+):
+    required = {"open", "high", "low", "close"}
+    if df is None or df.empty or not required.issubset(df.columns):
+        print("[Fehler] Keine Daten zum Plotten vorhanden.")
+        return
+
+    data = _prepare_data(df)
+    if data.empty:
+        print("[Fehler] Zeitindex ungültig.")
+        return
+
+    visible_signals = _filter_signals_for_visible_range(data, signals)
+    fig = _render_chart(data=data, signals=visible_signals,
+                        levels=levels, title=title)
 
     backend_name = plt.get_backend().lower()
-    is_gui_backend = any(
-        token in backend_name for token in ("qt", "gtk", "tk", "wx", "macosx")
-    )
+    is_gui_backend = any(token in backend_name for token in (
+        "qt", "gtk", "tk", "wx", "macosx"))
 
     if not is_gui_backend:
         plt.close(fig)
         return
 
     try:
-        manager = plt.get_current_fig_manager()
-        if manager is None:
-            raise RuntimeError("Kein GUI-Backend verfügbar.")
-
         plt.show(block=False)
         plt.pause(0.001)
 
         while plt.fignum_exists(fig.number):
             plt.pause(0.1)
-
-    except Exception as exc:
-        print(f"[Fehler] Chart konnte nicht angezeigt werden: {exc}")
     finally:
         if plt.fignum_exists(fig.number):
             plt.close(fig)

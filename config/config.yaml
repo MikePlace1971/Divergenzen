@@ -1,38 +1,36 @@
 # config.yaml
 settings:
-  timeframe: D1               # Zeitrahmen für die Analyse: z. B. D1 (Tageschart) oder H4 (4-Stunden-Chart)
+  timeframe: D1 # Zeitrahmen für die Analyse: z. B. D1 (Tageschart) oder H4 (4-Stunden-Chart)
   timeframe_choices: ["H1", "H4", "D1"]
-  default_source: yfinance    # Datenquelle: 'yfinance' (Yahoo Finance) oder 'oanda'
-  markets_file: config/markets.yaml   # Pfad zur Datei mit den Marktdefinitionen (z. B. Indizes, Währungen etc.)
+  default_source: yfinance # Datenquelle: 'yfinance' (Yahoo Finance) oder 'oanda'
+  markets_file: config/markets.yaml # Pfad zur Datei mit den Marktdefinitionen (z. B. Indizes, Währungen etc.)
 
 SMA:
-  langfristig: 200            # Periode für den langfristigen gleitenden Durchschnitt (SMA200)
-  kurzfristig: 20             # Periode für den kurzfristigen gleitenden Durchschnitt (SMA20)
+  langfristig: 200 # Periode für den langfristigen gleitenden Durchschnitt (SMA200)
+  kurzfristig: 20 # Periode für den kurzfristigen gleitenden Durchschnitt (SMA20)
 
 oanda:
-  access_token: 7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c   # OANDA API-Zugangsschlüssel (privat halten!)
-  account_id: 101-004-12489955-001   # Deine OANDA Konto-ID für API-Zugriffe (privat halten!)
+  access_token: 7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c # OANDA API-Zugangsschlüssel (privat halten!)
+  account_id: 101-004-12489955-001 # Deine OANDA Konto-ID für API-Zugriffe (privat halten!)
 
 divergence:
-  rsi_period: 14              # RSI-Periode (Standard 14) für Divergenzerkennung
-  fractal_periods: 4          # Wie viele Kerzen links/rechts ein Fraktalpunkt berücksichtigen soll
-  max_bars_diff: 12           # Maximale Kerzenanzahl zwischen zwei Divergenz-Punkten (Abstand)
+  rsi_period: 14 # RSI-Periode (Standard 14) für Divergenzerkennung
+  fractal_periods: 4 # Wie viele Kerzen links/rechts ein Fraktalpunkt berücksichtigen soll
+  max_bars_diff: 12 # Maximale Kerzenanzahl zwischen zwei Divergenz-Punkten (Abstand)
 
 auswertung:
-  maximal_bars: 7           # Wie viele Kerzen rückblickend in der Auswertung berücksichtigt werden (z. B. für Charts oder Signale)
+  maximal_bars: 7 # Wie viele Kerzen rückblickend in der Auswertung berücksichtigt werden (z. B. für Charts oder Signale)
 
 donchian:
   period: 20
   warn_distance_percent: 2
 
-
 rsi_scanner:
   period: 14
   lower: 30
   upper: 70
-  mode: last_bar          # "last_bar" = aktueller RSI der letzten Kerze
-  lookback_bars: 200      # wie viele Bars laden (sicher genug)
-
+  mode: last_bar # "last_bar" = aktueller RSI der letzten Kerze
+  lookback_bars: 200 # wie viele Bars laden (sicher genug)
 
 ## Liquidity Grab
 # Einstellungen für den Liquidity-Grab-Scanner nach SMC / ICT.
@@ -44,6 +42,11 @@ rsi_scanner:
 # - niedrigere Strenge = mehr Signale, aber auch mehr unklare Setups
 # - du entscheidest am Ende selbst, welche Grabs gut sind
 # - der Scanner zeigt dir nur aus seiner Sicht interessante Kandidaten
+#
+# Zusätzliche Logik im aktuellen Stand:
+# - ein Level darf vor dem eigentlichen Signal noch nicht schon früher sauber verletzt worden sein
+# - nahe Hochs/Tiefs können als Equal-Liquidity-Pool zusammengefasst werden
+# - bei Equal-Levels kann der neuere Pivot stärker gewichtet werden
 
 liquidity_grab:
   pivot_bars: 3
@@ -75,6 +78,17 @@ liquidity_grab:
   # Kleinerer Wert = frischere Levels, weniger Treffer.
   # Größerer Wert = mehr Levels, aber oft auch mehr unwichtige.
   # Gute Werte: 80 bis 120
+  #
+  # Wichtig:
+  # Zusätzlich wird im Code jetzt geprüft, ob das Level seit seinem Pivot
+  # schon vorher verletzt wurde.
+  # Beispiel:
+  # - buy_side-Level ist ungültig, wenn zwischen Pivot und Signal schon früher
+  #   ein High über dem Level lag
+  # - sell_side-Level ist ungültig, wenn zwischen Pivot und Signal schon früher
+  #   ein Low unter dem Level lag
+  #
+  # Dadurch werden "verbrauchte" Levels sauberer aussortiert.
 
   max_levels_per_side: 12
   # Maximale Anzahl aktiver Levels je Richtung.
@@ -91,15 +105,59 @@ liquidity_grab:
   # besonders interessante Liquiditätsbereiche sind.
   # Empfehlung: meist auf true lassen.
 
-  equal_level_threshold_percent: 0.15
+  equal_level_threshold_percent: 0.08
   # Wie nah zwei Hochs/Tiefs beieinander liegen müssen, um als "equal" zu gelten.
   # Angabe in Prozent.
   # Kleinerer Wert = strenger, nur sehr exakte Equal Highs/Lows.
   # Größerer Wert = lockerer, mehr Pools werden zusammengefasst.
+  #
+  # Hier wurde der Wert bewusst strenger gesetzt:
+  # 0.08 statt 0.15
+  #
+  # Ziel:
+  # Der Scanner soll echte Equal Highs / Equal Lows sauberer erkennen
+  # und nicht zu viele nur ungefähr ähnliche Hochs/Tiefs zusammenfassen.
+  #
   # Gute Werte:
-  # 0.10 = streng
-  # 0.15 = guter Standard
-  # 0.20 bis 0.30 = eher lockerer
+  # 0.05 = streng
+  # 0.08 = guter, sauberer Standard
+  # 0.10 = noch okay
+  # 0.15+ = eher lockerer
+
+  strong_close_threshold: 0.70
+  # Ab welcher Close-Stärke ein zusätzlicher Bonus vergeben wird.
+  #
+  # bullish:
+  # Schluss muss hoch in der Candle liegen
+  #
+  # bearish:
+  # Schluss muss tief in der Candle liegen
+  #
+  # Gute Werte:
+  # 0.65 = etwas lockerer
+  # 0.70 = guter Standard
+  # 0.75 = strenger
+
+  strong_close_score_bonus: 10.0
+  # Bonuspunkte für eine starke Schlusslage in Signalrichtung.
+  # Gute Werte: 6 bis 12
+
+  equal_level_recent_weight: 0.70
+  # Gewichtet bei einem Equal-Level-Pool den neueren Pivot stärker als den älteren.
+  # Dadurch bleibt der Pool näher an der zuletzt bestätigten Liquidität.
+  #
+  # Beispiel:
+  # Wenn ein bestehender Pool bei 100.00 liegt und ein neuer passender Pivot
+  # bei 100.04 dazukommt, dann wird der Pool nicht einfach stumpf gemittelt,
+  # sondern stärker in Richtung des neueren Pivots verschoben.
+  #
+  # Zusätzlich wird der Pool zeitlich auf den neueren Pivot "frischer" gesetzt.
+  #
+  # Gute Werte:
+  # 0.50 = neutrales Mittel
+  # 0.60 bis 0.75 = sinnvoller Bereich
+  # 0.70 = guter Standard
+  # 0.80+ = sehr starke Bevorzugung des neuesten Pivots
 
   min_sweep_percent: 0.03
   # Mindestgröße des Sweeps über/unter dem Level in Prozent.
@@ -166,6 +224,8 @@ liquidity_grab:
   # reclaim_only = guter Start
   # strong_reclaim = oft sinnvoller für bessere Qualität
   # structure_break = strenger und oft hochwertiger
+  #
+  # Für deinen aktuellen Fokus "reiner Sweep-Reclaim" ist reclaim_only passend.
 
   confirmation_lookahead_bars: 3
   # Nur relevant für confirmation_mode: structure_break
@@ -239,8 +299,56 @@ liquidity_grab:
   # Das ist vor allem für Tests und Feintuning interessant.
   # Für die normale Nutzung meist besser auf false lassen.
 
+  ######################################################
+  # Einstellungen für die Länge der Lunten/Dochte (Wicks)
+  use_wick_filter: false
+  # Wenn true, muss die relevante Sweep-Lunte eine Mindestgröße haben.
+  # Wenn false, wird die Wick-Ratio nur im Score berücksichtigt.
+  # Empfehlung zum Start: false
+  # Für strengere Qualität später: true
 
-  # Ergebnis-Erklärung (Liquidity Grab Scanner)
+  # Wenn du später strenger werden willst
+  # use_wick_filter: true
+  # min_wick_ratio: 0.40
+  # score_threshold: 65
+  # show_runs: false
+
+  min_wick_ratio: 0.40
+  # Mindestanteil der relevanten Lunte an der gesamten Candle-Range.
+  #
+  # Beispiel:
+  # 0.40 = die Sweep-Lunte muss mindestens 40 % der ganzen Candle ausmachen
+  #
+  # Gute Werte:
+  # 0.30 = lockerer
+  # 0.40 = guter Standard
+  # 0.50 = strenger
+
+  wick_score_weight: 10.0
+  # Wie stark eine gute Wick-Ratio zusätzlich in den Score einfließt.
+  # Höher = mehr Gewicht auf sichtbare Rejection.
+  # Gute Werte: 6 bis 12
+
+  ######################################################
+  ### Einstellungen zum Speichern der Charts für ChatGPT
+
+  save_chart_images: true
+  # Wenn true, werden alle gefundenen Charts automatisch als PNG gespeichert.
+
+  show_chart_windows: true
+  # Wenn true, werden die Charts zusätzlich wie bisher als Fenster angezeigt.
+  # Wenn du nur speichern willst, setze es auf false.
+
+  save_zoom_fraction: 0.3333
+  # Wie viel vom letzten Chartbereich zusätzlich als Zoom gespeichert werden soll.
+  # 0.3333 = letztes Drittel der Kurse
+
+  save_zoom_min_bars: 30
+  # Mindestanzahl an Kerzen im Zoom-Chart.
+  # Falls ein Drittel zu wenig wäre, bleiben mindestens so viele Bars sichtbar.
+
+###############################################
+### Ergebnis-Erklärung (Liquidity Grab Scanner)
 #
 # Jede Zeile im Ergebnis enthält die wichtigsten Infos zum erkannten Setup:
 #

@@ -1,5 +1,5 @@
 """
-modules/liquidtyGrabScanner/detector.py
+modules/liquidityGrabScanner/detector.py
 
 Erkennt Liquidity Grabs, Sweeps und Runs an zuvor definierten Liquidity-Levels.
 
@@ -10,7 +10,7 @@ strukturierte Rückgabe für Scanner und Chart-Plot.
 from __future__ import annotations
 
 from dataclasses import dataclass, asdict
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal
 
 import pandas as pd
 
@@ -38,6 +38,7 @@ class LiquiditySignal:
     reclaimed: bool
     confirmed: bool
     close_position: float
+    wick_ratio: float
     score: float
     reason: str
     level_touches: int
@@ -58,32 +59,41 @@ class LiquidityGrabDetector:
         self.pivot_bars = int(lg.get("pivot_bars", 3))
         self.lookback_bars = int(lg.get("lookback_bars", 260))
         self.scan_recent_bars = int(lg.get("scan_recent_bars", 8))
-        self.max_reference_age_bars = int(
-            lg.get("max_reference_age_bars", 120))
+        self.max_reference_age_bars = int(lg.get("max_reference_age_bars", 120))
         self.max_levels_per_side = int(lg.get("max_levels_per_side", 12))
 
         self.use_equal_levels = bool(lg.get("use_equal_levels", True))
         self.equal_level_threshold_percent = float(
-            lg.get("equal_level_threshold_percent", 0.15))
+            lg.get("equal_level_threshold_percent", 0.08)
+        )
+        self.equal_level_recent_weight = float(
+            lg.get("equal_level_recent_weight", 0.70)
+        )
 
         self.min_sweep_percent = float(lg.get("min_sweep_percent", 0.03))
         self.max_sweep_percent = float(lg.get("max_sweep_percent", 1.20))
 
         self.reclaim_rule = str(
-            lg.get("reclaim_rule", "close_back_inside")).strip()
+            lg.get("reclaim_rule", "close_back_inside")
+        ).strip()
         self.close_position_threshold = float(
-            lg.get("close_position_threshold", 0.45))
+            lg.get("close_position_threshold", 0.45)
+        )
 
         self.confirmation_mode = str(
-            lg.get("confirmation_mode", "reclaim_only")).strip()
+            lg.get("confirmation_mode", "reclaim_only")
+        ).strip()
         self.confirmation_lookahead_bars = int(
-            lg.get("confirmation_lookahead_bars", 3))
+            lg.get("confirmation_lookahead_bars", 3)
+        )
 
         self.require_opposite_candle_color = bool(
-            lg.get("require_opposite_candle_color", False))
+            lg.get("require_opposite_candle_color", False)
+        )
         self.one_sweep_per_level = bool(lg.get("one_sweep_per_level", True))
         self.allow_multiple_signals_per_symbol = bool(
-            lg.get("allow_multiple_signals_per_symbol", True))
+            lg.get("allow_multiple_signals_per_symbol", True)
+        )
 
         self.trend_filter = str(lg.get("trend_filter", "none")).strip()
         self.trend_sma_period = int(lg.get("trend_sma_period", 200))
@@ -91,6 +101,17 @@ class LiquidityGrabDetector:
         self.score_threshold = float(lg.get("score_threshold", 55))
         self.show_runs = bool(lg.get("show_runs", True))
         self.show_failed_grabs = bool(lg.get("show_failed_grabs", False))
+
+        # Neu: Wick / Rejection
+        self.use_wick_filter = bool(lg.get("use_wick_filter", False))
+        self.min_wick_ratio = float(lg.get("min_wick_ratio", 0.40))
+        self.wick_score_weight = float(lg.get("wick_score_weight", 10.0))
+        self.strong_close_score_bonus = float(
+            lg.get("strong_close_score_bonus", 10.0)
+        )
+        self.strong_close_threshold = float(
+            lg.get("strong_close_threshold", 0.70)
+        )
 
     @staticmethod
     def _close_position_in_range(row: pd.Series) -> float:
@@ -108,7 +129,38 @@ class LiquidityGrabDetector:
         return (close - low) / (high - low)
 
     @staticmethod
-    def _sweep_percent(direction: SignalDirection, row: pd.Series, level_price: float) -> float:
+    def _wick_ratio(direction: SignalDirection, row: pd.Series) -> float:
+        """
+        Verhältnis der relevanten Sweep-Lunte zur gesamten Candle-Range.
+
+        bullish:
+            untere Lunte / gesamte Range
+        bearish:
+            obere Lunte / gesamte Range
+        """
+        high = float(row["high"])
+        low = float(row["low"])
+        open_ = float(row["open"])
+        close = float(row["close"])
+
+        total_range = high - low
+        if total_range <= 0:
+            return 0.0
+
+        if direction == "bullish":
+            wick = min(open_, close) - low
+        else:
+            wick = high - max(open_, close)
+
+        wick = max(wick, 0.0)
+        return wick / total_range
+
+    @staticmethod
+    def _sweep_percent(
+        direction: SignalDirection,
+        row: pd.Series,
+        level_price: float,
+    ) -> float:
         """
         Berechnet, wie weit die Candle über/unter das Level hinaus sweeped.
         """
@@ -120,7 +172,12 @@ class LiquidityGrabDetector:
 
         return max(((level_price - float(row["low"])) / level_price) * 100.0, 0.0)
 
-    def _passes_reclaim_rule(self, direction: SignalDirection, row: pd.Series, level_price: float) -> bool:
+    def _passes_reclaim_rule(
+        self,
+        direction: SignalDirection,
+        row: pd.Series,
+        level_price: float,
+    ) -> bool:
         """
         Prüft, ob die Kerze das Level nach dem Sweep wieder sauber reclaimt.
         """
@@ -132,12 +189,15 @@ class LiquidityGrabDetector:
                 return max(open_, close) < level_price
             return min(open_, close) > level_price
 
-        # Standard: Schlusskurs muss wieder innerhalb liegen
         if direction == "bearish":
             return close < level_price
         return close > level_price
 
-    def _passes_opposite_candle_rule(self, direction: SignalDirection, row: pd.Series) -> bool:
+    def _passes_opposite_candle_rule(
+        self,
+        direction: SignalDirection,
+        row: pd.Series,
+    ) -> bool:
         """
         Optionaler Farbfilter:
         bullish Grab bevorzugt bullishe Kerze,
@@ -153,7 +213,11 @@ class LiquidityGrabDetector:
             return close > open_
         return close < open_
 
-    def _passes_trend_filter(self, direction: SignalDirection, row: pd.Series) -> bool:
+    def _passes_trend_filter(
+        self,
+        direction: SignalDirection,
+        row: pd.Series,
+    ) -> bool:
         """
         Optionaler Trendfilter, z. B. relativ zum SMA200.
         """
@@ -174,6 +238,30 @@ class LiquidityGrabDetector:
 
         return True
 
+    def _level_was_previously_violated(
+        self,
+        df: pd.DataFrame,
+        level: LiquidityLevel,
+        current_idx: int,
+    ) -> bool:
+        """
+        Prüft, ob das Level seit seinem Pivot bis direkt vor die aktuelle Signal-Bar
+        schon einmal sauber verletzt wurde.
+        """
+        start = level.pivot_index + 1
+        end = current_idx
+
+        if start >= end:
+            return False
+
+        if level.side == "buy_side":
+            return bool((df["high"].iloc[start:end] > level.price).any())
+
+        if level.side == "sell_side":
+            return bool((df["low"].iloc[start:end] < level.price).any())
+
+        return False
+
     def _confirmation_passed(
         self,
         df: pd.DataFrame,
@@ -184,16 +272,6 @@ class LiquidityGrabDetector:
     ) -> bool:
         """
         Prüft die gewünschte Signalbestätigung.
-
-        none:
-            keine zusätzliche Bestätigung
-        reclaim_only:
-            der Reclaim auf derselben Kerze reicht
-        strong_reclaim:
-            Reclaim + Schlusslage deutlich auf der "richtigen" Seite
-        structure_break:
-            nach dem Grab muss innerhalb weniger Bars die Signal-Candle
-            in Gegenrichtung bestätigt werden
         """
         row = df.iloc[idx]
         close_pos = self._close_position_in_range(row)
@@ -249,9 +327,10 @@ class LiquidityGrabDetector:
         """
         score = 0.0
         close_pos = self._close_position_in_range(row)
+        wick_ratio = self._wick_ratio(direction, row)
         age = level.age_bars(current_index)
 
-        # Basis nach Signaltyp
+        # Basis
         if signal_type == "grab":
             score += 40
         elif signal_type == "failed_grab":
@@ -265,34 +344,45 @@ class LiquidityGrabDetector:
         if confirmed:
             score += 15
 
-        # Equal-High / Equal-Low Pool ist meist interessanter
+        # Equal Pool / Touches
         if level.is_equal_pool:
             score += 10
 
-        # Mehrfache Tests / sichtbare Liquidität
         score += min(level.touches * 4, 16)
 
-        # Frischere Levels leicht bevorzugen
+        # Frische
         freshness_bonus = max(
-            0.0, 10.0 - (age / max(self.max_reference_age_bars, 1)) * 10.0)
+            0.0,
+            10.0 - (age / max(self.max_reference_age_bars, 1)) * 10.0,
+        )
         score += freshness_bonus
 
-        # Sweep-Größe: zu klein = schwach, zu groß = eher Run / ineffizient
+        # Sweep-Größe
         if self.min_sweep_percent <= sweep_percent <= self.max_sweep_percent:
             center = (self.min_sweep_percent + self.max_sweep_percent) / 2.0
-            spread = max((self.max_sweep_percent -
-                         self.min_sweep_percent) / 2.0, 0.0001)
+            spread = max(
+                (self.max_sweep_percent - self.min_sweep_percent) / 2.0,
+                0.0001,
+            )
             distance_from_center = abs(sweep_percent - center)
             normalized = max(0.0, 1.0 - (distance_from_center / spread))
             score += normalized * 12.0
         else:
             score -= 6.0
 
-        # Schlusslage der Candle
+        # Schlusslage
         if direction == "bullish":
             score += close_pos * 12.0
+            if close_pos >= self.strong_close_threshold:
+                score += self.strong_close_score_bonus
         else:
-            score += (1.0 - close_pos) * 12.0
+            bearish_close_strength = 1.0 - close_pos
+            score += bearish_close_strength * 12.0
+            if bearish_close_strength >= self.strong_close_threshold:
+                score += self.strong_close_score_bonus
+
+        # Neu: Wick-Qualität
+        score += wick_ratio * self.wick_score_weight
 
         return round(score, 2)
 
@@ -306,13 +396,6 @@ class LiquidityGrabDetector:
     ) -> SignalType:
         """
         Unterscheidet Grab, Run und Failed Grab.
-
-        grab:
-            sauberer Sweep + Reclaim
-        run:
-            Level wird genommen und Markt bleibt darüber/darunter oder sweeped zu weit
-        failed_grab:
-            Sweep vorhanden, aber Reclaim/Qualität reicht nicht
         """
         close = float(row["close"])
 
@@ -359,6 +442,7 @@ class LiquidityGrabDetector:
             max_levels_per_side=self.max_levels_per_side,
             use_equal_levels=self.use_equal_levels,
             equal_level_threshold_percent=self.equal_level_threshold_percent,
+            equal_level_recent_weight=self.equal_level_recent_weight,
         )
 
         signals: List[LiquiditySignal] = []
@@ -373,34 +457,36 @@ class LiquidityGrabDetector:
                 if level.pivot_index >= idx:
                     continue
 
-                level_key = (level.side, level.created_at,
-                             round(level.price, 8))
+                level_key = (level.side, level.created_at, round(level.price, 8))
                 if self.one_sweep_per_level and level_key in consumed_level_keys:
                     continue
 
                 if level.age_bars(idx) > self.max_reference_age_bars:
                     continue
 
-                # ---------------------------------------------------
-                # Bearish Grab: Sweep über buy-side liquidity
-                # ---------------------------------------------------
+                if self._level_was_previously_violated(data, level, idx):
+                    continue
+
+                # Bearish Grab über buy_side
                 if level.side == "buy_side":
                     if float(row["high"]) <= level.price:
                         continue
 
                     direction: SignalDirection = "bearish"
-                    sweep_percent = self._sweep_percent(
-                        direction, row, level.price)
+                    sweep_percent = self._sweep_percent(direction, row, level.price)
 
                     if sweep_percent < self.min_sweep_percent:
                         continue
 
-                    reclaimed = self._passes_reclaim_rule(
-                        direction, row, level.price)
+                    reclaimed = self._passes_reclaim_rule(direction, row, level.price)
                     if not self._passes_opposite_candle_rule(direction, row):
                         reclaimed = False
 
                     if not self._passes_trend_filter(direction, row):
+                        continue
+
+                    wick_ratio = self._wick_ratio(direction, row)
+                    if self.use_wick_filter and wick_ratio < self.min_wick_ratio:
                         continue
 
                     signal_type = self._classify_signal(
@@ -431,7 +517,8 @@ class LiquidityGrabDetector:
 
                     reason = (
                         f"buy-side liquidity swept @ {level.price:.5f} | "
-                        f"sweep={sweep_percent:.3f}% | reclaimed={reclaimed} | confirmed={confirmed}"
+                        f"sweep={sweep_percent:.3f}% | reclaimed={reclaimed} | "
+                        f"confirmed={confirmed} | wick_ratio={wick_ratio:.3f}"
                     )
 
                     signal = LiquiditySignal(
@@ -446,8 +533,8 @@ class LiquidityGrabDetector:
                         sweep_percent=round(sweep_percent, 4),
                         reclaimed=reclaimed,
                         confirmed=confirmed,
-                        close_position=round(
-                            self._close_position_in_range(row), 4),
+                        close_position=round(self._close_position_in_range(row), 4),
+                        wick_ratio=round(wick_ratio, 4),
                         score=score,
                         reason=reason,
                         level_touches=level.touches,
@@ -459,26 +546,26 @@ class LiquidityGrabDetector:
                         if self.one_sweep_per_level:
                             consumed_level_keys.add(level_key)
 
-                # ---------------------------------------------------
-                # Bullish Grab: Sweep unter sell-side liquidity
-                # ---------------------------------------------------
+                # Bullish Grab unter sell_side
                 if level.side == "sell_side":
                     if float(row["low"]) >= level.price:
                         continue
 
                     direction = "bullish"
-                    sweep_percent = self._sweep_percent(
-                        direction, row, level.price)
+                    sweep_percent = self._sweep_percent(direction, row, level.price)
 
                     if sweep_percent < self.min_sweep_percent:
                         continue
 
-                    reclaimed = self._passes_reclaim_rule(
-                        direction, row, level.price)
+                    reclaimed = self._passes_reclaim_rule(direction, row, level.price)
                     if not self._passes_opposite_candle_rule(direction, row):
                         reclaimed = False
 
                     if not self._passes_trend_filter(direction, row):
+                        continue
+
+                    wick_ratio = self._wick_ratio(direction, row)
+                    if self.use_wick_filter and wick_ratio < self.min_wick_ratio:
                         continue
 
                     signal_type = self._classify_signal(
@@ -509,7 +596,8 @@ class LiquidityGrabDetector:
 
                     reason = (
                         f"sell-side liquidity swept @ {level.price:.5f} | "
-                        f"sweep={sweep_percent:.3f}% | reclaimed={reclaimed} | confirmed={confirmed}"
+                        f"sweep={sweep_percent:.3f}% | reclaimed={reclaimed} | "
+                        f"confirmed={confirmed} | wick_ratio={wick_ratio:.3f}"
                     )
 
                     signal = LiquiditySignal(
@@ -524,8 +612,8 @@ class LiquidityGrabDetector:
                         sweep_percent=round(sweep_percent, 4),
                         reclaimed=reclaimed,
                         confirmed=confirmed,
-                        close_position=round(
-                            self._close_position_in_range(row), 4),
+                        close_position=round(self._close_position_in_range(row), 4),
+                        wick_ratio=round(wick_ratio, 4),
                         score=score,
                         reason=reason,
                         level_touches=level.touches,
@@ -537,10 +625,8 @@ class LiquidityGrabDetector:
                         if self.one_sweep_per_level:
                             consumed_level_keys.add(level_key)
 
-        # Beste Signale zuerst
         signals.sort(key=lambda s: (s.score, s.signal_time), reverse=True)
 
-        # Optional nur ein Signal pro Symbol/Scan später im Scanner filtern
         return {"df": data, "levels": levels, "signals": signals}
 
     def _should_include_signal(self, signal: LiquiditySignal) -> bool:
