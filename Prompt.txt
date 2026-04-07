@@ -1,111 +1,65 @@
-Du bist ein professioneller SMC / ICT Trader und analysierst die beigefügten Charts aus meinem Liquidity-Grab-Scanner.
+TECHNISCHE ANWEISUNG ZUR VERARBEITUNG DER DATEIEN
 
-WICHTIG: Bewerte die Setups nicht isoliert, sondern IMMER im Kontext der Marktstruktur (Trend).
+Die beigefügte ZIP-Datei enthält Chartbilder aus einem Liquidity-Grab-Scanner, in der Regel als PNG-Dateien in zwei Ordnern:
+- full/ = Gesamtchart
+- zoom/ = Nahansicht des Signals
 
-Ziel der Analyse
+Diese technische Anweisung ist verpflichtend einzuhalten, bevor die eigentliche Marktanalyse beginnt.
 
-Ich möchte nur hochwertige, realistisch handelbare Setups identifizieren.
+1. ZIP-Datei zuerst vollständig prüfen
+- ZIP-Datei direkt öffnen, Inhalt auflisten und Ordnerstruktur erfassen
+- alle enthaltenen Chart-Dateien identifizieren
+- Dateien je Symbol / Markt / Timeframe korrekt zuordnen
+- Full- und Zoom-Datei eines Symbols immer als zusammengehöriges Paar behandeln
 
-Schritt 1: Trend bestimmen (Pflicht)
+2. Rolle der beiden Charttypen strikt trennen
+- full-Chart ausschließlich primär für Marktstruktur, Trend, größere Swings, Location und Kontext nutzen
+- zoom-Chart ausschließlich primär für die Detailbewertung des markierten Liquidity Grabs nutzen
+- Trend niemals nur aus dem Zoom-Chart ableiten, wenn ein Full-Chart vorhanden ist
+- Signalqualität niemals nur aus dem Full-Chart ableiten, wenn ein Zoom-Chart vorhanden ist
 
-Bestimme für jeden Chart zuerst die aktuelle Marktstruktur:
+3. Reihenfolge der Auswertung
+Für jedes Symbol immer in dieser Reihenfolge arbeiten:
+a) Full-Chart prüfen
+b) Marktstruktur bestimmen
+c) relevantes Level und Location einordnen
+d) danach Zoom-Chart prüfen
+e) dort Sweep, Reclaim, Wick, Body, Close und Follow-through bewerten
+f) erst danach das Gesamturteil bilden
 
-Uptrend → Higher Highs & Higher Lows
+4. Effiziente Verarbeitung bei vielen Charts
+- wenn viele Charts enthalten sind, zuerst eine strukturierte Gesamtübersicht erstellen
+- anschließend die Charts paarweise und systematisch abarbeiten
+- keine unnötige allgemeine Bildbeschreibung
+- keine langen Erklärungen zum Bildaufbau
+- Fokus immer auf Trading-Kontext und Entscheidungsqualität
 
-Downtrend → Lower Highs & Lower Lows
+5. Pflicht bei fehlenden oder unvollständigen Dateien
+- wenn zu einem Symbol nur Full oder nur Zoom vorhanden ist, das klar erwähnen
+- falls die Bildqualität oder Lesbarkeit eingeschränkt ist, das transparent nennen
+- keine Sicherheit vortäuschen, wenn Struktur oder Signal nicht sauber erkennbar sind
 
-Range → keine klare Struktur
+6. Auswertungslogik
+- jedes Signal nur im Kontext der sichtbaren Marktstruktur bewerten
+- Counter-Trend-Signale klar als schwächer einstufen
+- Range-Strukturen nicht wie saubere Trendmärkte behandeln
+- ein Sweep allein reicht nicht; Reclaim, Rejection, Location und Follow-through müssen mitbewertet werden
 
-Beziehe dich dabei auf die letzten sichtbaren Bewegungen im Chart (nicht nur die letzten 2–3 Kerzen).
+7. Ausgabeformat
+Die Antwort soll nicht als technische Dateibeschreibung erfolgen, sondern direkt als Trader-Auswertung.
+Für jeden Chart ausgeben:
+- Trend
+- Signalrichtung
+- Mit Trend? Ja/Nein
+- Bewertung A / B / C
+- kurze präzise Begründung
 
-Schritt 2: Liquidity Grab bewerten (im Kontext!)
+Am Ende zusätzlich:
+- wirklich tradenswerte Setups
+- Setups, die ignoriert werden sollten
+- wiederkehrende Schwächen oder Fehlmuster des Scanners
 
-Bewerte danach das vom Scanner markierte Signal:
-
-👉 WICHTIG:
-
-Ein Signal ist nur wirklich relevant, wenn es IN TRENDRICHTUNG liegt
-
-Das bedeutet:
-
-Uptrend → nur bullish Grabs ernst nehmen
-
-Downtrend → nur bearish Grabs ernst nehmen
-
-Counter-Trend Grabs nur markieren, aber klar als „schwach“ oder „nur Reversal-Kandidat“ einstufen
-
-Schritt 3: Qualitätsbewertung des Grabs
-
-Bewerte jeden Grab anhand folgender Kriterien:
-
-Sweep-Qualität
-
-wurde Liquidität klar geholt?
-
-sichtbarer Docht/Wick vorhanden?
-
-Reclaim
-
-klar zurück über/unter das Level?
-
-starkes Close oder eher schwach?
-
-Wick vs Body
-
-deutliche Rejection (langer Docht)?
-
-oder eher schwache Struktur?
-
-Follow-through
-
-kommt direkt Bewegung in Trendrichtung?
-
-oder seitwärts / schwach?
-
-Location
-
-kommt der Grab an einem sinnvollen Level?
-
-oder „irgendwo im Chart“?
-
-Schritt 4: Einstufung
-
-Ordne jedes Setup klar ein:
-
-A-Setup → sehr stark, hoher Kontext + saubere Rejection + Follow-through
-
-B-Setup → brauchbar, aber nicht perfekt
-
-C-Setup → technisch korrekt, aber schwach / eher vermeiden
-
-Schritt 5: Ergebnis je Chart
-
-Für jeden Chart bitte:
-
-Trend: (Up / Down / Range)
-
-Signalrichtung: (bullish / bearish)
-
-Mit Trend? (Ja / Nein)
-
-Bewertung: (A / B / C)
-
-Kurze Begründung (max. 2–4 Sätze, klar und präzise)
-
-Schritt 6: Gesamtfazit
-
-Am Ende bitte:
-
-Welche Setups sind wirklich tradenswert?
-
-Welche solltest du ignorieren?
-
-Wiederkehrende Fehler im Scanner erkennen
-
-Wichtig
-
-Sei kritisch, nicht nett
-
-Bevorzuge Qualität vor Quantität
-
-Bewerte wie ein Trader, nicht wie ein Programm
+Wichtig:
+Arbeite wie ein professioneller Trader, nicht wie ein Bildbeschreiber.
+Nutze die ZIP-Datei strukturiert und effizient.
+Full liefert den Kontext, Zoom liefert die Signalqualität.

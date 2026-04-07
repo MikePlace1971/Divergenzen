@@ -1,351 +1,531 @@
 # config.yaml
+#
+# Zentrale Konfigurationsdatei für dein Analyse- und Scanner-System.
+#
+# Inhalt:
+# - allgemeine Programmeinstellungen
+# - Datenquellen
+# - SMA-Parameter
+# - Divergenz-Erkennung
+# - Donchian-Scanner
+# - RSI-Scanner
+# - Liquidity-Grab-Scanner mit 3-Stufen-Logik
+#
+# Hinweis:
+# Diese Datei ist so geschrieben, dass sie direkt nutzbar ist
+# und gleichzeitig die Bedeutung jeder Einstellung erklärt.
+
 settings:
-  timeframe: D1 # Zeitrahmen für die Analyse: z. B. D1 (Tageschart) oder H4 (4-Stunden-Chart)
+  timeframe: D1
+  # Standard-Zeitrahmen für die Analyse.
+  #
+  # Mögliche Werte:
+  # H1 = 1 Stunde
+  # H4 = 4 Stunden
+  # D1 = Tageschart
+  #
+  # Dieser Wert ist der voreingestellte Standard.
+  # In deinem Scanner kannst du den Timeframe später trotzdem
+  # interaktiv auswählen.
+
   timeframe_choices: ["H1", "H4", "D1"]
-  default_source: yfinance # Datenquelle: 'yfinance' (Yahoo Finance) oder 'oanda'
-  markets_file: config/markets.yaml # Pfad zur Datei mit den Marktdefinitionen (z. B. Indizes, Währungen etc.)
+  # Welche Timeframes im Auswahlmenü angeboten werden sollen.
+
+  default_source: yfinance
+  # Standard-Datenquelle.
+  #
+  # Mögliche Werte:
+  # yfinance = Yahoo Finance
+  # oanda    = OANDA API
+  #
+  # Für Aktien und viele Indizes ist yfinance praktisch.
+  # Für Forex / CFD / intraday kann OANDA je nach Markt sinnvoll sein.
+
+  markets_file: config/markets.yaml
+  # Pfad zur Datei mit den Marktdefinitionen.
+  #
+  # Dort legst du fest, welche Märkte / Watchlists / Symbole
+  # gescannt werden sollen.
 
 SMA:
-  langfristig: 200 # Periode für den langfristigen gleitenden Durchschnitt (SMA200)
-  kurzfristig: 20 # Periode für den kurzfristigen gleitenden Durchschnitt (SMA20)
+  langfristig: 200
+  # Periode des langfristigen gleitenden Durchschnitts.
+  #
+  # Standard:
+  # SMA200 wird oft als grober Trendfilter genutzt.
+
+  kurzfristig: 20
+  # Periode des kurzfristigen gleitenden Durchschnitts.
+  #
+  # Kann z. B. für Pullback-Analysen, Korrekturen oder
+  # allgemeine Trendnähe verwendet werden.
 
 oanda:
   access_token: 7110291164afb12ed43bb74b908183b3-2e13231fb42fe4080aa1eb291a9da12c # OANDA API-Zugangsschlüssel (privat halten!)
   account_id: 101-004-12489955-001 # Deine OANDA Konto-ID für API-Zugriffe (privat halten!)
 
 divergence:
-  rsi_period: 14 # RSI-Periode (Standard 14) für Divergenzerkennung
-  fractal_periods: 4 # Wie viele Kerzen links/rechts ein Fraktalpunkt berücksichtigen soll
-  max_bars_diff: 12 # Maximale Kerzenanzahl zwischen zwei Divergenz-Punkten (Abstand)
+  rsi_period: 14
+  # RSI-Periode für die Divergenzerkennung.
+  #
+  # Standard ist meist 14.
+
+  fractal_periods: 4
+  # Wie viele Kerzen links und rechts zur Fraktal-/Pivot-Erkennung
+  # genutzt werden.
+  #
+  # Höher = stabilere, aber langsamere Pivot-Erkennung
+  # Niedriger = sensibler, aber mehr Rauschen
+
+  max_bars_diff: 12
+  # Maximale Distanz zwischen zwei Divergenzpunkten in Bars.
+  #
+  # Verhindert, dass sehr weit auseinanderliegende Punkte
+  # als zusammengehörige Divergenz gewertet werden.
 
 auswertung:
-  maximal_bars: 7 # Wie viele Kerzen rückblickend in der Auswertung berücksichtigt werden (z. B. für Charts oder Signale)
+  maximal_bars: 7
+  # Wie viele der letzten Bars in bestimmten Auswertungen
+  # berücksichtigt werden sollen.
+  #
+  # Praktisch für kompakte Zusammenfassungen oder Signalchecks
+  # auf den jüngsten Kerzen.
 
 donchian:
   period: 20
+  # Periodenlänge des Donchian-Kanals.
+  #
+  # Standard:
+  # 20 ist sehr gebräuchlich.
+
   warn_distance_percent: 2
+  # Warnschwelle in Prozent.
+  #
+  # Beispiel:
+  # Wenn der Kurs nur noch 2 % vom oberen oder unteren Donchian-Level
+  # entfernt ist, kann der Scanner das als "nah dran" markieren.
 
 rsi_scanner:
   period: 14
-  lower: 30
-  upper: 70
-  mode: last_bar # "last_bar" = aktueller RSI der letzten Kerze
-  lookback_bars: 200 # wie viele Bars laden (sicher genug)
+  # RSI-Periode des RSI-Scanners.
 
-## Liquidity Grab
-# Einstellungen für den Liquidity-Grab-Scanner nach SMC / ICT.
-# Der Scanner sucht nach Bereichen, in denen der Markt ein altes Hoch oder Tief
-# kurz über- bzw. unterschreitet, dort Liquidität holt und anschließend wieder zurückläuft.
-#
-# Wichtig:
-# - höhere Strenge = weniger, aber meist bessere Signale
-# - niedrigere Strenge = mehr Signale, aber auch mehr unklare Setups
-# - du entscheidest am Ende selbst, welche Grabs gut sind
-# - der Scanner zeigt dir nur aus seiner Sicht interessante Kandidaten
-#
-# Zusätzliche Logik im aktuellen Stand:
-# - ein Level darf vor dem eigentlichen Signal noch nicht schon früher sauber verletzt worden sein
-# - nahe Hochs/Tiefs können als Equal-Liquidity-Pool zusammengefasst werden
-# - bei Equal-Levels kann der neuere Pivot stärker gewichtet werden
+  lower: 30
+  # Untere Schwelle.
+  #
+  # Typisch:
+  # RSI <= 30 = eher überverkauft
+
+  upper: 70
+  # Obere Schwelle.
+  #
+  # Typisch:
+  # RSI >= 70 = eher überkauft
+
+  mode: last_bar
+  # Scan-Modus.
+  #
+  # last_bar
+  #   = nur der RSI der letzten Kerze wird betrachtet
+
+  lookback_bars: 200
+  # Wie viele Bars geladen werden, damit RSI sauber berechnet
+  # und geprüft werden kann.
 
 liquidity_grab:
+  ######################################################
+  # GRUNDLOGIK DES SCANNERS
+  #
+  # Der Scanner arbeitet mit 3 Stufen:
+  #
+  # Stufe 1 – Early Grab
+  #   Sweep + Reclaim + erste Rejection + Kontext
+  #
+  # Stufe 2 – Follow-through
+  #   Der Markt läuft nach dem Grab innerhalb weniger Bars
+  #   sichtbar in die erwartete Richtung weiter
+  #
+  # Stufe 3 – MSS / CHOCH
+  #   Nach Grab + Follow-through wird zusätzlich
+  #   eine relevante Struktur gebrochen
+  #
+  # Ziel:
+  # - Stufe 1 = Vorbereitung / Beobachtung
+  # - Stufe 2 = Markt reagiert
+  # - Stufe 3 = strukturell bestätigtes Setup
+  ######################################################
+
   pivot_bars: 3
-  # Wie streng Hochs und Tiefs als relevante Swing-Levels erkannt werden.
-  # Der Wert gibt an, wie viele Kerzen links und rechts kleiner/größer sein müssen.
-  # Niedriger Wert = mehr Levels, mehr Signale, aber auch mehr Rauschen.
-  # Höherer Wert = nur stärkere Swing-Punkte.
-  # Sinnvolle Werte:
-  # 2 = aggressiv / viele Levels
+  # Wie streng Swing Highs / Swing Lows als Pivots erkannt werden.
+  #
+  # Wirkung:
+  # - kleiner Wert = mehr Levels, mehr Signale, mehr Rauschen
+  # - größerer Wert = weniger, aber stärkere Swings
+  #
+  # Gute Werte:
+  # 2 = aggressiv
   # 3 = guter Standard
-  # 4-5 = strenger / nur markantere Swings
+  # 4-5 = strenger
 
   lookback_bars: 260
-  # Wie viele Kerzen insgesamt geladen und analysiert werden.
-  # Mehr Bars = mehr historische Levels, aber auch etwas mehr Rechenaufwand.
-  # Für H1 sind 200-400 Bars meist gut.
-  # Für D1 reichen oft 150-300 Bars.
+  # Wie viele Bars insgesamt für den Liquidity-Grab-Scanner
+  # geladen und analysiert werden.
+  #
+  # Wirkung:
+  # mehr Bars = mehr Struktur / mehr historische Levels
+  #
+  # Gute Bereiche:
+  # H1: 200-400
+  # H4: 180-320
+  # D1: 150-300
 
   scan_recent_bars: 8
-  # Es werden nur Signale ausgegeben, die in den letzten X Kerzen entstanden sind.
-  # Damit der Scanner aktuelle Setups zeigt und nicht alte.
-  # Kleinere Werte = nur sehr frische Signale.
-  # Größere Werte = mehr Treffer in der Liste.
-  # Gute Standardwerte: 5 bis 10
+  # Nur Signale aus den letzten X Bars werden ausgegeben.
+  #
+  # So zeigt der Scanner frische Setups statt alter Situationen.
+  #
+  # Gute Werte:
+  # 5-10
+  # 8 = guter Standard
 
   max_reference_age_bars: 120
   # So alt darf ein Referenzlevel maximal sein.
-  # Sehr alte Hochs/Tiefs sind oft weniger relevant.
-  # Kleinerer Wert = frischere Levels, weniger Treffer.
-  # Größerer Wert = mehr Levels, aber oft auch mehr unwichtige.
-  # Gute Werte: 80 bis 120
   #
-  # Wichtig:
-  # Zusätzlich wird im Code jetzt geprüft, ob das Level seit seinem Pivot
-  # schon vorher verletzt wurde.
-  # Beispiel:
-  # - buy_side-Level ist ungültig, wenn zwischen Pivot und Signal schon früher
-  #   ein High über dem Level lag
-  # - sell_side-Level ist ungültig, wenn zwischen Pivot und Signal schon früher
-  #   ein Low unter dem Level lag
+  # Sehr alte Levels verlieren oft an Relevanz.
   #
-  # Dadurch werden "verbrauchte" Levels sauberer aussortiert.
+  # Wirkung:
+  # - kleiner = frischere Levels
+  # - größer = mehr Historie, aber oft mehr Unschärfe
+  #
+  # Zusätzlich prüft der Code, ob ein Level bereits früher
+  # verletzt wurde. Solche "verbrauchten" Levels werden verworfen.
 
   max_levels_per_side: 12
   # Maximale Anzahl aktiver Levels je Richtung.
-  # buy_side = Hochs über dem Markt
-  # sell_side = Tiefs unter dem Markt
-  # Zu viele Levels können die Bewertung und den Chart unnötig überladen.
-  # Gute Werte: 6 bis 10
-  # 12 ist eher großzügig.
+  #
+  # buy_side = alte Hochs über dem Markt
+  # sell_side = alte Tiefs unter dem Markt
+  #
+  # Höher = mehr Kontext, aber unübersichtlicher
+  # Niedriger = fokussierter
+
+  ######################################################
+  # EQUAL HIGHS / EQUAL LOWS / LIQUIDITY POOLS
+  ######################################################
 
   use_equal_levels: true
-  # Ob nahe beieinander liegende Hochs/Tiefs zu einem gemeinsamen Liquiditätspool
+  # Ob nahe Hochs / Tiefs zu gemeinsamen Liquidity-Pools
   # zusammengefasst werden sollen.
-  # Das ist für ICT / SMC sehr sinnvoll, weil Equal Highs / Equal Lows oft
-  # besonders interessante Liquiditätsbereiche sind.
-  # Empfehlung: meist auf true lassen.
+  #
+  # Für SMC / ICT meist sinnvoll.
 
   equal_level_threshold_percent: 0.08
-  # Wie nah zwei Hochs/Tiefs beieinander liegen müssen, um als "equal" zu gelten.
-  # Angabe in Prozent.
-  # Kleinerer Wert = strenger, nur sehr exakte Equal Highs/Lows.
-  # Größerer Wert = lockerer, mehr Pools werden zusammengefasst.
+  # Abstand in Prozent, innerhalb dessen Hochs/Tiefs noch
+  # als "equal" gelten.
   #
-  # Hier wurde der Wert bewusst strenger gesetzt:
-  # 0.08 statt 0.15
-  #
-  # Ziel:
-  # Der Scanner soll echte Equal Highs / Equal Lows sauberer erkennen
-  # und nicht zu viele nur ungefähr ähnliche Hochs/Tiefs zusammenfassen.
-  #
-  # Gute Werte:
+  # Richtwerte:
   # 0.05 = streng
-  # 0.08 = guter, sauberer Standard
-  # 0.10 = noch okay
-  # 0.15+ = eher lockerer
-
-  strong_close_threshold: 0.70
-  # Ab welcher Close-Stärke ein zusätzlicher Bonus vergeben wird.
-  #
-  # bullish:
-  # Schluss muss hoch in der Candle liegen
-  #
-  # bearish:
-  # Schluss muss tief in der Candle liegen
-  #
-  # Gute Werte:
-  # 0.65 = etwas lockerer
-  # 0.70 = guter Standard
-  # 0.75 = strenger
-
-  strong_close_score_bonus: 10.0
-  # Bonuspunkte für eine starke Schlusslage in Signalrichtung.
-  # Gute Werte: 6 bis 12
+  # 0.08 = guter Standard
+  # 0.10 = lockerer
 
   equal_level_recent_weight: 0.70
-  # Gewichtet bei einem Equal-Level-Pool den neueren Pivot stärker als den älteren.
-  # Dadurch bleibt der Pool näher an der zuletzt bestätigten Liquidität.
+  # Gewichtet neuere Pivots innerhalb eines Equal-Pools stärker.
   #
-  # Beispiel:
-  # Wenn ein bestehender Pool bei 100.00 liegt und ein neuer passender Pivot
-  # bei 100.04 dazukommt, dann wird der Pool nicht einfach stumpf gemittelt,
-  # sondern stärker in Richtung des neueren Pivots verschoben.
-  #
-  # Zusätzlich wird der Pool zeitlich auf den neueren Pivot "frischer" gesetzt.
-  #
-  # Gute Werte:
-  # 0.50 = neutrales Mittel
-  # 0.60 bis 0.75 = sinnvoller Bereich
-  # 0.70 = guter Standard
-  # 0.80+ = sehr starke Bevorzugung des neuesten Pivots
+  # Dadurch bleibt der Pool näher an der aktuellen Marktstruktur.
+
+  ######################################################
+  # SWEEP / GRAB-DEFINITION
+  ######################################################
 
   min_sweep_percent: 0.03
-  # Mindestgröße des Sweeps über/unter dem Level in Prozent.
-  # Der Markt muss das Level also wirklich ein Stück überschreiten.
-  # Zu kleiner Wert = viele Mini-Sweeps / unruhige Signale
-  # Höherer Wert = weniger, aber klarere Grabs
-  # Gute Werte:
+  # Mindestgröße des Sweeps über / unter dem Level in Prozent.
+  #
+  # Zu klein = viele Mini-Sweeps / Rauschen
+  #
+  # Richtwerte:
   # 0.03 = aggressiv
   # 0.05 = guter Standard
-  # 0.08 bis 0.10 = strenger
+  # 0.08+ = strenger
 
   max_sweep_percent: 1.20
   # Maximale Sweep-Größe in Prozent.
-  # Wenn der Markt viel zu weit über/unter das Level läuft, ist es oft eher
-  # ein echter Durchbruch / Run statt ein sauberer Grab.
-  # Niedrigerer Wert = strenger
-  # Höherer Wert = toleranter
-  # Gute Werte: 0.8 bis 1.2
+  #
+  # Wenn der Markt viel zu weit durchläuft, ist es oft eher
+  # ein Run / Breakout als ein sauberer Grab.
 
   reclaim_rule: close_back_inside
-  # Regel, wann ein Sweep als "zurückgeholt" gilt.
+  # Regel, wann ein Sweep als reclaimt gilt.
   #
   # Mögliche Werte:
-  # close_back_inside
-  #   = der Schlusskurs muss wieder innerhalb des Levels liegen
+  # close_back_inside = Schlusskurs wieder innerhalb
+  # body_back_inside  = ganzer Kerzenkörper wieder innerhalb
   #
-  # body_back_inside
-  #   = sogar der ganze Kerzenkörper muss wieder innerhalb liegen
-  #
-  # close_back_inside ist etwas lockerer und ein guter Start.
-  # body_back_inside ist strenger und filtert härter.
+  # close_back_inside = etwas lockerer
+  # body_back_inside  = strenger
 
   close_position_threshold: 0.45
-  # Bewertet, wie stark die Kerze in die gewünschte Richtung geschlossen hat.
-  # Beispiel bullish:
-  # - Schluss eher nahe am Hoch = besser
-  # Beispiel bearish:
-  # - Schluss eher nahe am Tief = besser
+  # Bewertet, wie stark die Signal-Kerze in die gewünschte
+  # Richtung schließt.
   #
-  # Je höher der Wert, desto mehr wird ein "starker" Schluss bevorzugt.
-  # Gute Werte:
-  # 0.45 = eher locker
-  # 0.55 = solider
-  # 0.60+ = strenger
+  # Höher = mehr Fokus auf starke Schlusslage.
 
-  confirmation_mode: reclaim_only
-  # Wie streng ein Grab zusätzlich bestätigt werden muss.
-  #
-  # Mögliche Werte:
-  # none
-  #   = keine zusätzliche Bestätigung, reine Rohsignale
-  #
-  # reclaim_only
-  #   = der Reclaim auf derselben Kerze reicht
-  #
-  # strong_reclaim
-  #   = Reclaim + stärkere Schlusslage der Kerze
-  #
-  # structure_break
-  #   = nach dem Grab muss innerhalb weniger Kerzen noch eine
-  #     Struktur-Bestätigung folgen
-  #
-  # Empfehlung:
-  # reclaim_only = guter Start
-  # strong_reclaim = oft sinnvoller für bessere Qualität
-  # structure_break = strenger und oft hochwertiger
-  #
-  # Für deinen aktuellen Fokus "reiner Sweep-Reclaim" ist reclaim_only passend.
-
-  confirmation_lookahead_bars: 3
-  # Nur relevant für confirmation_mode: structure_break
-  # Gibt an, wie viele Folgekerzen Zeit für die Bestätigung gegeben wird.
-  # Klein = strenger
-  # Groß = toleranter
-  # Gute Werte: 2 bis 4
+  ######################################################
+  # SIGNAL-QUALITÄT / REJECTION
+  ######################################################
 
   require_opposite_candle_color: false
   # Optionaler Kerzenfarben-Filter.
-  # Bullish Grab bevorzugt dann eine bullishe/grüne Kerze.
-  # Bearish Grab bevorzugt dann eine bearishe/rote Kerze.
-  # true = strenger
+  #
+  # bullish Grab -> bevorzugt bullishe Candle
+  # bearish Grab -> bevorzugt bearishe Candle
+  #
   # false = flexibler
-  #
-  # Später gut zum Testen, wenn du weniger, aber sauberere Signale möchtest.
+  # true  = strenger
 
-  one_sweep_per_level: true
-  # Wenn true, wird ein Level nach einem Sweep als "verbraucht" behandelt.
-  # So vermeidest du, dass derselbe Liquiditätspool mehrfach immer wieder
-  # als neues Signal auftaucht.
-  # Empfehlung: meist auf true lassen.
-
-  allow_multiple_signals_per_symbol: true
-  # Wenn true, darf ein Symbol mehrere Signale liefern.
-  # Wenn false, bleibt später typischerweise nur das beste Signal pro Symbol übrig.
-  #
-  # true = mehr Überblick
-  # false = sauberere, kompaktere Trefferliste
-
-  trend_filter: none
-  # Optionaler Trendfilter.
-  #
-  # Mögliche Werte:
-  # none
-  #   = kein Trendfilter
-  #
-  # sma200
-  #   = bullish Grabs nur oberhalb SMA200,
-  #     bearish Grabs nur unterhalb SMA200
-  #
-  # Empfehlung:
-  # none = mehr Signale
-  # sma200 = oft deutlich bessere Qualität
-
-  trend_sma_period: 200
-  # Periode des SMA für den Trendfilter.
-  # Standard ist meist 200 und in der Praxis sehr sinnvoll.
-
-  score_threshold: 55
-  # Mindest-Score, damit ein Signal überhaupt ausgegeben wird.
-  # Je höher der Wert, desto strenger der Filter.
-  #
-  # Gute Orientierung:
-  # 50-60 = viele Signale
-  # 65-75 = guter Bereich
-  # 80+ = sehr streng / nur wenige Top-Signale
-  #
-  # Einer der wichtigsten Regler, wenn du zu viele Treffer bekommst.
-
-  show_runs: true
-  # Wenn true, zeigt der Scanner auch Runs an.
-  # Runs sind Situationen, in denen das Level eher sauber durchlaufen wurde
-  # statt nur kurz Liquidität zu holen und zurückzulaufen.
-  #
-  # Für Analyse und Lernen oft hilfreich.
-  # Für reinen Grab-Fokus eher auf false setzen.
-
-  show_failed_grabs: false
-  # Wenn true, zeigt der Scanner auch schwächere oder unbestätigte Grabs an.
-  # Das ist vor allem für Tests und Feintuning interessant.
-  # Für die normale Nutzung meist besser auf false lassen.
-
-  ######################################################
-  # Einstellungen für die Länge der Lunten/Dochte (Wicks)
-  use_wick_filter: false
+  use_wick_filter: true
   # Wenn true, muss die relevante Sweep-Lunte eine Mindestgröße haben.
-  # Wenn false, wird die Wick-Ratio nur im Score berücksichtigt.
-  # Empfehlung zum Start: false
-  # Für strengere Qualität später: true
+  #
+  # Das macht sichtbare Rejection zur Pflicht.
 
-  # Wenn du später strenger werden willst
-  # use_wick_filter: true
-  # min_wick_ratio: 0.40
-  # score_threshold: 65
-  # show_runs: false
-
-  min_wick_ratio: 0.40
+  min_wick_ratio: 0.35
   # Mindestanteil der relevanten Lunte an der gesamten Candle-Range.
   #
   # Beispiel:
-  # 0.40 = die Sweep-Lunte muss mindestens 40 % der ganzen Candle ausmachen
-  #
-  # Gute Werte:
-  # 0.30 = lockerer
-  # 0.40 = guter Standard
-  # 0.50 = strenger
+  # 0.35 = Lunte muss mindestens 35 % der Candle ausmachen
 
   wick_score_weight: 10.0
-  # Wie stark eine gute Wick-Ratio zusätzlich in den Score einfließt.
-  # Höher = mehr Gewicht auf sichtbare Rejection.
-  # Gute Werte: 6 bis 12
+  # Wie stark eine gute Wick-Ratio im Score zusätzlich belohnt wird.
+
+  strong_close_threshold: 0.70
+  # Ab welchem Wert die Schlusslage als "stark" gilt.
+
+  strong_close_score_bonus: 10.0
+  # Bonuspunkte für starke Schlusslage in Signalrichtung.
 
   ######################################################
-  ### Einstellungen zum Speichern der Charts für ChatGPT
+  # BASISBESTÄTIGUNG FÜR STUFE 1
+  ######################################################
+
+  confirmation_mode: "strong_reclaim"
+  # Zusätzliche Bestätigungslogik für das Grundsignal.
+  #
+  # Mögliche Werte:
+  # none
+  # reclaim_only
+  # strong_reclaim
+  # structure_break
+  #
+  # strong_reclaim ist für deinen Scanner gut,
+  # weil Stufe 1 schon eine gewisse Qualität haben soll.
+
+  confirmation_lookahead_bars: 3
+  # Nur relevant, wenn confirmation_mode = structure_break.
+  #
+  # Gibt an, wie viele Folgekerzen für diese Bestätigung
+  # Zeit gelassen wird.
+
+  ######################################################
+  # TREND / MARKTSTRUKTUR / BIAS
+  ######################################################
+
+  trend_filter: "structure_bias"
+  # Mögliche Werte:
+  # none
+  # sma200
+  # structure_bias
+  #
+  # structure_bias = Trendbewertung über Struktur / Pivots
+  # und ist für deinen Scanner sehr passend.
+
+  trend_sma_period: 200
+  # Nur relevant, wenn trend_filter = sma200.
+
+  trend_pivot_lookback: 6
+  # Wie viele der letzten Pivots für die Trend-/Bias-Erkennung
+  # betrachtet werden.
+  #
+  # kleiner = sensibler
+  # größer = stabiler
+
+  range_score_penalty: 15
+  # Strafabzug, wenn das Setup in einer Range liegt.
+
+  counter_trend_score_penalty: 30
+  # Strafabzug, wenn das Signal gegen die erkannte Marktstruktur läuft.
+
+  skip_counter_trend_signals: false
+  # true  = Counter-Trend-Signale komplett ausblenden
+  # false = noch anzeigen, aber abwerten
+
+  skip_range_signals: false
+  # true  = Range-Signale komplett ausblenden
+  # false = noch anzeigen, aber abwerten
+
+  ######################################################
+  # SCORE / AUSGABE
+  ######################################################
+
+  score_threshold: 58
+  # Mindest-Score, damit ein Signal überhaupt ausgegeben wird.
+  #
+  # Orientierung:
+  # 50-60 = viele Signale
+  # 60-75 = guter Bereich
+  # 80+   = sehr streng
+
+  show_runs: true
+  # Wenn true, zeigt der Scanner auch Runs an.
+  #
+  # Für Lernen / Kontext oft hilfreich.
+
+  show_failed_grabs: false
+  # Wenn true, zeigt der Scanner auch schwächere / unbestätigte
+  # Grab-Kandidaten.
+  #
+  # Für normale Nutzung meist besser false.
+
+  ######################################################
+  # STUFEN-LOGIK
+  ######################################################
+
+  stage_mode: "highest_only"
+  # Ergebnislogik pro Symbol.
+  #
+  # highest_only
+  #   = pro Symbol zählt nur die höchste aktuell erreichte Stufe
+  #
+  # Das passt gut zu deinem Workflow:
+  # Du willst direkt sehen, wie weit ein Muster schon entwickelt ist.
+
+  ######################################################
+  # STUFE 2 – FOLLOW-THROUGH
+  ######################################################
+
+  # follow_through_lookahead_bars:
+  # Wird im Code automatisch je nach Timeframe gesetzt:
+  #
+  # H1 = 6 Bars
+  # H4 = 4 Bars
+  # D1 = 3 Bars
+  #
+  # Bedeutung:
+  # So viele Folgekerzen bekommt ein Grab Zeit,
+  # um sichtbar weiterzulaufen.
+  #
+  # Nur setzen, wenn du die automatische Logik bewusst überschreiben willst.
+
+  follow_through_use_close_break: true
+  # true:
+  #   Schlusskurs-Bruch der Signal-Kerze nötig
+  #
+  # false:
+  #   Wick-/High-/Low-Bruch reicht
+  #
+  # true = sauberer und strenger
+
+  follow_through_min_move_percent: 0.0
+  # Optionaler Mindestweg in Prozent nach dem Grab,
+  # damit Stufe 2 gilt.
+  #
+  # 0.0 = deaktiviert
+  #
+  # Später könntest du hier z. B. 0.10 testen,
+  # wenn dir Mini-Follow-throughs noch zu schwach sind.
+
+  ######################################################
+  # STUFE 3 – MSS / CHOCH
+  ######################################################
+
+  # mss_lookahead_bars:
+  # Wird im Code automatisch je nach Timeframe gesetzt:
+  #
+  # H1 = 12 Bars
+  # H4 = 8 Bars
+  # D1 = 6 Bars
+  #
+  # Bedeutung:
+  # So viele Folgekerzen bekommt das Setup Zeit,
+  # nach Stufe 2 zusätzlich noch eine relevante Struktur zu brechen.
+  #
+  # Nur setzen, wenn du die Auto-Logik bewusst überschreiben willst.
+
+  mss_use_close_break: true
+  # true:
+  #   Schlusskurs über/unter dem relevanten Pivot-Level nötig
+  #
+  # false:
+  #   Wick über/unter dem Pivot-Level reicht
+  #
+  # true = robuster und sauberer
+
+  stage2_score_bonus: 12.0
+  # Zusatzpunkte im Score, wenn ein Setup Stufe 2 erreicht.
+  #
+  # Hintergrund:
+  # Der Markt hat nach dem Grab tatsächlich reagiert.
+
+  stage3_score_bonus: 18.0
+  # Zusatzpunkte im Score, wenn ein Setup Stufe 3 erreicht.
+  #
+  # Hintergrund:
+  # MSS / CHOCH ist die stärkste Bestätigung in dieser Phase.
+
+  ######################################################
+  # OVERLAYS / ZUSATZMUSTER IM CHART
+  ######################################################
+
+  show_fvg: true
+  # Zeigt Fair Value Gaps dezent im Chart an.
+
+  show_engulfing: true
+  # Zeigt Engulfing-Muster dezent im Chart an.
+
+  max_fvg_boxes: 4
+  # Maximale Anzahl der zuletzt gefundenen FVGs pro Chart.
+
+  max_engulfings: 6
+  # Maximale Anzahl der zuletzt gefundenen Engulfings pro Chart.
+
+  fvg_extend_bars: 5
+  # Wie weit eine FVG-Box nach rechts verlängert wird.
+
+  min_fvg_gap_percent: 0.03
+  # Mindestgröße eines FVG in Prozent.
+  #
+  # 0.03 ist ein guter Startwert.
+
+  fvg_alpha: 0.08
+  # Transparenz der FVG-Boxen.
+  #
+  # kleiner = dezenter
+
+  engulfing_alpha: 0.55
+  # Sichtbarkeit der Engulfing-Markierungen.
+
+  ######################################################
+  # CHARTS SPEICHERN / AUSGEBEN
+  ######################################################
 
   save_chart_images: true
-  # Wenn true, werden alle gefundenen Charts automatisch als PNG gespeichert.
+  # Wenn true, speichert der Scanner die gefundenen Charts
+  # automatisch als PNG.
 
-  show_chart_windows: true
-  # Wenn true, werden die Charts zusätzlich wie bisher als Fenster angezeigt.
-  # Wenn du nur speichern willst, setze es auf false.
+  show_chart_windows: false
+  # Wenn true, werden Charts zusätzlich als Fenster geöffnet.
+  #
+  # false ist sinnvoll, wenn du vor allem Dateien speichern
+  # und später auswerten willst.
 
   save_zoom_fraction: 0.3333
-  # Wie viel vom letzten Chartbereich zusätzlich als Zoom gespeichert werden soll.
-  # 0.3333 = letztes Drittel der Kurse
+  # Wie viel des letzten Chartbereichs zusätzlich als Zoom
+  # gespeichert werden soll.
+  #
+  # 0.3333 = letztes Drittel
 
   save_zoom_min_bars: 30
-  # Mindestanzahl an Kerzen im Zoom-Chart.
-  # Falls ein Drittel zu wenig wäre, bleiben mindestens so viele Bars sichtbar.
+  # Mindestanzahl an Bars im Zoom-Chart.
+  #
+  # Falls das letzte Drittel zu klein wäre,
+  # bleiben mindestens 30 Bars sichtbar.
 
 ###############################################
 ### Ergebnis-Erklärung (Liquidity Grab Scanner)

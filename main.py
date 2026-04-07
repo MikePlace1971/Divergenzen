@@ -1,29 +1,46 @@
 ﻿# /main.py
-import matplotlib
-matplotlib.use("QtAgg")  # oder "TkAgg"
+
+from __future__ import annotations
 
 import time
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import matplotlib
 import questionary
 import yaml
 
-from modules.rsi_scanner import scan_rsi_range
-from modules.donchian_scanner import scan_donchian
-from modules.sma_korrekturen_finden import finde_sma_korrekturen
 from modules.divergence_detector import DivergenceDetector
+from modules.donchian_scanner import scan_donchian
 from modules.liquidityGrabScanner.scanner import scan_liquidity_grabs
-from utils.daten.data_loader import load_data
+from modules.rsi_scanner import scan_rsi_range
+from modules.sma_korrekturen_finden import finde_sma_korrekturen
 from utils.chart.plotter import plot_candles
+from utils.daten.data_loader import load_data
+from utils.daten.exporter import export_dataframe_to_txt
 
+matplotlib.use("QtAgg")  # alternativ: "TkAgg"
 
 DEFAULT_TIMEFRAME_CHOICES = ["H1", "H4", "D1"]
 
 
+def ensure_export_structure(base_dir: str = "exports") -> None:
+    """
+    Erstellt die Export-Ordnerstruktur, falls sie noch nicht existiert.
+    """
+    base = Path(base_dir)
+    (base / "oanda").mkdir(parents=True, exist_ok=True)
+    (base / "yfinance").mkdir(parents=True, exist_ok=True)
+
+
 def load_config() -> Optional[Dict[str, Any]]:
+    """
+    Lädt die Hauptkonfiguration aus config/config.yaml.
+    """
     try:
         with open("config/config.yaml", "r", encoding="utf-8") as stream:
-            return yaml.safe_load(stream)
+            data = yaml.safe_load(stream)
+            return data if isinstance(data, dict) else None
     except FileNotFoundError:
         print("[ERROR] config/config.yaml nicht gefunden.")
     except yaml.YAMLError as exc:
@@ -32,20 +49,39 @@ def load_config() -> Optional[Dict[str, Any]]:
 
 
 def load_markets(path: str) -> Optional[Dict[str, List[Dict[str, Any]]]]:
+    """
+    Lädt die Märkte-Datei und gibt den Bereich 'markets' zurück.
+    """
     try:
         with open(path, "r", encoding="utf-8") as stream:
             data = yaml.safe_load(stream)
-            return data.get("markets", {}) if isinstance(data, dict) else {}
     except FileNotFoundError:
         print(f"[ERROR] Maerkte-Datei {path} nicht gefunden.")
+        return None
     except yaml.YAMLError as exc:
         print(f"[ERROR] Konnte Maerkte-Datei nicht einlesen: {exc}")
-    return None
+        return None
+
+    if not isinstance(data, dict):
+        print(f"[ERROR] Ungueltige Struktur in {path}.")
+        return None
+
+    markets = data.get("markets", {})
+    if not isinstance(markets, dict):
+        print(f"[ERROR] Bereich 'markets' fehlt oder ist ungueltig in {path}.")
+        return None
+
+    return markets
 
 
 def get_timeframe_choices(cfg: Dict[str, Any]) -> List[str]:
+    """
+    Ermittelt die verfügbaren Timeframes aus der Konfiguration.
+    Standardmäßig: H1, H4, D1
+    """
     settings = cfg.get("settings", {})
     configured = settings.get("timeframe_choices")
+
     if isinstance(configured, list) and configured:
         choices = [str(item).upper() for item in configured if item]
     else:
@@ -58,24 +94,51 @@ def get_timeframe_choices(cfg: Dict[str, Any]) -> List[str]:
             choices.append(normalized)
 
     seen = set()
-    ordered = []
+    ordered: List[str] = []
     for item in DEFAULT_TIMEFRAME_CHOICES + choices:
         if item not in seen:
             ordered.append(item)
             seen.add(item)
+
     return ordered
 
 
 def build_detector(cfg: Dict[str, Any]) -> DivergenceDetector:
+    """
+    Baut den Divergenz-Detector aus den Konfigurationswerten.
+    """
     div_cfg = cfg.get(
         "divergence",
         {"rsi_period": 14, "fractal_periods": 4, "max_bars_diff": 30},
     )
+
     return DivergenceDetector(
         rsi_period=div_cfg.get("rsi_period", 14),
         fractal_periods=div_cfg.get("fractal_periods", 4),
         max_bars_diff=div_cfg.get("max_bars_diff", 30),
     )
+
+
+def export_loaded_data(
+    raw_df,
+    symbol: str,
+    source: str,
+    timeframe: str,
+) -> None:
+    """
+    Exportiert geladene Kursdaten als TXT.
+
+    try:
+        export_path = export_dataframe_to_txt(
+            df=raw_df,
+            symbol=symbol,
+            source=source,
+            timeframe=timeframe,
+        )
+        print(f"[INFO] Daten exportiert nach: {export_path}")
+    except Exception as exc:
+        print(f"[WARN] TXT-Export fehlgeschlagen fuer {symbol}: {exc}")
+    """
 
 
 def analyze_symbol(
@@ -85,8 +148,12 @@ def analyze_symbol(
     timeframe: str,
     detector: DivergenceDetector,
 ) -> Optional[Dict[str, Any]]:
+    """
+    Lädt Kursdaten, exportiert sie optional und berechnet Divergenzen.
+    """
     source = symbol_entry.get(
-        "source", cfg.get("settings", {}).get("default_source", "yfinance")
+        "source",
+        cfg.get("settings", {}).get("default_source", "yfinance"),
     )
     symbol = symbol_entry.get("symbol")
     name = symbol_entry.get("name", symbol or "")
@@ -99,7 +166,7 @@ def analyze_symbol(
     oanda_token = cfg.get("oanda", {}).get("access_token")
 
     print(
-        f"\n[INFO] Lade {symbol} ({symbol_entry.get('name', symbol)}) "
+        f"\n[INFO] Lade {symbol} ({name}) "
         f"aus {market_key} ({source}, {timeframe})"
     )
 
@@ -115,6 +182,13 @@ def analyze_symbol(
         print(f"[WARN] Keine Daten fuer {symbol}.")
         return None
 
+    export_loaded_data(
+        raw_df=raw_df,
+        symbol=symbol,
+        source=source,
+        timeframe=timeframe,
+    )
+
     bars_for_analysis = (
         lookback if isinstance(lookback, int) and lookback > 0 else len(raw_df)
     )
@@ -122,7 +196,8 @@ def analyze_symbol(
         bars_for_analysis) if bars_for_analysis else raw_df
 
     print(
-        f"[INFO] {len(raw_df)} Bars geladen, verwende {len(analysis_df)} Bars fuer Divergenz."
+        f"[INFO] {len(raw_df)} Bars geladen, verwende "
+        f"{len(analysis_df)} Bars fuer Divergenz."
     )
 
     full_result = detector.find_divergences(raw_df)
@@ -144,11 +219,14 @@ def analyze_symbol(
 
     if bullish or bearish:
         print(
-            f"[OK] {name} ({symbol}) -> {bullish} Bullish / {bearish} Bearish Divergenzen (letzte {len(analysis_df)} Bars)"
+            f"[OK] {name} ({symbol}) -> "
+            f"{bullish} Bullish / {bearish} Bearish Divergenzen "
+            f"(letzte {len(analysis_df)} Bars)"
         )
     else:
         print(
-            f"[INFO] {name} ({symbol}) -> Keine Divergenzen in den letzten {len(analysis_df)} Bars gefunden"
+            f"[INFO] {name} ({symbol}) -> "
+            f"Keine Divergenzen in den letzten {len(analysis_df)} Bars gefunden"
         )
 
     return {
@@ -158,7 +236,10 @@ def analyze_symbol(
         "bullish": bullish,
         "bearish": bearish,
         "result": full_result,
-        "recent_divergences": {"bullish": recent_bullish, "bearish": recent_bearish},
+        "recent_divergences": {
+            "bullish": recent_bullish,
+            "bearish": recent_bearish,
+        },
         "df": raw_df,
         "analysis_df": analysis_df,
         "timeframe": timeframe,
@@ -171,8 +252,12 @@ def run_single_analysis(
     detector: DivergenceDetector,
     timeframe_choices: List[str],
 ) -> None:
+    """
+    Einzelwertanalyse mit Chartanzeige.
+    """
     market_key = questionary.select(
-        "Bitte Markt auswaehlen:", choices=list(markets.keys())
+        "Bitte Markt auswaehlen:",
+        choices=list(markets.keys()),
     ).ask()
     if not market_key:
         print("[INFO] Auswahl abgebrochen.")
@@ -198,24 +283,135 @@ def run_single_analysis(
         return
 
     timeframe = questionary.select(
-        "Bitte Timeframe auswaehlen:", choices=timeframe_choices
+        "Bitte Timeframe auswaehlen:",
+        choices=timeframe_choices,
     ).ask()
     if not timeframe:
         print("[INFO] Auswahl abgebrochen.")
         return
 
-    result = analyze_symbol(symbol_choice, market_key,
-                            cfg, timeframe, detector)
-    if result:
-        plot_candles(
-            result["df"],
-            title=f"{result['symbol']} [{result['market']}] {timeframe}",
-            name=result["name"],
-            symbol=result["symbol"],
-            index=result["market"],
-            timeframe=timeframe,
-            divergences=result["result"],
+    result = analyze_symbol(
+        symbol_entry=symbol_choice,
+        market_key=market_key,
+        cfg=cfg,
+        timeframe=timeframe,
+        detector=detector,
+    )
+    if not result:
+        return
+
+    plot_candles(
+        result["df"],
+        title=f"{result['symbol']} [{result['market']}] {timeframe}",
+        name=result["name"],
+        symbol=result["symbol"],
+        index=result["market"],
+        timeframe=timeframe,
+        divergences=result["result"],
+    )
+
+
+def _select_markets(markets: Dict[str, List[Dict[str, Any]]]) -> Optional[List[str]]:
+    """
+    Gemeinsamer Dialog zur Marktauswahl.
+    """
+    market_choices = [
+        questionary.Choice(title=key, value=key, checked=True)
+        for key in markets.keys()
+    ]
+
+    selected_markets = questionary.checkbox(
+        "Märkte zum Scannen auswählen:",
+        choices=market_choices,
+        validate=lambda sel: bool(
+            sel) or "Bitte mindestens einen Markt wählen.",
+    ).ask()
+
+    if not selected_markets:
+        print("[INFO] Auswahl abgebrochen.")
+        return None
+
+    return selected_markets
+
+
+def _select_timeframe(timeframe_choices: List[str]) -> Optional[str]:
+    """
+    Gemeinsamer Dialog zur Timeframe-Auswahl.
+    """
+    timeframe = questionary.select(
+        "Bitte Timeframe auswählen:",
+        choices=timeframe_choices,
+    ).ask()
+
+    if not timeframe:
+        print("[INFO] Auswahl abgebrochen.")
+        return None
+
+    return timeframe
+
+
+def run_divergence_scanner(
+    markets: Dict[str, List[Dict[str, Any]]],
+    cfg: Dict[str, Any],
+    detector: DivergenceDetector,
+    timeframe_choices: List[str],
+) -> None:
+    """
+    Scannt mehrere Märkte nach Divergenzen.
+    """
+    selected_markets = _select_markets(markets)
+    if not selected_markets:
+        return
+
+    timeframe = _select_timeframe(timeframe_choices)
+    if not timeframe:
+        return
+
+    print("\n================ STARTE DIVERGENZ-SCANNER ================")
+
+    results: List[Dict[str, Any]] = []
+
+    for market_key in selected_markets:
+        print(f"\n--- Scanne Markt: {market_key} ---")
+        for entry in markets.get(market_key, []):
+            analysis = analyze_symbol(
+                symbol_entry=entry,
+                market_key=market_key,
+                cfg=cfg,
+                timeframe=timeframe,
+                detector=detector,
+            )
+            if analysis:
+                results.append(analysis)
+            time.sleep(0.4)
+
+    found = [item for item in results if item["bullish"] or item["bearish"]]
+
+    print("\n================ ERGEBNIS-ZUSAMMENFASSUNG ===============")
+    if not found:
+        print("Keine Divergenzen in den ausgewählten Märkten gefunden.")
+        return
+
+    for item in found:
+        print(
+            f"- {item['name']} ({item['symbol']}) | {item['market']} | "
+            f"{item['bullish']} Bullish / {item['bearish']} Bearish"
         )
+
+    print("\n[INFO] Öffne Charts nacheinander. Fenster schließen, um fortzufahren...\n")
+
+    for item in found:
+        plot_candles(
+            item["df"],
+            title=f"{item['symbol']} [{item['market']}] {timeframe}",
+            name=item["name"],
+            symbol=item["symbol"],
+            index=item["market"],
+            timeframe=timeframe,
+            divergences=item["result"],
+        )
+
+    print("\n[OK] Analyse abgeschlossen.")
 
 
 def run_market_scanner(
@@ -224,6 +420,9 @@ def run_market_scanner(
     detector: DivergenceDetector,
     timeframe_choices: List[str],
 ) -> None:
+    """
+    Hauptmenü für alle Scanner.
+    """
     scan_mode = questionary.select(
         "Was möchtest du scannen?",
         choices=[
@@ -233,115 +432,49 @@ def run_market_scanner(
             questionary.Choice("Donchian Pullback Setup", "donchian"),
             questionary.Choice("RSI Range Scanner (30-70)", "rsi"),
         ],
-
     ).ask()
 
-    if scan_mode == "divergence":
-        # bisheriger Divergenz-Scanner
-        market_choices = [
-            questionary.Choice(title=key, value=key, checked=True)
-            for key in markets.keys()
-        ]
-        selected_markets = questionary.checkbox(
-            "Märkte zum Scannen auswählen:",
-            choices=market_choices,
-            validate=lambda sel: bool(
-                sel) or "Bitte mindestens einen Markt wählen.",
-        ).ask()
-        if not selected_markets:
-            print("[INFO] Auswahl abgebrochen.")
-            return
-
-        timeframe = questionary.select(
-            "Bitte Timeframe auswählen:", choices=timeframe_choices
-        ).ask()
-        if not timeframe:
-            print("[INFO] Auswahl abgebrochen.")
-            return
-
-        print("\n================ STARTE DIVERGENZ-SCANNER ================")
-
-        results: List[Dict[str, Any]] = []
-        for market_key in selected_markets:
-            print(f"\n--- Scanne Markt: {market_key} ---")
-            for entry in markets.get(market_key, []):
-                analysis = analyze_symbol(
-                    entry, market_key, cfg, timeframe, detector)
-                if analysis:
-                    results.append(analysis)
-                time.sleep(0.4)
-
-        found = [item for item in results if item["bullish"] or item["bearish"]]
-
-        print("\n================ ERGEBNIS-ZUSAMMENFASSUNG ===============")
-        if not found:
-            print("Keine Divergenzen in den ausgewählten Märkten gefunden.")
-            return
-
-        for item in found:
-            print(
-                f"- {item['name']} ({item['symbol']}) | {item['market']} | "
-                f"{item['bullish']} Bullish / {item['bearish']} Bearish"
-            )
-
-        print(
-            "\n[INFO] Öffne Charts nacheinander. Fenster schließen, um fortzufahren...\n"
-        )
-        for item in found:
-            plot_candles(
-                item["df"],
-                title=f"{item['symbol']} [{item['market']}] {timeframe}",
-                name=item["name"],
-                symbol=item["symbol"],
-                index=item["market"],
-                timeframe=timeframe,
-                divergences=item["result"],
-            )
-
-        print("\n[OK] Analyse abgeschlossen.")
-    
-    elif scan_mode == "liquidity":
-        scan_liquidity_grabs(markets, cfg, timeframe_choices)
-        
-    elif scan_mode == "sma":
-        # neue Funktion für SMA-Korrekturen
-        finde_sma_korrekturen(markets, cfg, timeframe_choices)
-    elif scan_mode == "donchian":
-
-        # 1) Märkte wählen
-        market_choices = [
-            questionary.Choice(title=key, value=key, checked=True)
-            for key in markets.keys()
-        ]
-        selected_markets = questionary.checkbox(
-            "Märkte zum Scannen auswählen:",
-            choices=market_choices,
-            validate=lambda sel: bool(
-                sel) or "Bitte mindestens einen Markt wählen.",
-        ).ask()
-        if not selected_markets:
-            print("[INFO] Auswahl abgebrochen.")
-            return
-
-        # 2) Timeframe wählen
-        timeframe = questionary.select(
-            "Bitte Timeframe auswählen:", choices=timeframe_choices
-        ).ask()
-        if not timeframe:
-            print("[INFO] Auswahl abgebrochen.")
-            return
-
-        # 3) Scanner starten
-        scan_donchian(selected_markets, markets, cfg, timeframe)
-        
-    elif scan_mode == "rsi":
-        scan_rsi_range(markets, cfg, timeframe_choices)
-
-    else:
+    if not scan_mode:
         print("[INFO] Auswahl abgebrochen.")
+        return
+
+    if scan_mode == "divergence":
+        run_divergence_scanner(markets, cfg, detector, timeframe_choices)
+        return
+
+    if scan_mode == "liquidity":
+        scan_liquidity_grabs(markets, cfg, timeframe_choices)
+        return
+
+    if scan_mode == "sma":
+        finde_sma_korrekturen(markets, cfg, timeframe_choices)
+        return
+
+    if scan_mode == "donchian":
+        selected_markets = _select_markets(markets)
+        if not selected_markets:
+            return
+
+        timeframe = _select_timeframe(timeframe_choices)
+        if not timeframe:
+            return
+
+        scan_donchian(selected_markets, markets, cfg, timeframe)
+        return
+
+    if scan_mode == "rsi":
+        scan_rsi_range(markets, cfg, timeframe_choices)
+        return
+
+    print("[INFO] Auswahl abgebrochen.")
 
 
 def main() -> None:
+    """
+    Programmeinstieg.
+    """
+    # ensure_export_structure() # erstellt Ordner für Kursdaten-Export
+
     cfg = load_config()
     if not cfg:
         return

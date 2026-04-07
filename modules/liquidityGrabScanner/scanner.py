@@ -66,7 +66,6 @@ def scan_liquidity_grabs(
     timeframe_choices: List[str],
 ) -> None:
     lg_cfg = cfg.get("liquidity_grab", {}) if isinstance(cfg, dict) else {}
-    detector = LiquidityGrabDetector(cfg)
 
     market_choices = [
         questionary.Choice(title=key, value=key, checked=True)
@@ -93,6 +92,8 @@ def scan_liquidity_grabs(
         print("[INFO] Auswahl abgebrochen.")
         return
 
+    detector = LiquidityGrabDetector(cfg, timeframe=timeframe)
+
     lookback_bars = int(lg_cfg.get("lookback_bars", 260))
     allow_multiple = bool(lg_cfg.get(
         "allow_multiple_signals_per_symbol", True))
@@ -102,6 +103,17 @@ def scan_liquidity_grabs(
     show_chart_windows = bool(lg_cfg.get("show_chart_windows", True))
     zoom_fraction = float(lg_cfg.get("save_zoom_fraction", 1 / 3))
     min_zoom_bars = int(lg_cfg.get("save_zoom_min_bars", 30))
+
+    overlay_cfg = {
+        "show_fvg": bool(lg_cfg.get("show_fvg", True)),
+        "show_engulfing": bool(lg_cfg.get("show_engulfing", True)),
+        "max_fvg_boxes": int(lg_cfg.get("max_fvg_boxes", 4)),
+        "max_engulfings": int(lg_cfg.get("max_engulfings", 6)),
+        "fvg_extend_bars": int(lg_cfg.get("fvg_extend_bars", 5)),
+        "min_fvg_gap_percent": float(lg_cfg.get("min_fvg_gap_percent", 0.03)),
+        "fvg_alpha": float(lg_cfg.get("fvg_alpha", 0.08)),
+        "engulfing_alpha": float(lg_cfg.get("engulfing_alpha", 0.55)),
+    }
 
     scan_dir = None
     full_dir = None
@@ -113,7 +125,8 @@ def scan_liquidity_grabs(
     print("\n================ STARTE LIQUIDITY-GRAB-SCANNER ================")
     print(
         f"[INFO] timeframe={timeframe} | lookback={lookback_bars} | "
-        f"confirmation={lg_cfg.get('confirmation_mode', 'reclaim_only')}"
+        f"stages=1/2/3 | follow_through_lookahead={detector.follow_through_lookahead_bars} | "
+        f"mss_lookahead={detector.mss_lookahead_bars}"
     )
 
     if save_chart_images and scan_dir is not None:
@@ -196,8 +209,9 @@ def scan_liquidity_grabs(
             best_signal = signals[0]
             print(
                 f"[{market_key}] {i:>3}/{total} {symbol:<14} "
-                f"{best_signal.direction.upper()} {best_signal.signal_type.upper()} "
-                f"score={best_signal.score:.0f}".ljust(120),
+                f"STUFE {best_signal.stage} | {best_signal.direction.upper()} "
+                f"{best_signal.signal_type.upper()} | score={best_signal.score:.0f}".ljust(
+                    120),
                 end="\r",
                 flush=True,
             )
@@ -218,7 +232,7 @@ def scan_liquidity_grabs(
             best_per_symbol[key] = (symbol, name, market_key, payload)
         else:
             old_best = best_per_symbol[key][3]["signals"][0]
-            if best.score > old_best.score:
+            if (best.stage, best.score) > (old_best.stage, old_best.score):
                 best_per_symbol[key] = (symbol, name, market_key, payload)
 
     results = list(best_per_symbol.values())
@@ -228,7 +242,10 @@ def scan_liquidity_grabs(
         return
 
     results.sort(
-        key=lambda item: item[3]["signals"][0].score if item[3]["signals"] else 0,
+        key=lambda item: (
+            item[3]["signals"][0].stage if item[3]["signals"] else 0,
+            item[3]["signals"][0].score if item[3]["signals"] else 0,
+        ),
         reverse=True,
     )
 
@@ -237,9 +254,12 @@ def scan_liquidity_grabs(
         best = payload["signals"][0]
         print(
             f"{symbol:<12} | {market_key:<16} | "
+            f"Stufe={best.stage:<1} | "
             f"{best.direction:<7} | {best.signal_type:<11} | "
+            f"Trend={best.trend:<9} | WithTrend={str(best.with_trend):<5} | "
             f"Score={best.score:>6.2f} | Sweep={best.sweep_percent:>6.3f}% | "
-            f"Wick={best.wick_ratio:>5.2f} | Level={best.level_price:.5f} | {name}"
+            f"Wick={best.wick_ratio:>5.2f} | Level={best.level_price:.5f} | "
+            f"{best.stage_label} | {name}"
         )
 
     print()
@@ -251,7 +271,11 @@ def scan_liquidity_grabs(
         signals = payload["signals"]
         levels = payload["levels"]
 
-        title = f"{name} ({symbol}) [{market_key}] {timeframe} | Liquidity Grab"
+        best = signals[0]
+        title = (
+            f"{name} ({symbol}) [{market_key}] {timeframe} | "
+            f"Liquidity Grab | {best.stage_label}"
+        )
         base_filename = _sanitize_filename(
             f"{market_key}_{symbol}_{timeframe}")
 
@@ -266,6 +290,7 @@ def scan_liquidity_grabs(
                 title=f"{title} | FULL",
                 file_path=full_path,
                 zoom_last_fraction=None,
+                overlay_cfg=overlay_cfg,
             )
             if saved1:
                 saved_count += 1
@@ -278,6 +303,7 @@ def scan_liquidity_grabs(
                 file_path=zoom_path,
                 zoom_last_fraction=zoom_fraction,
                 min_zoom_bars=min_zoom_bars,
+                overlay_cfg=overlay_cfg,
             )
             if saved2:
                 saved_count += 1
@@ -288,6 +314,7 @@ def scan_liquidity_grabs(
                 signals=signals,
                 levels=levels,
                 title=title,
+                overlay_cfg=overlay_cfg,
             )
 
     zip_path = None
