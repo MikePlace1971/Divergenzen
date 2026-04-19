@@ -15,6 +15,37 @@
 # Diese Datei ist so geschrieben, dass sie direkt nutzbar ist
 # und gleichzeitig die Bedeutung jeder Einstellung erklärt.
 
+
+######################################################
+# CHARTS SPEICHERN / AUSGEBEN
+######################################################
+
+save_chart_images: true
+# Wenn true, speichert der Scanner die gefundenen Charts
+# automatisch als PNG.
+
+show_chart_windows: true
+# Wenn true, werden Charts zusätzlich als Fenster geöffnet.
+#
+# false ist sinnvoll, wenn du vor allem Dateien speichern
+# und später auswerten willst.
+
+save_zoom_fraction: 0.3333
+# Wie viel des letzten Chartbereichs zusätzlich als Zoom
+# gespeichert werden soll.
+#
+# 0.3333 = letztes Drittel
+
+save_zoom_min_bars: 30
+# Mindestanzahl an Bars im Zoom-Chart.
+#
+# Falls das letzte Drittel zu klein wäre,
+# bleiben mindestens 30 Bars sichtbar.
+
+######################################################
+# Allgemeine Settings
+######################################################
+
 settings:
   timeframe: D1
   # Standard-Zeitrahmen für die Analyse.
@@ -134,7 +165,16 @@ rsi_scanner:
 liquidity_grab:
   ######################################################
   # GRUNDLOGIK DES SCANNERS
-  #
+
+  included_stages: [1] # später leicht umstellen auf: z.B. included_stages: [2, 3]
+  show_runs: false
+  # Wenn true, zeigt der Scanner auch Runs an.
+  show_failed_grabs: false
+  # Wenn true, zeigt der Scanner auch schwächere / unbestätigte
+  # Grab-Kandidaten.
+  # Für normale Nutzung meist besser false.
+
+  
   # Der Scanner arbeitet mit 3 Stufen:
   #
   # Stufe 1 – Early Grab
@@ -372,17 +412,6 @@ liquidity_grab:
   # 60-75 = guter Bereich
   # 80+   = sehr streng
 
-  show_runs: true
-  # Wenn true, zeigt der Scanner auch Runs an.
-  #
-  # Für Lernen / Kontext oft hilfreich.
-
-  show_failed_grabs: false
-  # Wenn true, zeigt der Scanner auch schwächere / unbestätigte
-  # Grab-Kandidaten.
-  #
-  # Für normale Nutzung meist besser false.
-
   ######################################################
   # STUFEN-LOGIK
   ######################################################
@@ -500,32 +529,6 @@ liquidity_grab:
 
   engulfing_alpha: 0.55
   # Sichtbarkeit der Engulfing-Markierungen.
-
-  ######################################################
-  # CHARTS SPEICHERN / AUSGEBEN
-  ######################################################
-
-  save_chart_images: true
-  # Wenn true, speichert der Scanner die gefundenen Charts
-  # automatisch als PNG.
-
-  show_chart_windows: false
-  # Wenn true, werden Charts zusätzlich als Fenster geöffnet.
-  #
-  # false ist sinnvoll, wenn du vor allem Dateien speichern
-  # und später auswerten willst.
-
-  save_zoom_fraction: 0.3333
-  # Wie viel des letzten Chartbereichs zusätzlich als Zoom
-  # gespeichert werden soll.
-  #
-  # 0.3333 = letztes Drittel
-
-  save_zoom_min_bars: 30
-  # Mindestanzahl an Bars im Zoom-Chart.
-  #
-  # Falls das letzte Drittel zu klein wäre,
-  # bleiben mindestens 30 Bars sichtbar.
 
 ###############################################
 ### Ergebnis-Erklärung (Liquidity Grab Scanner)

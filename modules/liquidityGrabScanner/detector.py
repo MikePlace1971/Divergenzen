@@ -150,6 +150,7 @@ class LiquidityGrabDetector:
 
         self.score_threshold = float(lg.get("score_threshold", 55))
         self.show_runs = bool(lg.get("show_runs", True))
+        self.included_stages = list(lg.get("included_stages", [1, 2, 3]))
         self.show_failed_grabs = bool(lg.get("show_failed_grabs", False))
 
         # Wick / Rejection
@@ -949,8 +950,11 @@ class LiquidityGrabDetector:
 
     def _should_include_signal(self, signal: LiquiditySignal) -> bool:
         """
-        Filtert die Ausgabe nach Typ und Mindestscore.
+        Filtert die Ausgabe nach Stage, Typ und Mindestscore.
         """
+        if signal.stage not in self.included_stages:
+            return False
+
         if signal.score < self.score_threshold:
             return False
 
